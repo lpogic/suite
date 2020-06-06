@@ -1,5 +1,5 @@
 open module suite.main {
-    exports suite.suite;
-    exports suite.suite.action;
-    exports suite.suite.util;
+    exports lpo.suite;
+    exports lpo.suite.action;
+    exports lpo.suite.util;
 }
