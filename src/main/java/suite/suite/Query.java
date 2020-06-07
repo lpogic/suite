@@ -1,5 +1,7 @@
 package suite.suite;
 
+import suite.suite.action.Action;
+
 import java.util.function.Function;
 
 public class Query {
@@ -17,9 +19,21 @@ public class Query {
         return this;
     }
 
+    public Query get(Object key, Action action) {
+        result = action.play(source.get(key));
+        return this;
+    }
+
     public Query or(Object key) {
         if(result.desolated()) {
             result = source.get(key);
+        }
+        return this;
+    }
+
+    public Query or(Object key, Action action) {
+        if(result.desolated()) {
+            result = action.play(source.get(key));
         }
         return this;
     }
@@ -30,6 +44,10 @@ public class Query {
 
     public<B> B asExpected() {
         return result.asExpected();
+    }
+
+    public Object direct() {
+        return result.direct();
     }
 
     public Query map(Subject map) {
