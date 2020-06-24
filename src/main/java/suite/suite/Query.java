@@ -19,23 +19,38 @@ public class Query {
         return this;
     }
 
+    public Query get(Object key, Subject map) {
+        result = map.get(key);
+        return this;
+    }
+
     public Query get(Object key, Action action) {
         result = action.play(source.get(key));
         return this;
     }
 
-    public Query or(Object key) {
-        if(result.desolated()) {
-            result = source.get(key);
+    public<T> Query get(Object key, Class<T> type, Function<T, Object> function) {
+        var s = source.get(key);
+        if(s.assigned(type)) {
+            result = Suite.set(function.apply(s.asExpected()));
         }
         return this;
     }
 
+    public Query or(Object key) {
+        return result.desolated() ? get(key) : this;
+    }
+
+    public Query or(Object key, Subject map) {
+        return result.desolated() ? get(key, map) : this;
+    }
+
     public Query or(Object key, Action action) {
-        if(result.desolated()) {
-            result = action.play(source.get(key));
-        }
-        return this;
+        return result.desolated() ? get(key, action) : this;
+    }
+
+    public<T> Query or(Object key, Class<T> type, Function<T, Object> function) {
+        return result.desolated() ? get(key, type, function) : this;
     }
 
     public<B> B orGiven(B substitute) {
@@ -56,6 +71,13 @@ public class Query {
             r.inputAll(map.get(s.direct()).front());
         }
         result = r;
+        return this;
+    }
+
+    public Query map(Action action) {
+        for(var s : result.front()) {
+            result.insetAll(action.play(s).front());
+        }
         return this;
     }
 
