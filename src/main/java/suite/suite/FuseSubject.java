@@ -79,13 +79,13 @@ class FuseSubject implements Subject {
     }
 
     @Override
-    public Subject at(Slot slot) {
-        return subject.at(slot);
+    public Subject getAt(Slot slot) {
+        return subject.getAt(slot);
     }
 
     @Override
-    public Subject at(int slotIndex) {
-        return subject.at(slotIndex);
+    public Subject getAt(int slotIndex) {
+        return subject.getAt(slotIndex);
     }
 
     @Override

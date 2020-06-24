@@ -66,12 +66,12 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public Subject at(Slot slot) {
+    public Subject getAt(Slot slot) {
         return this;
     }
 
     @Override
-    public Subject at(int slotIndex) {
+    public Subject getAt(int slotIndex) {
         return this;
     }
 

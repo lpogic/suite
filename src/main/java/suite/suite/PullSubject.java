@@ -46,17 +46,17 @@ public abstract class PullSubject implements Subject {
 
     @Override
     public Subject prime() {
-        return at(Slot.PRIME);
+        return getAt(Slot.PRIME);
     }
 
     @Override
     public Subject recent() {
-        return at(Slot.RECENT);
+        return getAt(Slot.RECENT);
     }
 
     @Override
-    public Subject at(int slotIndex) {
-        return at(Slot.in(slotIndex));
+    public Subject getAt(int slotIndex) {
+        return getAt(Slot.in(slotIndex));
     }
 
     @Override

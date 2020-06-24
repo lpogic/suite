@@ -76,7 +76,7 @@ class BubbleSubject implements Subject {
     }
 
     @Override
-    public Subject at(Slot slot) {
+    public Subject getAt(Slot slot) {
         if(slot == Slot.PRIME || slot == Slot.RECENT || (slot instanceof Slot.PlacedSlot && ((Slot.PlacedSlot) slot).place == 0)) {
             return this;
         }
@@ -84,7 +84,7 @@ class BubbleSubject implements Subject {
     }
 
     @Override
-    public Subject at(int slotIndex) {
+    public Subject getAt(int slotIndex) {
         return slotIndex == 0 ? this : ZeroSubject.getInstance();
     }
 

@@ -80,7 +80,7 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Subject at(Slot slot) {
+    public Subject getAt(Slot slot) {
         if(slot == Slot.PRIME) {
             return chain.getFirst().subject;
         } else if(slot == Slot.RECENT) {
@@ -100,7 +100,7 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Subject at(int slotIndex) {
+    public Subject getAt(int slotIndex) {
         return chain.getNth(slotIndex).subject;
     }
 

@@ -101,13 +101,13 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Subject at(Slot slot) {
-        return new SolidSubject(subject.at(slot));
+    public Subject getAt(Slot slot) {
+        return new SolidSubject(subject.getAt(slot));
     }
 
     @Override
-    public Subject at(int slotIndex) {
-        return new SolidSubject(subject.at(slotIndex));
+    public Subject getAt(int slotIndex) {
+        return new SolidSubject(subject.getAt(slotIndex));
     }
 
     @Override

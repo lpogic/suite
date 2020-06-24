@@ -30,9 +30,12 @@ public interface Subject {
     Subject prime();
     Subject recent();
     Subject get(Object key);
-    Subject at(Slot slot);
-    Subject at(int slotIndex);
+    Subject getAt(Slot slot);
+    Subject getAt(int slotIndex);
 
+    default Subject at(Object key) {
+        return get(key).orDo(Suite::set);
+    }
     Object direct();
     <B> B asExpected();
     <B> B asGiven(Class<B> requestedType);
