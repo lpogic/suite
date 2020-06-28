@@ -169,6 +169,7 @@ class Chain implements FluidSubject {
             link.front = link.back = ward;
         }
         data.clear();
+        ward.front = ward.back = ward;
     }
 
     @Override
