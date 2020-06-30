@@ -132,6 +132,20 @@ public interface Fluid<T> extends Iterable<T>{
         });
     }
 
+    default boolean allTrue(Predicate<T> predicate) {
+        for(T t : this) {
+            if(!predicate.test(t))return false;
+        }
+        return true;
+    }
+
+    default boolean anyTrue(Predicate<T> predicate) {
+        for(T t : this) {
+            if(predicate.test(t))return true;
+        }
+        return false;
+    }
+
 
     default List<T> toList() {
         List<T> list = new ArrayList<>();
