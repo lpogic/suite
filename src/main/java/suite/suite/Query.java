@@ -74,6 +74,10 @@ public class Query {
         return result.orDo(supplier);
     }
 
+    public<B> B orDo(Function<Subject, B> function) {
+        return result.desolated() ? function.apply(source) : result.asExpected();
+    }
+
     public<B> B asExpected() {
         return result.asExpected();
     }
