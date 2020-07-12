@@ -29,6 +29,14 @@ public class Query {
         return this;
     }
 
+    public<T> Query get(Object key, Class<T> type) {
+        var s = source.get(key);
+        if(s.assigned(type)) {
+            result = s;
+        }
+        return this;
+    }
+
     public<T> Query get(Object key, Class<T> type, Function<T, Object> function) {
         var s = source.get(key);
         if(s.assigned(type)) {
@@ -47,6 +55,10 @@ public class Query {
 
     public Query or(Object key, Action action) {
         return result.desolated() ? get(key, action) : this;
+    }
+
+    public<T> Query or(Object key, Class<T> type) {
+        return result.desolated() ? get(key, type) : this;
     }
 
     public<T> Query or(Object key, Class<T> type, Function<T, Object> function) {
