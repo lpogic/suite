@@ -3,6 +3,7 @@ package suite.suite;
 import suite.suite.action.Action;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Query {
 
@@ -67,6 +68,10 @@ public class Query {
 
     public<B> B orGiven(B substitute) {
         return result.orGiven(substitute);
+    }
+
+    public<B> B orDo(Supplier<B> supplier) {
+        return result.orDo(supplier);
     }
 
     public<B> B asExpected() {
