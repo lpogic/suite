@@ -3,6 +3,7 @@ package suite.suite;
 import suite.suite.util.FluidSubject;
 import suite.suite.util.Glass;
 
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -46,11 +47,26 @@ public interface Subject {
     <B> B orDo(Supplier<B> supplier);
     boolean assigned(Class<?> type);
 
-    default int asInt() {
-        return asExpected();
-    }
     default String asString() {
-        return asExpected();
+        return Objects.toString(direct(), "nuLL");
+    }
+    default int asInt() {
+        return asGiven(Number.class).intValue();
+    }
+    default short asShort() {
+        return asGiven(Number.class).shortValue();
+    }
+    default long asLong() {
+        return asGiven(Number.class).longValue();
+    }
+    default double asDouble() {
+        return asGiven(Number.class).doubleValue();
+    }
+    default float asFloat() {
+        return asGiven(Number.class).floatValue();
+    }
+    default short asByte() {
+        return asGiven(Number.class).byteValue();
     }
 
     default Subject getSaved(Object key, Object substitute) {
