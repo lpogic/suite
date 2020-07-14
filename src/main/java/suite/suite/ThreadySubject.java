@@ -292,6 +292,16 @@ class ThreadySubject implements Subject {
     }
 
     @Override
+    public Subject takeAt(Slot slot) {
+        Subject taken;
+        try(var ignored = writeLock.lock()) {
+            taken = subject.getAt(slot);
+            if(taken.settled()) subject = subject.unset(taken.key().direct());
+        }
+        return new SolidSubject(taken);
+    }
+
+    @Override
     public boolean settled() {
         boolean settled;
         try(var ignored = readLock.lock()) {

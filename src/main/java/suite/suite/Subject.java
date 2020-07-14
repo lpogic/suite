@@ -65,6 +65,9 @@ public interface Subject {
     default Subject take(Object key) {
         throw new UnsupportedOperationException();
     }
+    default Subject takeAt(Slot slot) {
+        throw new UnsupportedOperationException();
+    }
 
     boolean settled();
     boolean desolated();

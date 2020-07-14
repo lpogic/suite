@@ -187,7 +187,14 @@ public class SolidSubject implements Subject {
     @Override
     public Subject take(Object key) {
         Subject taken = get(key);
-        subject = subject.unset(key);
+        if(taken.settled()) subject = subject.unset(key);
+        return taken;
+    }
+
+    @Override
+    public Subject takeAt(Slot slot) {
+        Subject taken = getAt(slot);
+        if(taken.settled()) subject = subject.unset(taken.key().direct());
         return taken;
     }
 
