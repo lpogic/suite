@@ -3,6 +3,7 @@ package suite.suite;
 import suite.suite.util.*;
 
 import java.util.NoSuchElementException;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 class MultiSubject implements Subject {
@@ -92,6 +93,18 @@ class MultiSubject implements Subject {
             } else if(slot instanceof Slot.SlotAfter) {
                 Link link = chain.get(((Slot.SlotAfter) slot).key);
                 return link == chain.ward ? ZeroSubject.getInstance() : link.back.subject;
+            } else if(slot instanceof Slot.RecentBeforeSlot) {
+                Predicate<Subject> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
+                for(Subject s : reverse()) {
+                    if(!isLater.test(s)) return s;
+                }
+                return ZeroSubject.getInstance();
+            } else if(slot instanceof Slot.PrimeAfterSlot) {
+                Predicate<Subject> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
+                for(Subject s : front()) {
+                    if(!isEarlier.test(s)) return s;
+                }
+                return ZeroSubject.getInstance();
             } else if(slot instanceof Slot.PlacedSlot) {
                 Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
                 return link.subject;
@@ -271,9 +284,33 @@ class MultiSubject implements Subject {
                 } else chain.put(link, key, value);
             } else if(slot instanceof Slot.SlotAfter) {
                 Link link = chain.get(((Slot.SlotAfter) slot).key);
-                if(link == chain.ward) {
+                if (link == chain.ward) {
                     throw new NoSuchElementException();
                 } else chain.put(link.back, key, value);
+            } else if(slot instanceof Slot.RecentBeforeSlot) {
+                Predicate<Subject> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
+                boolean settled = false;
+                for(Subject s : reverse()) {
+                    settled = !isLater.test(s);
+                    if(settled) {
+                        chain.put(chain.get(s.key().direct()).back, key, value);
+                        break;
+                    }
+                } if(!settled) {
+                    chain.put(chain.ward.back, key, value);
+                }
+            } else if(slot instanceof Slot.PrimeAfterSlot) {
+                Predicate<Subject> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
+                boolean settled = false;
+                for(Subject s : front()) {
+                    settled = !isEarlier.test(s);
+                    if(settled) {
+                        chain.put(chain.get(s.key().direct()), key, value);
+                        break;
+                    }
+                } if(!settled) {
+                    chain.put(chain.ward, key, value);
+                }
             } else if(slot instanceof Slot.PlacedSlot) {
                 Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
                 chain.put(link, key, value);
@@ -304,6 +341,14 @@ class MultiSubject implements Subject {
                 if(link == chain.ward) {
                     throw new NoSuchElementException();
                 } else chain.putIfAbsent(link.back, key, value);
+            } else if(slot instanceof Slot.RecentBeforeSlot) {
+                if(chain.get(key) == chain.ward) {
+                    setAt(slot, key, value);
+                }
+            } else if(slot instanceof Slot.PrimeAfterSlot) {
+                if(chain.get(key) == chain.ward) {
+                    setAt(slot, key, value);
+                }
             } else if(slot instanceof Slot.PlacedSlot) {
                 Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
                 chain.putIfAbsent(link, key, value);

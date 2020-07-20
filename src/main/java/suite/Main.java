@@ -6,9 +6,14 @@ import suite.suite.Suite;
 public class Main {
 
     public static void main(String[] args) {
-        var s = Suite.set("a").set("b").setAt(Slot.in(1), "b.a");
-        System.out.println(s);
-        System.out.println(Suite.from(s).get("X").or("b.a", s1 -> Suite.set(s1.asString().toUpperCase())).direct());
-        Suite.from(s).get("size").map(Number.class, Number::doubleValue).orGiven(9.0);
+        var sub = Suite.set("a").set("b").setAt(Slot.in(1), "b.a");
+        System.out.println(sub);
+        sub.setAt(Slot.recentBefore(s -> s.asString().startsWith("b")), "c");
+        System.out.println(sub);
+        sub.setAt(Slot.recentBefore(s -> true), "d");
+        System.out.println(sub);
+        sub.setAt(Slot.primeAfter(s -> false), "e");
+        sub.setAt(Slot.primeAfter(s -> s.assigned(String.class)), "f");
+        System.out.println(sub);
     }
 }

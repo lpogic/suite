@@ -1,5 +1,7 @@
 package suite.suite;
 
+import java.util.function.Predicate;
+
 public interface Slot {
     Slot PRIME = new Slot(){};
     Slot RECENT = new Slot(){};
@@ -14,6 +16,14 @@ public interface Slot {
 
     static Slot in(int place) {
         return new PlacedSlot(place);
+    }
+
+    static Slot recentBefore(Predicate<Subject> isLater) {
+        return new RecentBeforeSlot(isLater);
+    }
+
+    static Slot primeAfter(Predicate<Subject> isEarlier) {
+        return new PrimeAfterSlot(isEarlier);
     }
 
     class SlotBefore implements Slot {
@@ -37,6 +47,22 @@ public interface Slot {
 
         PlacedSlot(int place) {
             this.place = place;
+        }
+    }
+
+    class RecentBeforeSlot implements Slot {
+        Predicate<Subject> isLater;
+
+        RecentBeforeSlot(Predicate<Subject> isLater) {
+            this.isLater = isLater;
+        }
+    }
+
+    class PrimeAfterSlot implements Slot {
+        Predicate<Subject> isEarlier;
+
+        PrimeAfterSlot(Predicate<Subject> isEarlier) {
+            this.isEarlier = isEarlier;
         }
     }
 }

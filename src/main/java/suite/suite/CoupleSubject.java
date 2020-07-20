@@ -5,6 +5,7 @@ import suite.suite.util.FluidSubject;
 import suite.suite.util.Glass;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unchecked")
@@ -80,6 +81,12 @@ class CoupleSubject implements Subject {
     public Subject getAt(Slot slot) {
         if(slot == Slot.PRIME || slot == Slot.RECENT || (slot instanceof Slot.PlacedSlot && ((Slot.PlacedSlot) slot).place == 0)) {
             return this;
+        } else if(slot instanceof Slot.RecentBeforeSlot) {
+            Predicate<Subject> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
+            return isLater.test(this) ? ZeroSubject.getInstance() : this;
+        } else if(slot instanceof Slot.PrimeAfterSlot) {
+            Predicate<Subject> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
+            return isEarlier.test(this) ? ZeroSubject.getInstance() : this;
         }
         return ZeroSubject.getInstance();
     }
