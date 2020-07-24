@@ -91,4 +91,14 @@ public final class Suite {
         return new Query(sub);
     }
 
+    public static Subject zip(Iterable<Object> keys, Iterable<Object> values) {
+        Iterator<Object> keyIt = keys.iterator();
+        Iterator<Object> valIt = values.iterator();
+        Subject subject = Suite.set();
+        while (keyIt.hasNext() && valIt.hasNext()) {
+            subject.set(keyIt.next(), valIt.next());
+        }
+        return subject;
+    }
+
 }
