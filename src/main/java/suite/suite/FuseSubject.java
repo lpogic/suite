@@ -64,6 +64,12 @@ class FuseSubject implements Subject {
     }
 
     @Override
+    public Subject unsetAt(Slot slot) {
+        safe();
+        return subject.unsetAt(slot);
+    }
+
+    @Override
     public Subject prime() {
         return subject.prime();
     }

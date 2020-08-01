@@ -11,8 +11,8 @@ import java.util.function.Supplier;
 @SuppressWarnings("unchecked")
 class CoupleSubject implements Subject {
 
-    private final Object primeKey;
-    private final Object primeValue;
+    final Object primeKey;
+    final Object primeValue;
 
     CoupleSubject(Object primeKey, Object primeValue) {
         this.primeKey = primeKey;
@@ -55,6 +55,11 @@ class CoupleSubject implements Subject {
     public Subject unset(Object key, Object value) {
         return Objects.equals(primeKey, key) && Objects.equals(primeValue, value) ?
                 ZeroSubject.getInstance() : this;
+    }
+
+    @Override
+    public Subject unsetAt(Slot slot) {
+        return getAt(slot).settled() ? ZeroSubject.getInstance() : this;
     }
 
     @Override

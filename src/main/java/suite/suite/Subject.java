@@ -24,8 +24,9 @@ public interface Subject {
     default Subject unset() {
         return ZeroSubject.getInstance();
     }
-    Subject unset(Object key); // Usuń wartości pod kluczem $key
-    Subject unset(Object key, Object value); // Usuń wartość $value pod kluczem $key
+    Subject unset(Object key);
+    Subject unset(Object key, Object value);
+    Subject unsetAt(Slot slot);
 
     Subject key();
     Subject prime();

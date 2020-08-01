@@ -86,6 +86,12 @@ public class SolidSubject implements Subject {
     }
 
     @Override
+    public Subject unsetAt(Slot slot) {
+        subject = subject.unsetAt(slot);
+        return this;
+    }
+
+    @Override
     public Subject prime() {
         return new SolidSubject(subject.prime());
     }

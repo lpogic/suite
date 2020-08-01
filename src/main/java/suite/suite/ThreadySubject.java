@@ -108,6 +108,14 @@ class ThreadySubject implements Subject {
     }
 
     @Override
+    public Subject unsetAt(Slot slot) {
+        try(var ignored = writeLock.lock()) {
+            subject = subject.unsetAt(slot);
+        }
+        return this;
+    }
+
+    @Override
     public Subject prime() {
         Subject prime;
         try(var ignored = readLock.lock()) {

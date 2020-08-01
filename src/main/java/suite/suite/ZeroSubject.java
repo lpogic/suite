@@ -37,7 +37,7 @@ class ZeroSubject implements Subject {
 
     @Override
     public Subject add(Object element) {
-        return new CoupleSubject(new Suite.Add(), element);
+        return new CoupleSubject(new Suite.AutoKey(), element);
     }
 
     @Override
@@ -47,6 +47,11 @@ class ZeroSubject implements Subject {
 
     @Override
     public Subject unset(Object key, Object value) {
+        return this;
+    }
+
+    @Override
+    public Subject unsetAt(Slot slot) {
         return this;
     }
 

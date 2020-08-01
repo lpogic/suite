@@ -57,6 +57,11 @@ class BubbleSubject implements Subject {
     }
 
     @Override
+    public Subject unsetAt(Slot slot) {
+        return getAt(slot).settled() ? ZeroSubject.getInstance() : this;
+    }
+
+    @Override
     public Subject key() {
         return this;
     }

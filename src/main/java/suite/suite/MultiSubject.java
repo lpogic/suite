@@ -38,7 +38,7 @@ class MultiSubject implements Subject {
 
     @Override
     public Subject add(Object element) {
-        chain.putLast(new Suite.Add(), element);
+        chain.putLast(new Suite.AutoKey(), element);
         return this;
     }
 
@@ -58,6 +58,12 @@ class MultiSubject implements Subject {
     public Subject unset(Object key, Object value) {
         chain.remove(key, value);
         return this;
+    }
+
+    @Override
+    public Subject unsetAt(Slot slot) {
+        Subject s = getAt(slot);
+        return s.settled() ? unset(s.key().direct()) : this;
     }
 
     @Override
@@ -256,16 +262,6 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public int hashCode() {
-        return Suite.hashCode(this);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof Subject && Suite.equals(this, (Subject)obj);
-    }
-
-    @Override
     public Subject setAt(Slot slot, Object element) {
         return setAt(slot, element, element);
     }
@@ -359,6 +355,6 @@ class MultiSubject implements Subject {
 
     @Override
     public Subject addAt(Slot slot, Object element) {
-        return setAt(slot, new Suite.Add() ,element);
+        return setAt(slot, new Suite.AutoKey() ,element);
     }
 }

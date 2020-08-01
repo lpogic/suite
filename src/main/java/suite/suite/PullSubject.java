@@ -31,7 +31,7 @@ public abstract class PullSubject implements Subject {
 
     @Override
     public Subject add(Object element) {
-        return set(new Suite.Add(), element);
+        return set(new Suite.AutoKey(), element);
     }
 
     @Override
@@ -197,6 +197,6 @@ public abstract class PullSubject implements Subject {
 
     @Override
     public Subject addAt(Slot slot, Object element) {
-        return setAt(slot, new Suite.Add(), element);
+        return setAt(slot, new Suite.AutoKey(), element);
     }
 }
