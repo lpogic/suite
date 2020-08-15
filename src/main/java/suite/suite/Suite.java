@@ -1,5 +1,7 @@
 package suite.suite;
 
+import suite.suite.util.FluidSubject;
+
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -67,13 +69,7 @@ public final class Suite {
     }
 
     public static Subject zip(Iterable<Object> keys, Iterable<Object> values) {
-        Iterator<Object> keyIt = keys.iterator();
-        Iterator<Object> valIt = values.iterator();
-        Subject subject = Suite.set();
-        while (keyIt.hasNext() && valIt.hasNext()) {
-            subject.set(keyIt.next(), valIt.next());
-        }
-        return subject;
+        return insetAll(FluidSubject.engage(keys, values));
     }
 
 }

@@ -2,9 +2,6 @@ package suite.sets;
 
 import suite.suite.Subject;
 import suite.suite.Suite;
-import suite.suite.util.FluidIterator;
-
-import java.util.Iterator;
 
 public class Sets {
 

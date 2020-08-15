@@ -125,4 +125,21 @@ public interface FluidSubject extends Iterable<Subject> {
     static FluidSubject empty() {
         return FluidIterator::empty;
     }
+
+    static FluidSubject engage(Iterable<Object> keys, Iterable<Object> values) {
+        return () -> new FluidIterator<>() {
+            final Iterator<Object> keyIt = keys.iterator();
+            final Iterator<Object> valIt = values.iterator();
+
+            @Override
+            public boolean hasNext() {
+                return keyIt.hasNext() && valIt.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                return Suite.set(keyIt.next(), valIt.next());
+            }
+        };
+    }
 }
