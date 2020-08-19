@@ -1,12 +1,12 @@
 package suite.suite;
 
 import suite.suite.util.FluidIterator;
-import suite.suite.util.FluidSubject;
+import suite.suite.util.Fluid;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class Chain implements FluidSubject {
+class Chain implements Fluid {
 
     class ChainIterator implements FluidIterator<Subject> {
 

@@ -1,9 +1,6 @@
 package suite.suite;
 
-import suite.suite.util.FluidSubject;
-
-import java.util.Iterator;
-import java.util.Objects;
+import suite.suite.util.Fluid;
 
 public final class Suite {
 
@@ -69,7 +66,7 @@ public final class Suite {
     }
 
     public static Subject zip(Iterable<Object> keys, Iterable<Object> values) {
-        return insetAll(FluidSubject.engage(keys, values));
+        return insetAll(Fluid.engage(keys, values));
     }
 
 }

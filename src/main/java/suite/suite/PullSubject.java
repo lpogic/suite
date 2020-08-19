@@ -1,6 +1,6 @@
 package suite.suite;
 
-import suite.suite.util.FluidSubject;
+import suite.suite.util.Fluid;
 import suite.suite.util.Glass;
 
 import java.util.Objects;
@@ -159,26 +159,26 @@ public abstract class PullSubject implements Subject {
     public abstract Subject unset();
 
     @Override
-    public FluidSubject front() {
+    public Fluid front() {
         return frontFrom(Slot.PRIME);
     }
 
     @Override
-    public FluidSubject reverse() {
+    public Fluid reverse() {
         return reverseFrom(Slot.RECENT);
     }
 
     @Override
-    public abstract FluidSubject front(Object fromKeyIncluded);
+    public abstract Fluid front(Object fromKeyIncluded);
 
     @Override
-    public abstract FluidSubject reverse(Object fromKeyIncluded);
+    public abstract Fluid reverse(Object fromKeyIncluded);
 
     @Override
-    public abstract FluidSubject frontFrom(Slot fromSlotIncluded);
+    public abstract Fluid frontFrom(Slot fromSlotIncluded);
 
     @Override
-    public abstract FluidSubject reverseFrom(Slot fromSlotIncluded);
+    public abstract Fluid reverseFrom(Slot fromSlotIncluded);
 
     @Override
     public Subject setAt(Slot slot, Object element) {

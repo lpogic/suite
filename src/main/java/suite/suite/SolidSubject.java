@@ -1,7 +1,7 @@
 package suite.suite;
 
 import suite.suite.util.FluidIterator;
-import suite.suite.util.FluidSubject;
+import suite.suite.util.Fluid;
 import suite.suite.util.Glass;
 
 import java.util.function.Function;
@@ -10,20 +10,20 @@ import java.util.function.Supplier;
 public class SolidSubject implements Subject {
 
     static class HomogenizedSubjectIterator implements FluidIterator<Subject>{
-        final FluidIterator<Subject> subIt;
+        final FluidIterator<Subject> it;
 
-        HomogenizedSubjectIterator(FluidIterator<Subject> subIt) {
-            this.subIt = subIt;
+        HomogenizedSubjectIterator(FluidIterator<Subject> it) {
+            this.it = it;
         }
 
         @Override
         public boolean hasNext() {
-            return subIt.hasNext();
+            return it.hasNext();
         }
 
         @Override
         public Subject next() {
-            return new SolidSubject(subIt.next());
+            return new SolidSubject(it.next());
         }
     }
 
@@ -220,39 +220,44 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public FluidSubject front() {
-        subject = subject.homogenize();
-        return () -> new HomogenizedSubjectIterator(subject.front().iterator());
+    public Fluid front() {
+        return this;
     }
 
     @Override
-    public FluidSubject front(Object fromKeyIncluded) {
+    public Fluid front(Object fromKeyIncluded) {
         subject = subject.homogenize();
         return () -> new HomogenizedSubjectIterator(subject.front(fromKeyIncluded).iterator());
     }
 
     @Override
-    public FluidSubject frontFrom(Slot fromSlotIncluded) {
+    public Fluid frontFrom(Slot fromSlotIncluded) {
         subject = subject.homogenize();
         return () -> new HomogenizedSubjectIterator(subject.frontFrom(fromSlotIncluded).iterator());
     }
 
     @Override
-    public FluidSubject reverse() {
+    public Fluid reverse() {
         subject = subject.homogenize();
         return () -> new HomogenizedSubjectIterator(subject.reverse().iterator());
     }
 
     @Override
-    public FluidSubject reverse(Object fromKeyIncluded) {
+    public Fluid reverse(Object fromKeyIncluded) {
         subject = subject.homogenize();
         return () -> new HomogenizedSubjectIterator(subject.reverse(fromKeyIncluded).iterator());
     }
 
     @Override
-    public FluidSubject reverseFrom(Slot fromSlotIncluded) {
+    public Fluid reverseFrom(Slot fromSlotIncluded) {
         subject = subject.homogenize();
         return () -> new HomogenizedSubjectIterator(subject.reverseFrom(fromSlotIncluded).iterator());
+    }
+
+    @Override
+    public FluidIterator<Subject> iterator() {
+        subject = subject.homogenize();
+        return new HomogenizedSubjectIterator(subject.iterator());
     }
 
     @Override

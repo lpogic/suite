@@ -184,71 +184,76 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public FluidSubject front() {
+    public Fluid front() {
         return chain;
     }
 
     @Override
-    public FluidSubject front(Object fromKeyIncluded) {
+    public Fluid front(Object fromKeyIncluded) {
         Link link = chain.get(fromKeyIncluded);
-        return link == chain.ward ? FluidSubject.empty() : () -> chain.iterator(false, link.front);
+        return link == chain.ward ? Fluid.empty() : () -> chain.iterator(false, link.front);
     }
 
     @Override
-    public FluidSubject frontFrom(Slot fromSlotIncluded) {
+    public Fluid frontFrom(Slot fromSlotIncluded) {
         if(fromSlotIncluded == Slot.PRIME) {
             return chain;
         } else if(fromSlotIncluded == Slot.RECENT) {
             Link link = chain.getLast();
-            return link == chain.ward ? FluidSubject.empty() : () -> chain.iterator(false, link.front);
+            return link == chain.ward ? Fluid.empty() : () -> chain.iterator(false, link.front);
         } else {
             if(fromSlotIncluded instanceof Slot.SlotBefore) {
                 Link link = chain.get(((Slot.SlotBefore) fromSlotIncluded).key);
                 return link == chain.ward || link.front == chain.ward ?
-                        FluidSubject.empty() : () -> chain.iterator(false, link.front.front);
+                        Fluid.empty() : () -> chain.iterator(false, link.front.front);
             } else if(fromSlotIncluded instanceof Slot.SlotAfter) {
                 Link link = chain.get(((Slot.SlotAfter) fromSlotIncluded).key);
-                return link == chain.ward ? FluidSubject.empty() : () -> chain.iterator(false, link);
+                return link == chain.ward ? Fluid.empty() : () -> chain.iterator(false, link);
             } else if(fromSlotIncluded instanceof Slot.PlacedSlot) {
                 Link link = chain.getNth(((Slot.PlacedSlot) fromSlotIncluded).place);
-                return link == chain.ward ? FluidSubject.empty() : () -> chain.iterator(false, link.front);
+                return link == chain.ward ? Fluid.empty() : () -> chain.iterator(false, link.front);
             }
         }
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public FluidSubject reverse() {
+    public Fluid reverse() {
         return () -> chain.iterator(true);
     }
 
     @Override
-    public FluidSubject reverse(Object fromKeyIncluded) {
+    public Fluid reverse(Object fromKeyIncluded) {
         Link link = chain.get(fromKeyIncluded);
-        return link == chain.ward ? FluidSubject.empty() : () -> chain.iterator(true, link.back);
+        return link == chain.ward ? Fluid.empty() : () -> chain.iterator(true, link.back);
     }
 
     @Override
-    public FluidSubject reverseFrom(Slot fromSlotIncluded) {
+    public Fluid reverseFrom(Slot fromSlotIncluded) {
         if(fromSlotIncluded == Slot.PRIME) {
             Link link = chain.getFirst();
-            return link == chain.ward ? FluidSubject.empty() : () -> chain.iterator(true, link.back);
+            return link == chain.ward ? Fluid.empty() : () -> chain.iterator(true, link.back);
         } else if(fromSlotIncluded == Slot.RECENT) {
             return () -> chain.iterator(true);
         } else {
             if(fromSlotIncluded instanceof Slot.SlotBefore) {
                 Link link = chain.get(((Slot.SlotBefore) fromSlotIncluded).key);
-                return link == chain.ward ? FluidSubject.empty() : () -> chain.iterator(true, link);
+                return link == chain.ward ? Fluid.empty() : () -> chain.iterator(true, link);
             } else if(fromSlotIncluded instanceof Slot.SlotAfter) {
                 Link link = chain.get(((Slot.SlotAfter) fromSlotIncluded).key);
                 return link == chain.ward || link.back == chain.ward ?
-                        FluidSubject.empty() : () -> chain.iterator(true, link.back.back);
+                        Fluid.empty() : () -> chain.iterator(true, link.back.back);
             } else if(fromSlotIncluded instanceof Slot.PlacedSlot) {
                 Link link = chain.getNth(((Slot.PlacedSlot) fromSlotIncluded).place);
-                return link == chain.ward ? FluidSubject.empty() : () -> chain.iterator(false, link.back);
+                return link == chain.ward ? Fluid.empty() : () -> chain.iterator(false, link.back);
             }
         }
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public FluidIterator<Subject> iterator() {
+        return chain.iterator();
     }
 
     @Override

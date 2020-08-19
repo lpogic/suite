@@ -1,7 +1,7 @@
 package suite.suite;
 
 import suite.suite.util.FluidIterator;
-import suite.suite.util.FluidSubject;
+import suite.suite.util.Fluid;
 import suite.suite.util.Glass;
 
 import java.util.concurrent.locks.Lock;
@@ -337,29 +337,28 @@ class ThreadySubject implements Subject {
     }
 
     @Override
-    public FluidSubject front() { // TODO przerobic na wielokrotne hasnext
-        FluidSubject fluid;
+    public Fluid reverse() {
+        Fluid fluid;
         try(var ignored = writeLock.lock()) {
             subject = subject.homogenize();
             fluid = () -> new FluidIterator<>() {
-                final FluidIterator<Subject> subIt = subject.front().iterator();
+                final FluidIterator<Subject> subIt = subject.reverse().iterator();
+                boolean hasNext;
                 Subject next;
 
                 @Override
                 public boolean hasNext() {
-                    boolean hasNext;
+                    if(hasNext) return true;
                     try(var ignored = readLock.lock()) {
-                        hasNext = subIt.hasNext();
-                        if(hasNext) {
-                            next = subIt.next();
-                        }
+                        if(hasNext = subIt.hasNext()) next = subIt.next();
                     }
                     return hasNext;
                 }
 
                 @Override
                 public Subject next() {
-                    return next;
+                    hasNext = false;
+                    return new SolidSubject(next);
                 }
             };
         }
@@ -367,33 +366,33 @@ class ThreadySubject implements Subject {
     }
 
     @Override
-    public FluidSubject reverse() { // TODO przerobic na wielokrotne hasnext
-        FluidSubject fluid;
+    public FluidIterator<Subject> iterator() {
+        FluidIterator<Subject> it;
         try(var ignored = writeLock.lock()) {
             subject = subject.homogenize();
-            fluid = () -> new FluidIterator<>() {
-                final FluidIterator<Subject> subIt = subject.reverse().iterator();
+            it = new FluidIterator<>() {
+                final FluidIterator<Subject> subIt = subject.front().iterator();
+                boolean hasNext;
                 Subject next;
 
                 @Override
                 public boolean hasNext() {
-                    boolean hasNext;
+                    if(hasNext) return true;
                     try(var ignored = readLock.lock()) {
                         hasNext = subIt.hasNext();
-                        if(hasNext) {
-                            next = subIt.next();
-                        }
+                        if(hasNext) next = subIt.next();
                     }
                     return hasNext;
                 }
 
                 @Override
                 public Subject next() {
+                    hasNext = false;
                     return new SolidSubject(next);
                 }
             };
         }
-        return fluid;
+        return it;
     }
 
     @Override

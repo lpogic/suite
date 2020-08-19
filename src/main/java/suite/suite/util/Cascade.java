@@ -42,7 +42,7 @@ public class Cascade<T> implements FluidIterator<T> {
         return falls;
     }
 
-    public Fluid<T> until(Predicate<T> predicate) {
+    public FluidObject<T> until(Predicate<T> predicate) {
         falls = 0;
         return () -> new FluidIterator<>() {
 
@@ -69,7 +69,7 @@ public class Cascade<T> implements FluidIterator<T> {
         };
     }
 
-    public Fluid<T> toEnd() {
+    public FluidObject<T> toEnd() {
         falls = 0;
         return () -> new FluidIterator<T>() {
             @Override

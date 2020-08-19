@@ -1,6 +1,7 @@
 package suite.suite;
 
-import suite.suite.util.FluidSubject;
+import suite.suite.util.FluidIterator;
+import suite.suite.util.Fluid;
 import suite.suite.util.Glass;
 
 import java.util.function.Supplier;
@@ -16,7 +17,7 @@ class FuseSubject implements Subject {
 
     private void safe() {
         if(active) {
-            subject = ZeroSubject.getInstance().insetAll(subject.front());
+            subject = Suite.insetAll(subject.front());
             active = false;
         }
     }
@@ -160,13 +161,18 @@ class FuseSubject implements Subject {
     }
 
     @Override
-    public FluidSubject front() {
+    public Fluid front() {
         return subject.front();
     }
 
     @Override
-    public FluidSubject reverse() {
+    public Fluid reverse() {
         return subject.reverse();
+    }
+
+    @Override
+    public FluidIterator<Subject> iterator() {
+        return subject.iterator();
     }
 
     @Override

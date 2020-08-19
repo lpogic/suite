@@ -2,33 +2,31 @@ package suite.suite.util;
 
 import suite.suite.Subject;
 import suite.suite.Suite;
+import suite.suite.action.Action;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
-public interface Fluid<T> extends Iterable<T>{
-    FluidIterator<T> iterator();
+public interface Fluid extends Iterable<Subject> {
+    FluidIterator<Subject> iterator();
 
-    default Cascade<T> cascade() {
+    default Cascade<Subject> cascade() {
         return new Cascade<>(iterator());
     }
 
-    default <F extends T> Fluid<F> filter(Class<F> requestedType) {
-        return () -> new FluidIterator<F>() {
-            final Iterator<T> origin = iterator();
-            F next = null;
+    default Fluid filter(Predicate<Subject> predicate) {
+        return () -> new FluidIterator<>() {
+            final Iterator<Subject> origin = iterator();
+            Subject next = null;
             boolean nextFound = false;
 
             @Override
             public boolean hasNext() {
                 if(nextFound) return true;
                 while (origin.hasNext()) {
-                    Object o = origin.next();
-                    if(requestedType.isInstance(o)) {
-                        next = requestedType.cast(o);
+                    Subject s = origin.next();
+                    if(predicate.test(s)) {
+                        next = s;
                         nextFound = true;
                         return true;
                     }
@@ -37,76 +35,16 @@ public interface Fluid<T> extends Iterable<T>{
             }
 
             @Override
-            public F next() {
+            public Subject next() {
                 nextFound = false;
                 return next;
             }
         };
     }
 
-    default <F extends T> Fluid<F> filter(Glass<? super F, F> requestedType) {
+    default Fluid map(Action action) {
         return () -> new FluidIterator<>() {
-            final Iterator<T> origin = iterator();
-            F next = null;
-            boolean nextFound = false;
-
-            @Override
-            public boolean hasNext() {
-                if(nextFound) return true;
-                while (origin.hasNext()) {
-                    Object o = origin.next();
-                    if(requestedType.isInstance(o)) {
-                        next = requestedType.cast(o);
-                        nextFound = true;
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public F next() {
-                nextFound = false;
-                return next;
-            }
-        };
-    }
-
-    default Fluid<T> filter(Predicate<T> predicate) {
-        return () -> new FluidIterator<>() {
-            final Iterator<T> origin = iterator();
-            T next = null;
-            boolean nextFound = false;
-
-            @Override
-            public boolean hasNext() {
-                if(nextFound) return true;
-                while (origin.hasNext()) {
-                    T t = origin.next();
-                    if(predicate.test(t)) {
-                        next = t;
-                        nextFound = true;
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public T next() {
-                nextFound = false;
-                return next;
-            }
-        };
-    }
-
-    static<I> Fluid<I> empty() {
-        return FluidIterator::empty;
-    }
-
-    default<O> Fluid<O> map(Function<T, O> function) {
-        return () -> new FluidIterator<>() {
-            final Iterator<T> origin = iterator();
+            final Iterator<Subject> origin = iterator();
 
             @Override
             public boolean hasNext() {
@@ -114,62 +52,98 @@ public interface Fluid<T> extends Iterable<T>{
             }
 
             @Override
-            public O next() {
-                return function.apply(origin.next());
+            public Subject next() {
+                return action.play(origin.next());
             }
         };
     }
 
-    default Fluid<T> skip(int from, int to) {
-        return filter(new Predicate<>() {
-            int counter = 0;
+    default FluidObject<Object> keys() {
+        return () -> new FluidIterator<>() {
+            final Iterator<Subject> subIt = iterator();
 
             @Override
-            public boolean test(T t) {
-                ++counter;
-                return counter <= from || counter > to;
+            public boolean hasNext() {
+                return subIt.hasNext();
             }
-        });
+
+            @Override
+            public Object next() {
+                return subIt.next().key().direct();
+            }
+        };
     }
 
-    default boolean allTrue(Predicate<T> predicate) {
-        for(T t : this) {
-            if(!predicate.test(t))return false;
-        }
-        return true;
+    default<T> FluidObject<T> keys(Class<T> type) {
+        return () -> new FluidIterator<>() {
+            final Iterator<Subject> subIt = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return subIt.hasNext();
+            }
+
+            @Override
+            public T next() {
+                return subIt.next().key().asExpected();
+            }
+        };
     }
 
-    default boolean anyTrue(Predicate<T> predicate) {
-        for(T t : this) {
-            if(predicate.test(t))return true;
-        }
-        return false;
+    default FluidObject<Object> values() {
+        return () -> new FluidIterator<>() {
+            final Iterator<Subject> subIt = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return subIt.hasNext();
+            }
+
+            @Override
+            public Object next() {
+                return subIt.next().direct();
+            }
+        };
     }
 
+    default<T> FluidObject<T> values(Class<T> type) {
+        return () -> new FluidIterator<>() {
+            final Iterator<Subject> subIt = iterator();
 
-    default List<T> toList() {
-        List<T> list = new ArrayList<>();
-        forEach(list::add);
-        return list;
+            @Override
+            public boolean hasNext() {
+                return subIt.hasNext();
+            }
+
+            @Override
+            public T next() {
+                return subIt.next().asExpected();
+            }
+        };
     }
 
-    default Subject toSubject(Iterable<?> keysSource) {
-        Iterator<?> v = iterator();
-        Iterator<?> k = keysSource.iterator();
-        Subject subject = Suite.set();
-        while (v.hasNext() && k.hasNext()) {
-            subject.set(k.next(), v.next());
-        }
-        return subject;
+    default Subject set() {
+        return Suite.insetAll(this);
     }
 
-    default String toString(String separator) {
-        StringBuilder stringBuilder = new StringBuilder();
-        Iterator<T> it = iterator();
-        while(it.hasNext()) {
-            stringBuilder.append(it.next());
-            if(it.hasNext())stringBuilder.append(separator);
-        }
-        return stringBuilder.toString();
+    static Fluid empty() {
+        return FluidIterator::empty;
+    }
+
+    static Fluid engage(Iterable<Object> keys, Iterable<Object> values) {
+        return () -> new FluidIterator<>() {
+            final Iterator<Object> keyIt = keys.iterator();
+            final Iterator<Object> valIt = values.iterator();
+
+            @Override
+            public boolean hasNext() {
+                return keyIt.hasNext() && valIt.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                return Suite.set(keyIt.next(), valIt.next());
+            }
+        };
     }
 }

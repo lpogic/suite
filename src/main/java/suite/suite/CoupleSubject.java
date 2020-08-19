@@ -1,7 +1,5 @@
 package suite.suite;
 
-import suite.suite.util.FluidIterator;
-import suite.suite.util.FluidSubject;
 import suite.suite.util.Glass;
 
 import java.util.Objects;
@@ -159,29 +157,6 @@ class CoupleSubject implements Subject {
     @Override
     public int size() {
         return 1;
-    }
-
-    @Override
-    public FluidSubject front() {
-        return () -> new FluidIterator<>() {
-            boolean available = true;
-
-            @Override
-            public boolean hasNext() {
-                return available;
-            }
-
-            @Override
-            public Subject next() {
-                available = false;
-                return CoupleSubject.this;
-            }
-        };
-    }
-
-    @Override
-    public FluidSubject reverse() {
-        return front();
     }
 
     @Override

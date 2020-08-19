@@ -1,13 +1,14 @@
 package suite.suite;
 
-import suite.suite.util.FluidSubject;
+import suite.suite.util.FluidIterator;
+import suite.suite.util.Fluid;
 import suite.suite.util.Glass;
 
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public interface Subject {
+public interface Subject extends Fluid {
 
     Subject set(Object element);
     Subject set(Object key, Object value);
@@ -90,23 +91,28 @@ public interface Subject {
     boolean desolated();
     int size();
 
-    default FluidSubject front() {
-        throw new UnsupportedOperationException();
+    @Override
+    default FluidIterator<Subject> iterator() {
+        throw new UnsupportedOperationException("Subject should be homogenized first");
     }
-    default FluidSubject front(Object fromKeyIncluded) {
-        throw new UnsupportedOperationException();
+
+    default Fluid front() {
+        throw new UnsupportedOperationException("Subject should be homogenized first");
     }
-    default FluidSubject frontFrom(Slot fromSlotIncluded) {
-        throw new UnsupportedOperationException();
+    default Fluid front(Object fromKeyIncluded) {
+        throw new UnsupportedOperationException("Subject should be homogenized first");
     }
-    default FluidSubject reverse() {
-        throw new UnsupportedOperationException();
+    default Fluid frontFrom(Slot fromSlotIncluded) {
+        throw new UnsupportedOperationException("Subject should be homogenized first");
     }
-    default FluidSubject reverse(Object fromKeyIncluded) {
-        throw new UnsupportedOperationException();
+    default Fluid reverse() {
+        throw new UnsupportedOperationException("Subject should be homogenized first");
     }
-    default FluidSubject reverseFrom(Slot fromSlotIncluded) {
-        throw new UnsupportedOperationException();
+    default Fluid reverse(Object fromKeyIncluded) {
+        throw new UnsupportedOperationException("Subject should be homogenized first");
+    }
+    default Fluid reverseFrom(Slot fromSlotIncluded) {
+        throw new UnsupportedOperationException("Subject should be homogenized first");
     }
 
     Subject homogenize();
