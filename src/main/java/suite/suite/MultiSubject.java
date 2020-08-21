@@ -14,6 +14,10 @@ class MultiSubject implements Subject {
         this.chain = new Chain();
     }
 
+    MultiSubject(Link ward) {
+        this.chain = new Chain(ward);
+    }
+
     @Override
     public Subject set(Object element) {
         return set(element, element);
@@ -189,76 +193,8 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Fluid front(Object fromKeyIncluded) {
-        Link link = chain.get(fromKeyIncluded);
-        return link == chain.ward ? Fluid.empty() : () -> chain.iterator(false, link.front);
-    }
-
-    @Override
-    public Fluid frontFrom(Slot fromSlotIncluded) {
-        if(fromSlotIncluded == Slot.PRIME) {
-            return chain;
-        } else if(fromSlotIncluded == Slot.RECENT) {
-            Link link = chain.getLast();
-            return link == chain.ward ? Fluid.empty() : () -> chain.iterator(false, link.front);
-        } else {
-            if(fromSlotIncluded instanceof Slot.SlotBefore) {
-                Link link = chain.get(((Slot.SlotBefore) fromSlotIncluded).key);
-                return link == chain.ward || link.front == chain.ward ?
-                        Fluid.empty() : () -> chain.iterator(false, link.front.front);
-            } else if(fromSlotIncluded instanceof Slot.SlotAfter) {
-                Link link = chain.get(((Slot.SlotAfter) fromSlotIncluded).key);
-                return link == chain.ward ? Fluid.empty() : () -> chain.iterator(false, link);
-            } else if(fromSlotIncluded instanceof Slot.PlacedSlot) {
-                Link link = chain.getNth(((Slot.PlacedSlot) fromSlotIncluded).place);
-                return link == chain.ward ? Fluid.empty() : () -> chain.iterator(false, link.front);
-            }
-        }
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Fluid reverse() {
         return () -> chain.iterator(true);
-    }
-
-    @Override
-    public Fluid reverse(Object fromKeyIncluded) {
-        Link link = chain.get(fromKeyIncluded);
-        return link == chain.ward ? Fluid.empty() : () -> chain.iterator(true, link.back);
-    }
-
-    @Override
-    public Fluid reverseFrom(Slot fromSlotIncluded) {
-        if(fromSlotIncluded == Slot.PRIME) {
-            Link link = chain.getFirst();
-            return link == chain.ward ? Fluid.empty() : () -> chain.iterator(true, link.back);
-        } else if(fromSlotIncluded == Slot.RECENT) {
-            return () -> chain.iterator(true);
-        } else {
-            if(fromSlotIncluded instanceof Slot.SlotBefore) {
-                Link link = chain.get(((Slot.SlotBefore) fromSlotIncluded).key);
-                return link == chain.ward ? Fluid.empty() : () -> chain.iterator(true, link);
-            } else if(fromSlotIncluded instanceof Slot.SlotAfter) {
-                Link link = chain.get(((Slot.SlotAfter) fromSlotIncluded).key);
-                return link == chain.ward || link.back == chain.ward ?
-                        Fluid.empty() : () -> chain.iterator(true, link.back.back);
-            } else if(fromSlotIncluded instanceof Slot.PlacedSlot) {
-                Link link = chain.getNth(((Slot.PlacedSlot) fromSlotIncluded).place);
-                return link == chain.ward ? Fluid.empty() : () -> chain.iterator(false, link.back);
-            }
-        }
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public FluidIterator<Subject> iterator() {
-        return chain.iterator();
-    }
-
-    @Override
-    public Subject homogenize() {
-        return this;
     }
 
     @Override
@@ -361,5 +297,49 @@ class MultiSubject implements Subject {
     @Override
     public Subject addAt(Slot slot, Object element) {
         return setAt(slot, new Suite.AutoKey() ,element);
+    }
+
+    @Override
+    public FluidIterator<Subject> iterator(Slot slot, boolean reverse) {
+        if(reverse) {
+            if(slot == Slot.PRIME) {
+                Link link = chain.getFirst();
+                return link == chain.ward ? FluidIterator.empty() : chain.iterator(true, link.back);
+            } else if(slot == Slot.RECENT) {
+                return chain.iterator(true);
+            } else {
+                if(slot instanceof Slot.SlotBefore) {
+                    Link link = chain.get(((Slot.SlotBefore) slot).key);
+                    return link == chain.ward ? FluidIterator.empty() : chain.iterator(true, link);
+                } else if(slot instanceof Slot.SlotAfter) {
+                    Link link = chain.get(((Slot.SlotAfter) slot).key);
+                    return link == chain.ward || link.back == chain.ward ?
+                            FluidIterator.empty() : chain.iterator(true, link.back.back);
+                } else if(slot instanceof Slot.PlacedSlot) {
+                    Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
+                    return link == chain.ward ? FluidIterator.empty() : chain.iterator(false, link.back);
+                }
+            }
+        } else {
+            if(slot == Slot.PRIME) {
+                return chain.iterator();
+            } else if(slot == Slot.RECENT) {
+                Link link = chain.getLast();
+                return link == chain.ward ? FluidIterator.empty() : chain.iterator(false, link.front);
+            } else {
+                if(slot instanceof Slot.SlotBefore) {
+                    Link link = chain.get(((Slot.SlotBefore) slot).key);
+                    return link == chain.ward || link.front == chain.ward ?
+                            FluidIterator.empty() : chain.iterator(false, link.front.front);
+                } else if(slot instanceof Slot.SlotAfter) {
+                    Link link = chain.get(((Slot.SlotAfter) slot).key);
+                    return link == chain.ward ? FluidIterator.empty() : chain.iterator(false, link);
+                } else if(slot instanceof Slot.PlacedSlot) {
+                    Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
+                    return link == chain.ward ? FluidIterator.empty() : chain.iterator(false, link.front);
+                }
+            }
+        }
+        throw new UnsupportedOperationException();
     }
 }

@@ -1,5 +1,6 @@
 package suite.suite;
 
+import suite.suite.util.FluidIterator;
 import suite.suite.util.Glass;
 
 import java.util.Objects;
@@ -10,6 +11,7 @@ import java.util.function.Supplier;
 class BubbleSubject implements Subject {
 
     private final Object bubbled;
+    private Link ward;
 
     BubbleSubject(Object bubbled) {
         this.bubbled = bubbled;
@@ -18,30 +20,30 @@ class BubbleSubject implements Subject {
     @Override
     public Subject set(Object element) {
         return Objects.equals(bubbled, element) ? new BubbleSubject(element) :
-                new MultiSubject().set(bubbled).set(element, element);
+                new MultiSubject(link()).set(element, element);
     }
 
     @Override
     public Subject set(Object key, Object value) {
         return Objects.equals(bubbled, key) ? new CoupleSubject(key, value) :
-                new MultiSubject().set(bubbled).set(key, value);
+                new MultiSubject(link()).set(key, value);
     }
 
     @Override
     public Subject put(Object element) {
         return Objects.equals(bubbled, element) ? this :
-                new MultiSubject().set(bubbled).set(element, element);
+                new MultiSubject(link()).set(element, element);
     }
 
     @Override
     public Subject put(Object key, Object value) {
         return Objects.equals(bubbled, key) ? this :
-                new MultiSubject().set(bubbled).set(key, value);
+                new MultiSubject(link()).set(key, value);
     }
 
     @Override
     public Subject add(Object element) {
-        return new MultiSubject().set(bubbled).add(element);
+        return new MultiSubject(link()).add(element);
     }
 
     @Override
@@ -159,11 +161,6 @@ class BubbleSubject implements Subject {
     }
 
     @Override
-    public Subject homogenize() {
-        return new MultiSubject().set(bubbled);
-    }
-
-    @Override
     public String toString() {
         return "[" + bubbled + "]" + bubbled;
     }
@@ -171,29 +168,62 @@ class BubbleSubject implements Subject {
     @Override
     public Subject setAt(Slot slot, Object element) {
         return Objects.equals(bubbled, element) ? new BubbleSubject(element) :
-                new MultiSubject().set(bubbled).setAt(slot, element, element);
+                new MultiSubject(link()).setAt(slot, element, element);
     }
 
     @Override
     public Subject setAt(Slot slot, Object key, Object value) {
         return Objects.equals(bubbled, key) ? new CoupleSubject(key, value) :
-                new MultiSubject().set(bubbled).setAt(slot, key, value);
+                new MultiSubject(link()).setAt(slot, key, value);
     }
 
     @Override
     public Subject putAt(Slot slot, Object element) {
         return Objects.equals(bubbled, element) ? this :
-                new MultiSubject().set(bubbled).setAt(slot, element, element);
+                new MultiSubject(link()).setAt(slot, element, element);
     }
 
     @Override
     public Subject putAt(Slot slot, Object key, Object value) {
         return Objects.equals(bubbled, key) ? this :
-                new MultiSubject().set(bubbled).setAt(slot, key, value);
+                new MultiSubject(link()).setAt(slot, key, value);
     }
 
     @Override
     public Subject addAt(Slot slot, Object element) {
-        return new MultiSubject().set(bubbled).addAt(slot, element);
+        return new MultiSubject(link()).addAt(slot, element);
+    }
+
+    private Link link() {
+        if(ward == null) {
+            ward = new Link();
+            Link link = new Link(ward, ward, this);
+            ward.front = ward.back = link;
+        }
+        return ward;
+    }
+
+    @Override
+    public FluidIterator<Subject> iterator(Slot slot, boolean reverse) {
+        link();
+        if(slot == Slot.PRIME) {
+            return new LinkIterator(reverse, ward, ward);
+        } else if(slot == Slot.RECENT) {
+            return new LinkIterator(reverse, ward, ward);
+        } else {
+            if(slot instanceof Slot.SlotBefore) {
+                return FluidIterator.empty();
+            } else if(slot instanceof Slot.SlotAfter) {
+                return FluidIterator.empty();
+            } else if(slot instanceof Slot.RecentBeforeSlot) {
+                Predicate<Subject> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
+                return isLater.test(new SolidSubject(this)) ? FluidIterator.empty() : new LinkIterator(reverse, ward, ward);
+            } else if(slot instanceof Slot.PrimeAfterSlot) {
+                Predicate<Subject> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
+                return isEarlier.test(new SolidSubject(this)) ? FluidIterator.empty() : new LinkIterator(reverse, ward, ward);
+            } else if(slot instanceof Slot.PlacedSlot) {
+                return ((Slot.PlacedSlot) slot).place == 0 ? new LinkIterator(reverse, ward, ward) : FluidIterator.empty();
+            } else throw new UnsupportedOperationException();
+        }
     }
 }

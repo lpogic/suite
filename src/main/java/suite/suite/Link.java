@@ -1,6 +1,6 @@
 package suite.suite;
 
-class Link {
+public class Link {
     Link front;
     Link back;
     Subject subject;

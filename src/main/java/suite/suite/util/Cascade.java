@@ -1,5 +1,6 @@
 package suite.suite.util;
 
+import suite.suite.Slot;
 import suite.suite.Subject;
 import suite.suite.Suite;
 
@@ -31,7 +32,7 @@ public class Cascade<T> implements FluidIterator<T> {
 
     @Override
     public T next() {
-        return stored.settled() ? stored.take(stored.key().direct()).asExpected() : iterator.next();
+        return stored.settled() ? stored.takeAt(Slot.PRIME).asExpected() : iterator.next();
     }
 
     public void store(T t) {

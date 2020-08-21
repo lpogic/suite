@@ -1,7 +1,6 @@
 package suite.suite;
 
 import suite.suite.util.FluidIterator;
-import suite.suite.util.Fluid;
 import suite.suite.util.Glass;
 
 import java.util.concurrent.locks.Lock;
@@ -10,6 +9,48 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 class ThreadySubject implements Subject {
+
+    class HomogenizedSubjectIterator implements FluidIterator<Subject>{
+        Subject sub;
+        boolean reverse;
+        Slot slot;
+        FluidIterator<Subject> it;
+
+        boolean hasNext;
+        Subject next;
+
+        HomogenizedSubjectIterator(Subject sub, boolean reverse, Slot slot) {
+            this.sub = sub;
+            this.reverse = reverse;
+            this.slot = slot;
+            this.it = sub.iterator(slot, reverse);
+        }
+
+
+        @Override
+        public boolean hasNext() {
+            if(hasNext) return true;
+            try(var ignored = readLock.lock()) {
+                if(sub != subject) {
+                    if(sub == ZeroSubject.getInstance()) {
+                        it = reverse ? subject.iterator(Slot.RECENT, true) : subject.iterator(Slot.PRIME, false);
+                    } else if(subject == ZeroSubject.getInstance()) {
+                        it = FluidIterator.empty();
+                    }
+                    sub = subject;
+                }
+                hasNext = it.hasNext();
+                if(hasNext) next = it.next();
+            }
+            return hasNext;
+        }
+
+        @Override
+        public Subject next() {
+            hasNext = false;
+            return new SolidSubject(next);
+        }
+    }
 
     private static class ThreadyLock implements AutoCloseable {
         private final Lock lock;
@@ -337,67 +378,12 @@ class ThreadySubject implements Subject {
     }
 
     @Override
-    public Fluid reverse() {
-        Fluid fluid;
-        try(var ignored = writeLock.lock()) {
-            subject = subject.homogenize();
-            fluid = () -> new FluidIterator<>() {
-                final FluidIterator<Subject> subIt = subject.reverse().iterator();
-                boolean hasNext;
-                Subject next;
-
-                @Override
-                public boolean hasNext() {
-                    if(hasNext) return true;
-                    try(var ignored = readLock.lock()) {
-                        if(hasNext = subIt.hasNext()) next = subIt.next();
-                    }
-                    return hasNext;
-                }
-
-                @Override
-                public Subject next() {
-                    hasNext = false;
-                    return new SolidSubject(next);
-                }
-            };
-        }
-        return fluid;
-    }
-
-    @Override
-    public FluidIterator<Subject> iterator() {
+    public FluidIterator<Subject> iterator(Slot slot, boolean reverse) {
         FluidIterator<Subject> it;
         try(var ignored = writeLock.lock()) {
-            subject = subject.homogenize();
-            it = new FluidIterator<>() {
-                final FluidIterator<Subject> subIt = subject.front().iterator();
-                boolean hasNext;
-                Subject next;
-
-                @Override
-                public boolean hasNext() {
-                    if(hasNext) return true;
-                    try(var ignored = readLock.lock()) {
-                        hasNext = subIt.hasNext();
-                        if(hasNext) next = subIt.next();
-                    }
-                    return hasNext;
-                }
-
-                @Override
-                public Subject next() {
-                    hasNext = false;
-                    return new SolidSubject(next);
-                }
-            };
+            it = new HomogenizedSubjectIterator(subject, reverse, slot);
         }
         return it;
-    }
-
-    @Override
-    public Subject homogenize() {
-        return this;
     }
 
     @Override
@@ -423,11 +409,6 @@ class ThreadySubject implements Subject {
             fused = subject.fused();
         }
         return fused;
-    }
-
-    @Override
-    public boolean homogeneous() {
-        return true;
     }
 
     @Override

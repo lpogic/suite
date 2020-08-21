@@ -8,36 +8,21 @@ import java.util.Map;
 
 class Chain implements Fluid {
 
-    class ChainIterator implements FluidIterator<Subject> {
-
-        private final boolean reverse;
-        private Link current;
-
-        public ChainIterator() {
-            this(false, ward);
-        }
-
-        public ChainIterator(boolean reverse, Link link) {
-            this.reverse = reverse;
-            this.current = link;
-        }
-
-        public boolean hasNext() {
-            return (reverse ? current.front() : current.back()) != ward;
-        }
-
-        public Subject next() {
-            current = reverse ? current.front() : current.back();
-            return current.subject;
-        }
-    }
-
     private final Map<Object, Link> data = new HashMap<>();
     final Link ward;
 
     public Chain() {
         this.ward = new Link(null, null, ZeroSubject.getInstance());
         this.ward.front = this.ward.back = ward;
+    }
+
+    public Chain(Link ward) {
+        this.ward = ward;
+        Link link = ward.front;
+        while (link != ward) {
+            data.put(link.subject.key().direct(), link);
+            link = link.front;
+        }
     }
 
     Link get(Object key) {
@@ -166,7 +151,7 @@ class Chain implements Fluid {
 
     public void clear() {
         for(Link link : data.values()) {
-            link.front = link.back = ward;
+            link.subject = null;
         }
         data.clear();
         ward.front = ward.back = ward;
@@ -174,15 +159,15 @@ class Chain implements Fluid {
 
     @Override
     public FluidIterator<Subject> iterator() {
-        return new ChainIterator();
+        return new LinkIterator(ward);
     }
 
     public FluidIterator<Subject> iterator(boolean reverse) {
-        return new ChainIterator(reverse, ward);
+        return new LinkIterator(reverse, ward, ward);
     }
 
     public FluidIterator<Subject> iterator(boolean reverse, Link link) {
-        return new ChainIterator(reverse, link);
+        return new LinkIterator(reverse, link, ward);
     }
 
     @Override

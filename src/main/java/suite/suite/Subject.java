@@ -1,8 +1,6 @@
 package suite.suite;
 
-import suite.suite.util.FluidIterator;
-import suite.suite.util.Fluid;
-import suite.suite.util.Glass;
+import suite.suite.util.*;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -91,37 +89,27 @@ public interface Subject extends Fluid {
     boolean desolated();
     int size();
 
+    FluidIterator<Subject> iterator(Slot slot, boolean reverse);
+
     @Override
     default FluidIterator<Subject> iterator() {
-        throw new UnsupportedOperationException("Subject should be homogenized first");
+        return iterator(Slot.PRIME, false);
     }
 
     default Fluid front() {
-        throw new UnsupportedOperationException("Subject should be homogenized first");
+        return () -> iterator(Slot.PRIME, false);
     }
-    default Fluid front(Object fromKeyIncluded) {
-        throw new UnsupportedOperationException("Subject should be homogenized first");
-    }
-    default Fluid frontFrom(Slot fromSlotIncluded) {
-        throw new UnsupportedOperationException("Subject should be homogenized first");
+    default Fluid front(Slot slot) {
+        return () -> iterator(slot, false);
     }
     default Fluid reverse() {
-        throw new UnsupportedOperationException("Subject should be homogenized first");
+        return () -> iterator(Slot.RECENT, true);
     }
-    default Fluid reverse(Object fromKeyIncluded) {
-        throw new UnsupportedOperationException("Subject should be homogenized first");
+    default Fluid reverse(Slot slot) {
+        return () -> iterator(slot, true);
     }
-    default Fluid reverseFrom(Slot fromSlotIncluded) {
-        throw new UnsupportedOperationException("Subject should be homogenized first");
-    }
-
-    Subject homogenize();
 
     default boolean fused() {
-        return false;
-    }
-
-    default boolean homogeneous() {
         return false;
     }
 

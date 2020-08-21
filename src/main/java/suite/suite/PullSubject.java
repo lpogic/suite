@@ -115,11 +115,6 @@ public abstract class PullSubject implements Subject {
     }
 
     @Override
-    public Subject homogenize() {
-        return this;
-    }
-
-    @Override
     public Subject getSaved(Object key, Object reserve) {
         Subject saved = get(key);
         if(saved.settled())return saved;
@@ -151,34 +146,7 @@ public abstract class PullSubject implements Subject {
     }
 
     @Override
-    public boolean homogeneous() {
-        return true;
-    }
-
-    @Override
     public abstract Subject unset();
-
-    @Override
-    public Fluid front() {
-        return frontFrom(Slot.PRIME);
-    }
-
-    @Override
-    public Fluid reverse() {
-        return reverseFrom(Slot.RECENT);
-    }
-
-    @Override
-    public abstract Fluid front(Object fromKeyIncluded);
-
-    @Override
-    public abstract Fluid reverse(Object fromKeyIncluded);
-
-    @Override
-    public abstract Fluid frontFrom(Slot fromSlotIncluded);
-
-    @Override
-    public abstract Fluid reverseFrom(Slot fromSlotIncluded);
 
     @Override
     public Subject setAt(Slot slot, Object element) {

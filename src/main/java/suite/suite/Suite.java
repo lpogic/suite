@@ -23,10 +23,13 @@ public final class Suite {
         return new SolidSubject(new CoupleSubject(key, value));
     }
     public static Subject add(Object element) {
-        return new SolidSubject(new ArraySubject().add(element));
+        return new SolidSubject(new CoupleSubject(new AutoKey(), element));
     }
     public static Subject insetAll(Iterable<Subject> source) {
         return new SolidSubject(ZeroSubject.getInstance().insetAll(source));
+    }
+    public static Subject inputAll(Iterable<Subject> source) {
+        return new SolidSubject(ZeroSubject.getInstance().inputAll(source));
     }
     public static Subject setAll(Iterable<Object> source) {
         return new SolidSubject(ZeroSubject.getInstance().setAll(source));

@@ -176,12 +176,6 @@ class FuseSubject implements Subject {
     }
 
     @Override
-    public Subject homogenize() {
-        subject = subject.homogenize();
-        return this;
-    }
-
-    @Override
     public boolean fused() {
         return true;
     }
@@ -214,5 +208,10 @@ class FuseSubject implements Subject {
     public Subject addAt(Slot slot, Object element) {
         safe();
         return subject.addAt(slot, element);
+    }
+
+    @Override
+    public FluidIterator<Subject> iterator(Slot slot, boolean reverse) {
+        return subject.iterator(slot, reverse);
     }
 }

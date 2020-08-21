@@ -125,6 +125,9 @@ public interface Fluid extends Iterable<Subject> {
     default Subject set() {
         return Suite.insetAll(this);
     }
+    default Subject put() {
+        return Suite.inputAll(this);
+    }
 
     static Fluid empty() {
         return FluidIterator::empty;

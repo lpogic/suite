@@ -15,5 +15,13 @@ public class Main {
         sub.setAt(Slot.primeAfter(s -> false), "e");
         sub.setAt(Slot.primeAfter(s -> s.assigned(String.class)), "f");
         System.out.println(sub);
+        System.out.println("unsetting");
+        for (var s : sub) {
+            System.out.println("s: " + s);
+            if(s.direct() == "a") {
+                sub.unset().set("A").set("B").set("C");
+            }
+            System.out.println(sub);
+        }
     }
 }

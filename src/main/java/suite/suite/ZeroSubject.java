@@ -1,5 +1,6 @@
 package suite.suite;
 
+import suite.suite.util.FluidIterator;
 import suite.suite.util.Glass;
 
 import java.util.NoSuchElementException;
@@ -146,11 +147,6 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public Subject homogenize() {
-        return new MultiSubject();
-    }
-
-    @Override
     public String toString() {
         return "[]";
     }
@@ -178,5 +174,10 @@ class ZeroSubject implements Subject {
     @Override
     public Subject addAt(Slot slot, Object element) {
         return add(element);
+    }
+
+    @Override
+    public FluidIterator<Subject> iterator(Slot slot, boolean reverse) {
+        return FluidIterator.empty();
     }
 }
