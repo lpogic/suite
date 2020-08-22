@@ -13,7 +13,6 @@ class ThreadySubject implements Subject {
     class HomogenizedSubjectIterator implements FluidIterator<Subject>{
         Subject sub;
         boolean reverse;
-        Slot slot;
         FluidIterator<Subject> it;
 
         boolean hasNext;
@@ -22,7 +21,6 @@ class ThreadySubject implements Subject {
         HomogenizedSubjectIterator(Subject sub, boolean reverse, Slot slot) {
             this.sub = sub;
             this.reverse = reverse;
-            this.slot = slot;
             this.it = sub.iterator(slot, reverse);
         }
 
@@ -387,17 +385,17 @@ class ThreadySubject implements Subject {
     }
 
     @Override
-    public Subject insetAll(Iterable<Subject> iterable) {
+    public Subject inset(Iterable<Subject> iterable) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.insetAll(iterable);
+            subject = subject.inset(iterable);
         }
         return this;
     }
 
     @Override
-    public Subject inputAll(Iterable<Subject> iterable) {
+    public Subject input(Iterable<Subject> iterable) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.inputAll(iterable);
+            subject = subject.input(iterable);
         }
         return this;
     }

@@ -6,6 +6,10 @@ public interface Slot {
     Slot PRIME = new Slot(){};
     Slot RECENT = new Slot(){};
 
+    static Slot of(Object key) {
+        return new SlotOf(key);
+    }
+
     static Slot before(Object key) {
         return new SlotBefore(key);
     }
@@ -24,6 +28,14 @@ public interface Slot {
 
     static Slot primeAfter(Predicate<Subject> isEarlier) {
         return new PrimeAfterSlot(isEarlier);
+    }
+
+    class SlotOf implements Slot {
+        Object key;
+
+        SlotOf(Object key) {
+            this.key = key;
+        }
     }
 
     class SlotBefore implements Slot {

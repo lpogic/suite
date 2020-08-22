@@ -113,7 +113,7 @@ public interface Subject extends Fluid {
         return false;
     }
 
-    default Subject insetAll(Iterable<Subject> iterable) {
+    default Subject inset(Iterable<Subject> iterable) {
         Subject subject = this;
         for(Subject it : iterable) {
             subject = subject.set(it.key().direct(), it.direct());
@@ -121,7 +121,7 @@ public interface Subject extends Fluid {
         return subject;
     }
 
-    default Subject inputAll(Iterable<Subject> iterable) {
+    default Subject input(Iterable<Subject> iterable) {
         Subject subject = this;
         for(Subject it : iterable) {
             subject = subject.put(it.key().direct(), it.direct());

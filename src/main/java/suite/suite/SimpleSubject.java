@@ -1,13 +1,12 @@
 package suite.suite;
 
-import suite.suite.util.Fluid;
 import suite.suite.util.Glass;
 
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public abstract class PullSubject implements Subject {
+public abstract class SimpleSubject implements Subject {
 
     @Override
     public Subject set(Object key, Object value) {
@@ -142,6 +141,13 @@ public abstract class PullSubject implements Subject {
     public Subject take(Object key) {
         Subject taken = get(key);
         unset(key);
+        return taken;
+    }
+
+    @Override
+    public Subject takeAt(Slot slot) {
+        Subject taken = getAt(slot);
+        unsetAt(slot);
         return taken;
     }
 

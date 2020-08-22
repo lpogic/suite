@@ -17,7 +17,7 @@ class FuseSubject implements Subject {
 
     private void safe() {
         if(active) {
-            subject = Suite.insetAll(subject.front());
+            subject = Suite.inset(subject.front());
             active = false;
         }
     }

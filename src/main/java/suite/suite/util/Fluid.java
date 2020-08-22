@@ -123,10 +123,10 @@ public interface Fluid extends Iterable<Subject> {
     }
 
     default Subject set() {
-        return Suite.insetAll(this);
+        return Suite.inset(this);
     }
     default Subject put() {
-        return Suite.inputAll(this);
+        return Suite.input(this);
     }
 
     static Fluid empty() {

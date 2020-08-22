@@ -25,11 +25,11 @@ public final class Suite {
     public static Subject add(Object element) {
         return new SolidSubject(new CoupleSubject(new AutoKey(), element));
     }
-    public static Subject insetAll(Iterable<Subject> source) {
-        return new SolidSubject(ZeroSubject.getInstance().insetAll(source));
+    public static Subject inset(Iterable<Subject> source) {
+        return new SolidSubject(ZeroSubject.getInstance().inset(source));
     }
-    public static Subject inputAll(Iterable<Subject> source) {
-        return new SolidSubject(ZeroSubject.getInstance().inputAll(source));
+    public static Subject input(Iterable<Subject> source) {
+        return new SolidSubject(ZeroSubject.getInstance().input(source));
     }
     public static Subject setAll(Iterable<Object> source) {
         return new SolidSubject(ZeroSubject.getInstance().setAll(source));
@@ -64,12 +64,16 @@ public final class Suite {
         return new ThreadySubject();
     }
 
+    public static Subject wonky() {
+        return new WonkySubject();
+    }
+
     public static Query from(Subject sub) {
         return new Query(sub);
     }
 
     public static Subject zip(Iterable<Object> keys, Iterable<Object> values) {
-        return insetAll(Fluid.engage(keys, values));
+        return inset(Fluid.engage(keys, values));
     }
 
 }

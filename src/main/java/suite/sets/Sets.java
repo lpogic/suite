@@ -14,13 +14,13 @@ public class Sets {
     }
 
     public static Subject union(Fluid major, Fluid minor) {
-        return Suite.insetAll(major).inputAll(minor);
+        return Suite.inset(major).input(minor);
     }
     
-    public static Subject insec(Subject major, Fluid minor) {
+    public static Subject insec(Subject strainer, Fluid fluid) {
         Subject sub = Suite.set();
-        for(var o : minor.keys()) {
-            Subject s = major.get(o);
+        for(var o : fluid.keys()) {
+            Subject s = strainer.get(o);
             if(s.settled()) {
                 sub.set(s.key().direct(), s.direct());
             }

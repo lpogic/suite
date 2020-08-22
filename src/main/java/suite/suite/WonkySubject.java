@@ -1,19 +1,23 @@
 package suite.suite;
 
-import suite.suite.util.FluidIterator;
 import suite.suite.util.Fluid;
+import suite.suite.util.FluidIterator;
 import suite.suite.util.Glass;
 
+import java.lang.ref.WeakReference;
+import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class SolidSubject implements Subject {
+public class WonkySubject extends SolidSubject {
 
     class HomogenizedSubjectIterator implements FluidIterator<Subject>{
         Subject sub;
         boolean reverse;
         FluidIterator<Subject> it;
 
+        boolean hasNext;
+        Subject next;
 
         HomogenizedSubjectIterator(Subject sub, boolean reverse, Slot slot) {
             this.sub = sub;
@@ -21,8 +25,10 @@ public class SolidSubject implements Subject {
             this.it = sub.iterator(slot, reverse);
         }
 
+
         @Override
         public boolean hasNext() {
+            if(hasNext) return true;
             if(sub != subject) {
                 if(sub == ZeroSubject.getInstance()) {
                     it = reverse ? subject.iterator(Slot.RECENT, true) : subject.iterator(Slot.PRIME, false);
@@ -31,52 +37,73 @@ public class SolidSubject implements Subject {
                 }
                 sub = subject;
             }
-            return it.hasNext();
+            while (hasNext = it.hasNext()) {
+                Subject s = it.next();
+                s = unweak(s);
+                if(s != ZeroSubject.getInstance()) {
+                    next = s;
+                    return true;
+                }
+            }
+            return false;
         }
 
         @Override
         public Subject next() {
-            return new SolidSubject(it.next());
+            hasNext = false;
+            return new SolidSubject(next);
         }
     }
 
     private Subject subject;
 
-    SolidSubject() {
+    WonkySubject() {
         subject = ZeroSubject.getInstance();
     }
 
-    SolidSubject(Subject subject) {
-        this.subject = subject;
+    private WeakReference<Object> weak(Object o) {
+        return o == null ? null : new WeakReference<>(o);
+    }
+
+    private Subject unweak(Subject s) {
+        WeakReference<Object> ref = s.orGiven(null);
+        if(ref == null) return s;
+        Object o = ref.get();
+        if(o == null) return ZeroSubject.getInstance();
+        return new CoupleSubject(s.key().direct(), o);
     }
 
     @Override
     public Subject set(Object element) {
-        subject = subject.set(element);
+        System.err.println("Keys in WeakSubject are not weak wrapped");
+        subject = subject.set(element, weak(element));
         return this;
     }
 
     @Override
     public Subject set(Object key, Object value) {
-        subject = subject.set(key, value);
+        subject = subject.set(key, weak(value));
         return this;
     }
 
     @Override
     public Subject put(Object element) {
-        subject = subject.put(element);
+        System.err.println("Keys in WeakSubject are not weak wrapped");
+        if(unweak(subject.get(element)).desolated())
+            subject = subject.set(element, weak(element));
         return this;
     }
 
     @Override
     public Subject put(Object key, Object value) {
-        subject = subject.put(key, value);
+        if(unweak(subject.get(key)).desolated())
+            subject = subject.set(key, weak(value));
         return this;
     }
 
     @Override
     public Subject add(Object element) {
-        subject = subject.add(element);
+        subject = subject.add(weak(element));
         return this;
     }
 
@@ -106,27 +133,29 @@ public class SolidSubject implements Subject {
 
     @Override
     public Subject prime() {
-        return new SolidSubject(subject.prime());
+        Iterator<Subject> it = iterator(Slot.PRIME, false);
+        return it.hasNext() ? it.next() : new SolidSubject(ZeroSubject.getInstance());
     }
 
     @Override
     public Subject recent() {
-        return new SolidSubject(subject.recent());
+        Iterator<Subject> it = iterator(Slot.RECENT, true);
+        return it.hasNext() ? it.next() : new SolidSubject(ZeroSubject.getInstance());
     }
 
     @Override
     public Subject get(Object key) {
-        return new SolidSubject(subject.get(key));
+        return unweak(subject.get(key));
     }
 
     @Override
     public Subject getAt(Slot slot) {
-        return new SolidSubject(subject.getAt(slot));
+        return new SolidSubject(unweak(subject.getAt(slot)));
     }
 
     @Override
     public Subject getAt(int slotIndex) {
-        return new SolidSubject(subject.getAt(slotIndex));
+        return new SolidSubject(unweak(subject.getAt(slotIndex)));
     }
 
     @Override
@@ -136,70 +165,70 @@ public class SolidSubject implements Subject {
 
     @Override
     public Object direct() {
-        return subject.direct();
+        return prime().direct();
     }
 
     @Override
     public <B> B asExpected() {
-        return subject.asExpected();
+        return prime().asExpected();
     }
 
     @Override
     public <B> B asGiven(Class<B> requestedType) {
-        return subject.asGiven(requestedType);
+        return prime().asGiven(requestedType);
     }
 
     @Override
     public <B> B asGiven(Glass<? super B, B> requestedType) {
-        return subject.asGiven(requestedType);
+        return prime().asGiven(requestedType);
     }
 
     @Override
     public <B> B asGiven(Class<B> requestedType, B substitute) {
-        return subject.asGiven(requestedType, substitute);
+        return prime().asGiven(requestedType, substitute);
     }
 
     @Override
     public <B> B asGiven(Glass<? super B, B> requestedType, B substitute) {
-        return subject.asGiven(requestedType, substitute);
+        return prime().asGiven(requestedType, substitute);
     }
 
     @Override
     public <B> B orGiven(B substitute) {
-        return subject.orGiven(substitute);
+        return prime().orGiven(substitute);
     }
 
     @Override
     public <B> B orDo(Supplier<B> supplier) {
-        return subject.orDo(supplier);
+        return prime().orDo(supplier);
     }
 
     @Override
     public boolean assigned(Class<?> type) {
-        return subject.assigned(type);
+        return prime().assigned(type);
     }
 
     @Override
     public Subject getSaved(Object key, Object reserve) {
-        Subject saved = subject.get(key);
+        Subject saved = unweak(subject.get(key));
         if(saved.settled())return new SolidSubject(saved);
-        subject = subject.set(key, reserve);
+        subject = subject.set(key, weak(reserve));
         return get(key);
     }
 
     @Override
     public Subject getDone(Object key, Supplier<?> supplier) {
-        Subject done = subject.get(key);
+        Subject done = unweak(subject.get(key));
         if(done.settled())return new SolidSubject(done);
-        subject = subject.set(key, supplier.get());
+        subject = subject.set(key, weak(supplier.get()));
         return get(key);
     }
 
     @Override
     public Subject getDone(Object key, Function<Subject, ?> function, Subject argument) {
-        Subject done = subject.get(key);
+        Subject done = unweak(subject.get(key));
         if(done.settled())return new SolidSubject(done);
-        subject = subject.set(key, function.apply(argument));
+        subject = subject.set(key, weak(function.apply(argument)));
         return get(key);
     }
 
@@ -207,24 +236,24 @@ public class SolidSubject implements Subject {
     public Subject take(Object key) {
         Subject taken = get(key);
         if(taken.settled()) subject = subject.unset(key);
-        return taken;
+        return unweak(taken);
     }
 
     @Override
     public Subject takeAt(Slot slot) {
         Subject taken = getAt(slot);
         if(taken.settled()) subject = subject.unset(taken.key().direct());
-        return taken;
+        return unweak(taken);
     }
 
     @Override
     public boolean settled() {
-        return subject.settled();
+        return iterator(Slot.PRIME, false).hasNext();
     }
 
     @Override
     public boolean desolated() {
-        return subject.desolated();
+        return !settled();
     }
 
     @Override
@@ -259,13 +288,17 @@ public class SolidSubject implements Subject {
 
     @Override
     public Subject inset(Iterable<Subject> iterable) {
-        subject = subject.inset(iterable);
+        for(Subject s : iterable) {
+            subject = subject.set(s.key().direct(), s.direct());
+        }
         return this;
     }
 
     @Override
     public Subject input(Iterable<Subject> iterable) {
-        subject = subject.input(iterable);
+        for(Subject s : iterable) {
+            subject = subject.put(s.key().direct(), s.direct());
+        }
         return this;
     }
 
@@ -281,31 +314,35 @@ public class SolidSubject implements Subject {
 
     @Override
     public Subject setAt(Slot slot, Object element) {
-        subject = subject.setAt(slot, element);
+        System.err.println("Keys in WeakSubject are not weak wrapped");
+        subject = subject.setAt(slot, element, weak(element));
         return this;
     }
 
     @Override
     public Subject setAt(Slot slot, Object key, Object value) {
-        subject = subject.setAt(slot, key, value);
+        subject = subject.setAt(slot, key, weak(value));
         return this;
     }
 
     @Override
     public Subject putAt(Slot slot, Object element) {
-        subject = subject.putAt(slot, element);
+        System.err.println("Keys in WeakSubject are not weak wrapped");
+        if(unweak(get(element)).desolated())
+            subject = subject.putAt(slot, element, weak(element));
         return this;
     }
 
     @Override
     public Subject putAt(Slot slot, Object key, Object value) {
-        subject = subject.putAt(slot, key, value);
+        if(unweak(get(key)).desolated())
+            subject = subject.putAt(slot, key, weak(value));
         return this;
     }
 
     @Override
     public Subject addAt(Slot slot, Object element) {
-        subject = subject.addAt(slot, element);
+        subject = subject.addAt(slot, weak(element));
         return this;
     }
 }

@@ -89,7 +89,7 @@ public class Query {
     public Query map(Subject map) {
         Subject r = Suite.set();
         for(var s : result.front()) {
-            r.inputAll(map.get(s.direct()).front());
+            r.input(map.get(s.direct()).front());
         }
         result = r;
         return this;
@@ -97,7 +97,7 @@ public class Query {
 
     public Query map(Action action) {
         for(var s : result.front()) {
-            result.insetAll(action.play(s).front());
+            result.inset(action.play(s).front());
         }
         return this;
     }
