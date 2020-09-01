@@ -36,7 +36,7 @@ public class SolidSubject implements Subject {
 
         @Override
         public Subject next() {
-            return new SolidSubject(it.next());
+            return new SolidSubject(it.next().exclude());
         }
     }
 
@@ -106,32 +106,32 @@ public class SolidSubject implements Subject {
 
     @Override
     public Subject prime() {
-        return new SolidSubject(subject.prime());
+        return new SolidSubject(subject.prime().exclude());
     }
 
     @Override
     public Subject recent() {
-        return new SolidSubject(subject.recent());
+        return new SolidSubject(subject.recent().exclude());
     }
 
     @Override
     public Subject get(Object key) {
-        return new SolidSubject(subject.get(key));
+        return new SolidSubject(subject.get(key).exclude());
     }
 
     @Override
     public Subject getAt(Slot slot) {
-        return new SolidSubject(subject.getAt(slot));
+        return new SolidSubject(subject.getAt(slot).exclude());
     }
 
     @Override
     public Subject getAt(int slotIndex) {
-        return new SolidSubject(subject.getAt(slotIndex));
+        return new SolidSubject(subject.getAt(slotIndex).exclude());
     }
 
     @Override
     public Subject key() {
-        return new SolidSubject(subject.key());
+        return new SolidSubject(subject.key().exclude());
     }
 
     @Override

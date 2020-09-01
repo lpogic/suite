@@ -46,7 +46,7 @@ class ThreadySubject implements Subject {
         @Override
         public Subject next() {
             hasNext = false;
-            return new SolidSubject(next);
+            return new SolidSubject(next.exclude());
         }
     }
 
@@ -158,7 +158,7 @@ class ThreadySubject implements Subject {
     public Subject prime() {
         Subject prime;
         try(var ignored = readLock.lock()) {
-            prime = new SolidSubject(subject.prime());
+            prime = new SolidSubject(subject.prime().exclude());
         }
         return prime;
     }
@@ -167,7 +167,7 @@ class ThreadySubject implements Subject {
     public Subject recent() {
         Subject recent;
         try(var ignored = readLock.lock()) {
-            recent = new SolidSubject(subject.recent());
+            recent = new SolidSubject(subject.recent().exclude());
         }
         return recent;
     }
@@ -176,7 +176,7 @@ class ThreadySubject implements Subject {
     public Subject get(Object key) {
         Subject get;
         try(var ignored = readLock.lock()) {
-            get = new SolidSubject(subject.get(key));
+            get = new SolidSubject(subject.get(key).exclude());
         }
         return get;
     }
@@ -185,7 +185,7 @@ class ThreadySubject implements Subject {
     public Subject getAt(Slot slot) {
         Subject at;
         try(var ignored = readLock.lock()) {
-            at = new SolidSubject(subject.getAt(slot));
+            at = new SolidSubject(subject.getAt(slot).exclude());
         }
         return at;
     }
@@ -194,7 +194,7 @@ class ThreadySubject implements Subject {
     public Subject getAt(int slotIndex) {
         Subject at;
         try(var ignored = readLock.lock()) {
-            at = new SolidSubject(subject.getAt(slotIndex));
+            at = new SolidSubject(subject.getAt(slotIndex).exclude());
         }
         return at;
     }
@@ -203,7 +203,7 @@ class ThreadySubject implements Subject {
     public Subject key() {
         Subject key;
         try(var ignored = readLock.lock()) {
-            key = new SolidSubject(subject.key());
+            key = new SolidSubject(subject.key().exclude());
         }
         return key;
     }

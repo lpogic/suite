@@ -112,6 +112,9 @@ public interface Subject extends Fluid {
     default boolean fused() {
         return false;
     }
+    default Subject exclude() {
+        return this;
+    }
 
     default Subject inset(Iterable<Subject> iterable) {
         Subject subject = this;

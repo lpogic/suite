@@ -227,4 +227,9 @@ class CoupleSubject implements Subject {
             } else throw new UnsupportedOperationException();
         }
     }
+
+    @Override
+    public Subject exclude() {
+        return new CoupleSubject(primeKey, primeValue);
+    }
 }

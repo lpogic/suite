@@ -50,8 +50,10 @@ public class WonkySubject extends SolidSubject {
 
         @Override
         public Subject next() {
-            hasNext = false;
-            return new SolidSubject(next);
+            if(hasNext) {
+                hasNext = false;
+                return new SolidSubject(next);
+            } else return new SolidSubject(next.exclude());
         }
     }
 

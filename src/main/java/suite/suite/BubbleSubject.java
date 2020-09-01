@@ -226,4 +226,9 @@ class BubbleSubject implements Subject {
             } else throw new UnsupportedOperationException();
         }
     }
+
+    @Override
+    public Subject exclude() {
+        return new BubbleSubject(bubbled);
+    }
 }
