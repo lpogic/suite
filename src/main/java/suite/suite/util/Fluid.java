@@ -133,10 +133,10 @@ public interface Fluid extends Iterable<Subject> {
         return FluidIterator::empty;
     }
 
-    static Fluid engage(Iterable<Object> keys, Iterable<Object> values) {
+    static Fluid engage(Iterable<?> keys, Iterable<?> values) {
         return () -> new FluidIterator<>() {
-            final Iterator<Object> keyIt = keys.iterator();
-            final Iterator<Object> valIt = values.iterator();
+            final Iterator<?> keyIt = keys.iterator();
+            final Iterator<?> valIt = values.iterator();
 
             @Override
             public boolean hasNext() {
