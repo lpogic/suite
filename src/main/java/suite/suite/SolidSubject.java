@@ -42,11 +42,11 @@ public class SolidSubject implements Subject {
 
     private Subject subject;
 
-    SolidSubject() {
+    public SolidSubject() {
         subject = ZeroSubject.getInstance();
     }
 
-    SolidSubject(Subject subject) {
+    public SolidSubject(Subject subject) {
         this.subject = subject;
     }
 
