@@ -84,6 +84,9 @@ public interface Subject extends Fluid {
     default Subject takeAt(Slot slot) {
         throw new UnsupportedOperationException();
     }
+    default Subject into(Object key) {
+        return getDone(key, Suite::set).asExpected();
+    }
 
     boolean settled();
     boolean desolated();
