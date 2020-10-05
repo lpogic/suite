@@ -16,8 +16,8 @@ public interface Slime<T> extends Iterable<T>{
         return new Cascade<>(iterator());
     }
 
-    default <F extends T> Slime<F> filter(Class<F> requestedType) {
-        return () -> new Wave<F>() {
+    default <F> Slime<F> filter(Class<F> requestedType) {
+        return () -> new Wave<>() {
             final Iterator<T> origin = iterator();
             F next = null;
             boolean nextFound = false;
@@ -44,7 +44,7 @@ public interface Slime<T> extends Iterable<T>{
         };
     }
 
-    default <F extends T> Slime<F> filter(Glass<? super F, F> requestedType) {
+    default <F> Slime<F> filter(Glass<? super F, F> requestedType) {
         return () -> new Wave<>() {
             final Iterator<T> origin = iterator();
             F next = null;
