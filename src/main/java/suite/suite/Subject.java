@@ -92,10 +92,10 @@ public interface Subject extends Fluid {
     boolean desolated();
     int size();
 
-    FluidIterator<Subject> iterator(Slot slot, boolean reverse);
+    Wave<Subject> iterator(Slot slot, boolean reverse);
 
     @Override
-    default FluidIterator<Subject> iterator() {
+    default Wave<Subject> iterator() {
         return iterator(Slot.PRIME, false);
     }
 
@@ -135,7 +135,7 @@ public interface Subject extends Fluid {
         return subject;
     }
 
-    default Subject setAll(Iterable<Object> iterable) {
+    default Subject setAll(Iterable<?> iterable) {
         Subject subject = this;
         for(Object it : iterable) {
             subject = subject.set(it);
@@ -143,7 +143,7 @@ public interface Subject extends Fluid {
         return subject;
     }
 
-    default Subject putAll(Iterable<Object> iterable) {
+    default Subject putAll(Iterable<?> iterable) {
         Subject subject = this;
         for(Object it : iterable) {
             subject = subject.put(it);
@@ -151,7 +151,7 @@ public interface Subject extends Fluid {
         return subject;
     }
 
-    default Subject addAll(Iterable<Object> iterable) {
+    default Subject addAll(Iterable<?> iterable) {
         Subject subject = this;
         for (Object it : iterable) {
             subject = subject.add(it);

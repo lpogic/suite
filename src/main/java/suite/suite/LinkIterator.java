@@ -1,8 +1,8 @@
 package suite.suite;
 
-import suite.suite.util.FluidIterator;
+import suite.suite.util.Wave;
 
-public class LinkIterator implements FluidIterator<Subject> {
+public class LinkIterator implements Wave<Subject> {
 
     private final boolean reverse;
     private Link current;

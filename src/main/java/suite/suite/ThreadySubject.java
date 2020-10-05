@@ -1,6 +1,6 @@
 package suite.suite;
 
-import suite.suite.util.FluidIterator;
+import suite.suite.util.Wave;
 import suite.suite.util.Glass;
 
 import java.util.concurrent.locks.Lock;
@@ -10,10 +10,10 @@ import java.util.function.Supplier;
 
 class ThreadySubject implements Subject {
 
-    class HomogenizedSubjectIterator implements FluidIterator<Subject>{
+    class HomogenizedSubjectIterator implements Wave<Subject> {
         Subject sub;
         boolean reverse;
-        FluidIterator<Subject> it;
+        Wave<Subject> it;
 
         boolean hasNext;
         Subject next;
@@ -33,7 +33,7 @@ class ThreadySubject implements Subject {
                     if(sub == ZeroSubject.getInstance()) {
                         it = reverse ? subject.iterator(Slot.RECENT, true) : subject.iterator(Slot.PRIME, false);
                     } else if(subject == ZeroSubject.getInstance()) {
-                        it = FluidIterator.empty();
+                        it = Wave.empty();
                     }
                     sub = subject;
                 }
@@ -376,8 +376,8 @@ class ThreadySubject implements Subject {
     }
 
     @Override
-    public FluidIterator<Subject> iterator(Slot slot, boolean reverse) {
-        FluidIterator<Subject> it;
+    public Wave<Subject> iterator(Slot slot, boolean reverse) {
+        Wave<Subject> it;
         try(var ignored = writeLock.lock()) {
             it = new HomogenizedSubjectIterator(subject, reverse, slot);
         }

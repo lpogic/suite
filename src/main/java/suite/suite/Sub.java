@@ -1,13 +1,16 @@
 package suite.suite;
 
-import suite.suite.util.Wave;
 import suite.suite.util.Fluid;
+import suite.suite.util.Slime;
 import suite.suite.util.Glass;
+import suite.suite.util.Wave;
 
+import java.util.Iterator;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class SolidSubject implements Subject {
+public class Sub<T> implements Fluid {
 
     class HomogenizedSubjectIterator implements Wave<Subject> {
         Subject sub;
@@ -42,234 +45,188 @@ public class SolidSubject implements Subject {
 
     private Subject subject;
 
-    public SolidSubject() {
+    public Sub() {
         subject = ZeroSubject.getInstance();
     }
 
-    public SolidSubject(Subject subject) {
+    Sub(Subject subject) {
         this.subject = subject;
     }
 
-    @Override
-    public Subject set(Object element) {
+    public Sub<T> set(T element) {
         subject = subject.set(element);
         return this;
     }
 
-    @Override
-    public Subject set(Object key, Object value) {
+    public Sub<T> set(Object key, T value) {
         subject = subject.set(key, value);
         return this;
     }
 
-    @Override
-    public Subject put(Object element) {
+    public Sub<T> put(T element) {
         subject = subject.put(element);
         return this;
     }
 
-    @Override
-    public Subject put(Object key, Object value) {
+    public Sub<T> put(Object key, T value) {
         subject = subject.put(key, value);
         return this;
     }
 
-    @Override
-    public Subject add(Object element) {
+    public Sub<T> add(T element) {
         subject = subject.add(element);
         return this;
     }
 
-    @Override
-    public Subject unset() {
+    public Sub<T> unset() {
         subject = subject.unset();
         return this;
     }
 
-    @Override
-    public Subject unset(Object key) {
+    public Sub<T> unset(Object key) {
         subject = subject.unset(key);
         return this;
     }
 
-    @Override
-    public Subject unset(Object key, Object value) {
+    public Sub<T> unset(Object key, Object value) {
         subject = subject.unset(key, value);
         return this;
     }
 
-    @Override
-    public Subject unsetAt(Slot slot) {
+    public Sub<T> unsetAt(Slot slot) {
         subject = subject.unsetAt(slot);
         return this;
     }
 
-    @Override
-    public Subject prime() {
-        return new SolidSubject(subject.prime().exclude());
+    public Sub<T> prime() {
+        return new Sub<>(subject.prime().exclude());
     }
 
-    @Override
-    public Subject recent() {
-        return new SolidSubject(subject.recent().exclude());
+    public Sub<T> recent() {
+        return new Sub<>(subject.recent().exclude());
     }
 
-    @Override
-    public Subject get(Object key) {
-        return new SolidSubject(subject.get(key).exclude());
+    public Sub<T> get(Object key) {
+        return new Sub<>(subject.get(key).exclude());
     }
 
-    @Override
-    public Subject getAt(Slot slot) {
-        return new SolidSubject(subject.getAt(slot).exclude());
+    public Sub<T> getAt(Slot slot) {
+        return new Sub<>(subject.getAt(slot).exclude());
     }
 
-    @Override
-    public Subject getAt(int slotIndex) {
-        return new SolidSubject(subject.getAt(slotIndex).exclude());
+    public Sub<T> getAt(int slotIndex) {
+        return new Sub<>(subject.getAt(slotIndex).exclude());
     }
 
-    @Override
     public Subject key() {
         return new SolidSubject(subject.key().exclude());
     }
 
-    @Override
-    public Object direct() {
-        return subject.direct();
+    public T direct() {
+        return subject.orGiven(null);
     }
 
-    @Override
-    public <B> B asExpected() {
+    public <B extends T> B asExpected() {
         return subject.asExpected();
     }
 
-    @Override
-    public <B> B asGiven(Class<B> requestedType) {
+    public <B extends T> B asGiven(Class<B> requestedType) {
         return subject.asGiven(requestedType);
     }
 
-    @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType) {
+    public <B extends T> B asGiven(Glass<? super B, B> requestedType) {
         return subject.asGiven(requestedType);
     }
 
-    @Override
-    public <B> B asGiven(Class<B> requestedType, B substitute) {
+    public <B extends T> B asGiven(Class<B> requestedType, B substitute) {
         return subject.asGiven(requestedType, substitute);
     }
 
-    @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType, B substitute) {
+    public <B extends T> B asGiven(Glass<? super B, B> requestedType, B substitute) {
         return subject.asGiven(requestedType, substitute);
     }
 
-    @Override
-    public <B> B orGiven(B substitute) {
+    public <B extends T> B orGiven(B substitute) {
         return subject.orGiven(substitute);
     }
 
-    @Override
-    public <B> B orDo(Supplier<B> supplier) {
+    public <B extends T> B orDo(Supplier<B> supplier) {
         return subject.orDo(supplier);
     }
 
-    @Override
-    public boolean assigned(Class<?> type) {
+    public <B extends T> boolean assigned(Class<B> type) {
         return subject.assigned(type);
     }
 
-    @Override
-    public Subject getSaved(Object key, Object reserve) {
+    public Sub<T> getSaved(Object key, T reserve) {
         Subject saved = subject.get(key);
-        if(saved.settled())return new SolidSubject(saved);
+        if(saved.settled())return new Sub<>(saved);
         subject = subject.set(key, reserve);
         return get(key);
     }
 
-    @Override
-    public Subject getDone(Object key, Supplier<?> supplier) {
+    public Sub<T> getDone(Object key, Supplier<T> supplier) {
         Subject done = subject.get(key);
-        if(done.settled())return new SolidSubject(done);
+        if(done.settled())return new Sub<>(done);
         subject = subject.set(key, supplier.get());
         return get(key);
     }
 
-    @Override
-    public Subject getDone(Object key, Function<Subject, ?> function, Subject argument) {
+    public Sub<T> getDone(Object key, Function<Subject, T> function, Subject argument) {
         Subject done = subject.get(key);
-        if(done.settled())return new SolidSubject(done);
+        if(done.settled())return new Sub<>(done);
         subject = subject.set(key, function.apply(argument));
         return get(key);
     }
 
-    @Override
-    public Subject take(Object key) {
-        Subject taken = get(key);
+    public Sub<T> take(Object key) {
+        Sub<T> taken = get(key);
         if(taken.settled()) subject = subject.unset(key);
         return taken;
     }
 
-    @Override
-    public Subject takeAt(Slot slot) {
-        Subject taken = getAt(slot);
+    public Sub<T> takeAt(Slot slot) {
+        Sub<T> taken = getAt(slot);
         if(taken.settled()) subject = subject.unset(taken.key().direct());
         return taken;
     }
 
-    @Override
     public boolean settled() {
         return subject.settled();
     }
 
-    @Override
     public boolean desolated() {
         return subject.desolated();
     }
 
-    @Override
     public int size() {
         return subject.size();
     }
 
-    @Override
     public Fluid front() {
         return () -> new HomogenizedSubjectIterator(subject, false, Slot.PRIME);
     }
 
-    @Override
     public Fluid front(Slot slot) {
         return () -> new HomogenizedSubjectIterator(subject, false, slot);
     }
 
-    @Override
     public Fluid reverse() {
         return () -> new HomogenizedSubjectIterator(subject, true, Slot.RECENT);
     }
 
-    @Override
     public Fluid reverse(Slot slot) {
         return () -> new HomogenizedSubjectIterator(subject, true, slot);
     }
 
-    @Override
     public Wave<Subject> iterator(Slot slot, boolean reverse) {
         return new HomogenizedSubjectIterator(subject, reverse, slot);
     }
 
-    @Override
-    public Subject inset(Iterable<Subject> iterable) {
-        subject = subject.inset(iterable);
-        return this;
+    public Wave<Subject> iterator() {
+        return iterator(Slot.PRIME, false);
     }
 
-    @Override
-    public Subject input(Iterable<Subject> iterable) {
-        subject = subject.input(iterable);
-        return this;
-    }
-
-    @Override
     public boolean fused() {
         return subject.fused();
     }
@@ -279,33 +236,79 @@ public class SolidSubject implements Subject {
         return subject.toString();
     }
 
-    @Override
-    public Subject setAt(Slot slot, Object element) {
+    public Sub<T> setAt(Slot slot, T element) {
         subject = subject.setAt(slot, element);
         return this;
     }
 
-    @Override
-    public Subject setAt(Slot slot, Object key, Object value) {
+    public Sub<T> setAt(Slot slot, Object key, T value) {
         subject = subject.setAt(slot, key, value);
         return this;
     }
 
-    @Override
-    public Subject putAt(Slot slot, Object element) {
+    public Sub<T> putAt(Slot slot, T element) {
         subject = subject.putAt(slot, element);
         return this;
     }
 
-    @Override
-    public Subject putAt(Slot slot, Object key, Object value) {
+    public Sub<T> putAt(Slot slot, Object key, T value) {
         subject = subject.putAt(slot, key, value);
         return this;
     }
 
-    @Override
-    public Subject addAt(Slot slot, Object element) {
+    public Sub<T> addAt(Slot slot, T element) {
         subject = subject.addAt(slot, element);
         return this;
+    }
+
+    public String asString() {
+        return Objects.toString(direct(), "nuLL");
+    }
+
+    public Sub<T> setAll(Iterable<T> iterable) {
+        subject = subject.setAll(iterable);
+        return this;
+    }
+
+    public Sub<T> putAll(Iterable<T> iterable) {
+        subject = subject.putAll(iterable);
+        return this;
+    }
+
+    public Sub<T> addAll(Iterable<T> iterable) {
+        subject = subject.addAll(iterable);
+        return this;
+    }
+
+    public Slime<T> keys() {
+        return () -> new Wave<>() {
+            final Iterator<Subject> subIt = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return subIt.hasNext();
+            }
+
+            @Override
+            public T next() {
+                return subIt.next().key().asExpected();
+            }
+        };
+    }
+
+    public Slime<T> values() {
+        return () -> new Wave<>() {
+            final Iterator<Subject> subIt = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return subIt.hasNext();
+            }
+
+            @Override
+            public T next() {
+                return subIt.next().asExpected();
+            }
+        };
     }
 }

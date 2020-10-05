@@ -1,6 +1,6 @@
 package suite.suite;
 
-import suite.suite.util.FluidIterator;
+import suite.suite.util.Wave;
 import suite.suite.util.Fluid;
 
 import java.util.HashMap;
@@ -158,15 +158,15 @@ class Chain implements Fluid {
     }
 
     @Override
-    public FluidIterator<Subject> iterator() {
+    public Wave<Subject> iterator() {
         return new LinkIterator(ward);
     }
 
-    public FluidIterator<Subject> iterator(boolean reverse) {
+    public Wave<Subject> iterator(boolean reverse) {
         return new LinkIterator(reverse, ward, ward);
     }
 
-    public FluidIterator<Subject> iterator(boolean reverse, Link link) {
+    public Wave<Subject> iterator(boolean reverse, Link link) {
         return new LinkIterator(reverse, link, ward);
     }
 

@@ -7,7 +7,7 @@ import suite.suite.Suite;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public class Cascade<T> implements FluidIterator<T> {
+public class Cascade<T> implements Wave<T> {
 
     private final Iterator<T> iterator;
     private final Subject stored;
@@ -43,9 +43,9 @@ public class Cascade<T> implements FluidIterator<T> {
         return falls;
     }
 
-    public FluidObject<T> until(Predicate<T> predicate) {
+    public Slime<T> until(Predicate<T> predicate) {
         falls = 0;
-        return () -> new FluidIterator<>() {
+        return () -> new Wave<>() {
 
             @Override
             public boolean hasNext() {
@@ -70,9 +70,9 @@ public class Cascade<T> implements FluidIterator<T> {
         };
     }
 
-    public FluidObject<T> toEnd() {
+    public Slime<T> toEnd() {
         falls = 0;
-        return () -> new FluidIterator<T>() {
+        return () -> new Wave<T>() {
             @Override
             public boolean hasNext() {
                 return Cascade.this.hasNext();

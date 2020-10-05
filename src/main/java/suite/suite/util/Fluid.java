@@ -8,14 +8,14 @@ import java.util.Iterator;
 import java.util.function.Predicate;
 
 public interface Fluid extends Iterable<Subject> {
-    FluidIterator<Subject> iterator();
+    Wave<Subject> iterator();
 
     default Cascade<Subject> cascade() {
         return new Cascade<>(iterator());
     }
 
     default Fluid filter(Predicate<Subject> predicate) {
-        return () -> new FluidIterator<>() {
+        return () -> new Wave<>() {
             final Iterator<Subject> origin = iterator();
             Subject next = null;
             boolean nextFound = false;
@@ -43,7 +43,7 @@ public interface Fluid extends Iterable<Subject> {
     }
 
     default Fluid map(Action action) {
-        return () -> new FluidIterator<>() {
+        return () -> new Wave<>() {
             final Iterator<Subject> origin = iterator();
 
             @Override
@@ -58,8 +58,8 @@ public interface Fluid extends Iterable<Subject> {
         };
     }
 
-    default FluidObject<Object> keys() {
-        return () -> new FluidIterator<>() {
+    default Slime<?> keys() {
+        return () -> new Wave<>() {
             final Iterator<Subject> subIt = iterator();
 
             @Override
@@ -74,8 +74,8 @@ public interface Fluid extends Iterable<Subject> {
         };
     }
 
-    default<T> FluidObject<T> keys(Class<T> type) {
-        return () -> new FluidIterator<>() {
+    default<T> Slime<T> keys(Class<T> type) {
+        return () -> new Wave<>() {
             final Iterator<Subject> subIt = iterator();
 
             @Override
@@ -90,8 +90,8 @@ public interface Fluid extends Iterable<Subject> {
         };
     }
 
-    default FluidObject<Object> values() {
-        return () -> new FluidIterator<>() {
+    default Slime<?> values() {
+        return () -> new Wave<>() {
             final Iterator<Subject> subIt = iterator();
 
             @Override
@@ -106,8 +106,8 @@ public interface Fluid extends Iterable<Subject> {
         };
     }
 
-    default<T> FluidObject<T> values(Class<T> type) {
-        return () -> new FluidIterator<>() {
+    default<T> Slime<T> values(Class<T> type) {
+        return () -> new Wave<>() {
             final Iterator<Subject> subIt = iterator();
 
             @Override
@@ -130,11 +130,11 @@ public interface Fluid extends Iterable<Subject> {
     }
 
     static Fluid empty() {
-        return FluidIterator::empty;
+        return Wave::empty;
     }
 
     static Fluid engage(Iterable<?> keys, Iterable<?> values) {
-        return () -> new FluidIterator<>() {
+        return () -> new Wave<>() {
             final Iterator<?> keyIt = keys.iterator();
             final Iterator<?> valIt = values.iterator();
 

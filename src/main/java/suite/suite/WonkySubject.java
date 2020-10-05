@@ -1,7 +1,7 @@
 package suite.suite;
 
 import suite.suite.util.Fluid;
-import suite.suite.util.FluidIterator;
+import suite.suite.util.Wave;
 import suite.suite.util.Glass;
 
 import java.lang.ref.WeakReference;
@@ -11,10 +11,10 @@ import java.util.function.Supplier;
 
 public class WonkySubject extends SolidSubject {
 
-    class HomogenizedSubjectIterator implements FluidIterator<Subject>{
+    class HomogenizedSubjectIterator implements Wave<Subject> {
         Subject sub;
         boolean reverse;
-        FluidIterator<Subject> it;
+        Wave<Subject> it;
 
         boolean hasNext;
         Subject next;
@@ -33,7 +33,7 @@ public class WonkySubject extends SolidSubject {
                 if(sub == ZeroSubject.getInstance()) {
                     it = reverse ? subject.iterator(Slot.RECENT, true) : subject.iterator(Slot.PRIME, false);
                 } else if(subject == ZeroSubject.getInstance()) {
-                    it = FluidIterator.empty();
+                    it = Wave.empty();
                 }
                 sub = subject;
             }
@@ -284,7 +284,7 @@ public class WonkySubject extends SolidSubject {
     }
 
     @Override
-    public FluidIterator<Subject> iterator(Slot slot, boolean reverse) {
+    public Wave<Subject> iterator(Slot slot, boolean reverse) {
         return new HomogenizedSubjectIterator(subject, reverse, slot);
     }
 

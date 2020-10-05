@@ -1,6 +1,6 @@
 package suite.suite;
 
-import suite.suite.util.FluidIterator;
+import suite.suite.util.Wave;
 import suite.suite.util.Glass;
 
 import java.util.NoSuchElementException;
@@ -177,7 +177,7 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public FluidIterator<Subject> iterator(Slot slot, boolean reverse) {
-        return FluidIterator.empty();
+    public Wave<Subject> iterator(Slot slot, boolean reverse) {
+        return Wave.empty();
     }
 }

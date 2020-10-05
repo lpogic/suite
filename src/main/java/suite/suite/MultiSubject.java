@@ -300,24 +300,24 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public FluidIterator<Subject> iterator(Slot slot, boolean reverse) {
+    public Wave<Subject> iterator(Slot slot, boolean reverse) {
         if(reverse) {
             if(slot == Slot.PRIME) {
                 Link link = chain.getFirst();
-                return link == chain.ward ? FluidIterator.empty() : chain.iterator(true, link.back);
+                return link == chain.ward ? Wave.empty() : chain.iterator(true, link.back);
             } else if(slot == Slot.RECENT) {
                 return chain.iterator(true);
             } else {
                 if(slot instanceof Slot.SlotBefore) {
                     Link link = chain.get(((Slot.SlotBefore) slot).key);
-                    return link == chain.ward ? FluidIterator.empty() : chain.iterator(true, link);
+                    return link == chain.ward ? Wave.empty() : chain.iterator(true, link);
                 } else if(slot instanceof Slot.SlotAfter) {
                     Link link = chain.get(((Slot.SlotAfter) slot).key);
                     return link == chain.ward || link.back == chain.ward ?
-                            FluidIterator.empty() : chain.iterator(true, link.back.back);
+                            Wave.empty() : chain.iterator(true, link.back.back);
                 } else if(slot instanceof Slot.PlacedSlot) {
                     Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
-                    return link == chain.ward ? FluidIterator.empty() : chain.iterator(false, link.back);
+                    return link == chain.ward ? Wave.empty() : chain.iterator(false, link.back);
                 }
             }
         } else {
@@ -325,18 +325,18 @@ class MultiSubject implements Subject {
                 return chain.iterator();
             } else if(slot == Slot.RECENT) {
                 Link link = chain.getLast();
-                return link == chain.ward ? FluidIterator.empty() : chain.iterator(false, link.front);
+                return link == chain.ward ? Wave.empty() : chain.iterator(false, link.front);
             } else {
                 if(slot instanceof Slot.SlotBefore) {
                     Link link = chain.get(((Slot.SlotBefore) slot).key);
                     return link == chain.ward || link.front == chain.ward ?
-                            FluidIterator.empty() : chain.iterator(false, link.front.front);
+                            Wave.empty() : chain.iterator(false, link.front.front);
                 } else if(slot instanceof Slot.SlotAfter) {
                     Link link = chain.get(((Slot.SlotAfter) slot).key);
-                    return link == chain.ward ? FluidIterator.empty() : chain.iterator(false, link);
+                    return link == chain.ward ? Wave.empty() : chain.iterator(false, link);
                 } else if(slot instanceof Slot.PlacedSlot) {
                     Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
-                    return link == chain.ward ? FluidIterator.empty() : chain.iterator(false, link.front);
+                    return link == chain.ward ? Wave.empty() : chain.iterator(false, link.front);
                 }
             }
         }

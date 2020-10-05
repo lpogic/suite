@@ -1,6 +1,6 @@
 package suite.suite;
 
-import suite.suite.util.FluidIterator;
+import suite.suite.util.Wave;
 import suite.suite.util.Glass;
 
 import java.util.Objects;
@@ -205,7 +205,7 @@ class CoupleSubject implements Subject {
     }
 
     @Override
-    public FluidIterator<Subject> iterator(Slot slot, boolean reverse) {
+    public Wave<Subject> iterator(Slot slot, boolean reverse) {
         link();
         if(slot == Slot.PRIME) {
             return new LinkIterator(reverse, ward, ward);
@@ -213,17 +213,17 @@ class CoupleSubject implements Subject {
             return new LinkIterator(reverse, ward, ward);
         } else {
             if(slot instanceof Slot.SlotBefore) {
-                return FluidIterator.empty();
+                return Wave.empty();
             } else if(slot instanceof Slot.SlotAfter) {
-                return FluidIterator.empty();
+                return Wave.empty();
             } else if(slot instanceof Slot.RecentBeforeSlot) {
                 Predicate<Subject> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
-                return isLater.test(new SolidSubject(this)) ? FluidIterator.empty() : new LinkIterator(reverse, ward, ward);
+                return isLater.test(new SolidSubject(this)) ? Wave.empty() : new LinkIterator(reverse, ward, ward);
             } else if(slot instanceof Slot.PrimeAfterSlot) {
                 Predicate<Subject> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
-                return isEarlier.test(new SolidSubject(this)) ? FluidIterator.empty() : new LinkIterator(reverse, ward, ward);
+                return isEarlier.test(new SolidSubject(this)) ? Wave.empty() : new LinkIterator(reverse, ward, ward);
             } else if(slot instanceof Slot.PlacedSlot) {
-                return ((Slot.PlacedSlot) slot).place == 0 ? new LinkIterator(reverse, ward, ward) : FluidIterator.empty();
+                return ((Slot.PlacedSlot) slot).place == 0 ? new LinkIterator(reverse, ward, ward) : Wave.empty();
             } else throw new UnsupportedOperationException();
         }
     }

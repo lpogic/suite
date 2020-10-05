@@ -9,15 +9,15 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public interface FluidObject<T> extends Iterable<T>{
-    FluidIterator<T> iterator();
+public interface Slime<T> extends Iterable<T>{
+    Wave<T> iterator();
 
     default Cascade<T> cascade() {
         return new Cascade<>(iterator());
     }
 
-    default <F extends T> FluidObject<F> filter(Class<F> requestedType) {
-        return () -> new FluidIterator<F>() {
+    default <F extends T> Slime<F> filter(Class<F> requestedType) {
+        return () -> new Wave<F>() {
             final Iterator<T> origin = iterator();
             F next = null;
             boolean nextFound = false;
@@ -44,8 +44,8 @@ public interface FluidObject<T> extends Iterable<T>{
         };
     }
 
-    default <F extends T> FluidObject<F> filter(Glass<? super F, F> requestedType) {
-        return () -> new FluidIterator<>() {
+    default <F extends T> Slime<F> filter(Glass<? super F, F> requestedType) {
+        return () -> new Wave<>() {
             final Iterator<T> origin = iterator();
             F next = null;
             boolean nextFound = false;
@@ -72,8 +72,8 @@ public interface FluidObject<T> extends Iterable<T>{
         };
     }
 
-    default FluidObject<T> filter(Predicate<T> predicate) {
-        return () -> new FluidIterator<>() {
+    default Slime<T> filter(Predicate<T> predicate) {
+        return () -> new Wave<>() {
             final Iterator<T> origin = iterator();
             T next = null;
             boolean nextFound = false;
@@ -100,12 +100,12 @@ public interface FluidObject<T> extends Iterable<T>{
         };
     }
 
-    static<I> FluidObject<I> empty() {
-        return FluidIterator::empty;
+    static<I> Slime<I> empty() {
+        return Wave::empty;
     }
 
-    default<O> FluidObject<O> map(Function<T, O> function) {
-        return () -> new FluidIterator<>() {
+    default<O> Slime<O> map(Function<T, O> function) {
+        return () -> new Wave<>() {
             final Iterator<T> origin = iterator();
 
             @Override
@@ -120,7 +120,7 @@ public interface FluidObject<T> extends Iterable<T>{
         };
     }
 
-    default FluidObject<T> skip(int from, int to) {
+    default Slime<T> skip(int from, int to) {
         return filter(new Predicate<>() {
             int counter = 0;
 

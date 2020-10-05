@@ -1,6 +1,6 @@
 package suite.suite;
 
-import suite.suite.util.FluidIterator;
+import suite.suite.util.Wave;
 import suite.suite.util.Fluid;
 import suite.suite.util.Glass;
 
@@ -171,7 +171,7 @@ class FuseSubject implements Subject {
     }
 
     @Override
-    public FluidIterator<Subject> iterator() {
+    public Wave<Subject> iterator() {
         return subject.iterator();
     }
 
@@ -211,7 +211,7 @@ class FuseSubject implements Subject {
     }
 
     @Override
-    public FluidIterator<Subject> iterator(Slot slot, boolean reverse) {
+    public Wave<Subject> iterator(Slot slot, boolean reverse) {
         return subject.iterator(slot, reverse);
     }
 }
