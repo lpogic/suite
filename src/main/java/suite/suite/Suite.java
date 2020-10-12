@@ -2,7 +2,7 @@ package suite.suite;
 
 import suite.suite.util.Fluid;
 
-public final class Suite {
+public class Suite {
 
     public static class AutoKey {
         @Override
