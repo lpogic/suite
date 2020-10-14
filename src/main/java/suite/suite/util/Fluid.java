@@ -149,4 +149,21 @@ public interface Fluid extends Iterable<Subject> {
             }
         };
     }
+
+    static Fluid engageS(Iterable<?> keys, Iterable<?> values) {
+        return () -> new Wave<>() {
+            final Iterator<?> keyIt = Wave.wave(keys.iterator());
+            final Iterator<?> valIt = Wave.wave(values.iterator());
+
+            @Override
+            public boolean hasNext() {
+                return keyIt.hasNext() && valIt.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                return Suite.set(keyIt.next(), valIt.next());
+            }
+        };
+    }
 }
