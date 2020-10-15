@@ -110,6 +110,10 @@ public class Sub<T> implements Fluid {
         return new Sub<>(subject.get(key).exclude());
     }
 
+    public Sub<T> get(Object ... keys) {
+        return new Sub<>(subject.get(keys).exclude());
+    }
+
     public Sub<T> getAt(Slot slot) {
         return new Sub<>(subject.getAt(slot).exclude());
     }

@@ -172,4 +172,29 @@ public interface Slime<T> extends Iterable<T>{
         }
         return stringBuilder.toString();
     }
+
+    static<I> Slime<I> source(Iterable<I> iterable) {
+        return iterable instanceof Slime ? (Slime<I>)iterable : () -> Wave.wave(iterable.iterator());
+    }
+
+    default Slime<T> append(Iterable<T> iterable) {
+        return () -> new Wave<>() {
+            Wave<T> selfWave = Slime.this.iterator();
+            final Iterator<T> thatIterator = iterable.iterator();
+
+            @Override
+            public boolean hasNext() {
+                if(selfWave != null) {
+                    if(selfWave.hasNext()) return true;
+                    else selfWave = null;
+                }
+                return thatIterator.hasNext();
+            }
+
+            @Override
+            public T next() {
+                return selfWave != null ? selfWave.next() : thatIterator.next();
+            }
+        };
+    }
 }

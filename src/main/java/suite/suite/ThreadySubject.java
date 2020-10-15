@@ -182,6 +182,15 @@ class ThreadySubject implements Subject {
     }
 
     @Override
+    public Subject get(Object ... keys) {
+        Subject get;
+        try(var ignored = readLock.lock()) {
+            get = new SolidSubject(subject.get(keys).exclude());
+        }
+        return get;
+    }
+
+    @Override
     public Subject getAt(Slot slot) {
         Subject at;
         try(var ignored = readLock.lock()) {

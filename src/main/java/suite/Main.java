@@ -23,5 +23,7 @@ public class Main {
             }
             System.out.println(sub);
         }
+
+        System.out.println("end");
     }
 }

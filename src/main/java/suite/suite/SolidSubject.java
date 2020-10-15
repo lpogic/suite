@@ -120,6 +120,11 @@ public class SolidSubject implements Subject {
     }
 
     @Override
+    public Subject get(Object ... keys) {
+        return new SolidSubject(subject.get(keys).exclude());
+    }
+
+    @Override
     public Subject getAt(Slot slot) {
         return new SolidSubject(subject.getAt(slot).exclude());
     }

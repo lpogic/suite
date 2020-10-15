@@ -31,6 +31,13 @@ public interface Subject extends Fluid {
     Subject prime();
     Subject recent();
     Subject get(Object key);
+    default Subject get(Object ... keys) {
+        Subject s = ZeroSubject.getInstance();
+        for(Object k : keys) {
+            s.inset(get(k));
+        }
+        return s;
+    }
     Subject getAt(Slot slot);
     Subject getAt(int slotIndex);
 

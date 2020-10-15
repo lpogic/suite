@@ -25,7 +25,21 @@ public interface Wave<T> extends Iterator<T> {
         };
     }
 
-    static Wave<Object> wave(Iterator<?> it) {
+    static<I> Wave<I> wave(Iterator<I> it) {
+        return it instanceof Wave ? (Wave<I>)it : new Wave<>() {
+            @Override
+            public boolean hasNext() {
+                return it.hasNext();
+            }
+
+            @Override
+            public I next() {
+                return it.next();
+            }
+        };
+    }
+
+    static Wave<Object> waveS(Iterator<?> it) {
         return new Wave<>() {
             final Iterator<?> primary = it;
             Iterator<?> secondary = null;

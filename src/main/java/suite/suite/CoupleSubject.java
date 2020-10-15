@@ -79,7 +79,15 @@ class CoupleSubject implements Subject {
 
     @Override
     public Subject get(Object key) {
-        return Objects.equals(primeKey, key) ? new BubbleSubject(primeValue) : ZeroSubject.getInstance();
+        return Objects.equals(primeKey, key) ? this : ZeroSubject.getInstance();
+    }
+
+    @Override
+    public Subject get(Object ... keys) {
+        for(Object k : keys) {
+            if(Objects.equals(primeKey, k)) return this;
+        }
+        return ZeroSubject.getInstance();
     }
 
     @Override

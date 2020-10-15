@@ -82,6 +82,14 @@ class BubbleSubject implements Subject {
     }
 
     @Override
+    public Subject get(Object ... keys) {
+        for(Object k : keys) {
+            if(Objects.equals(bubbled, k)) return this;
+        }
+        return ZeroSubject.getInstance();
+    }
+
+    @Override
     public Subject getAt(Slot slot) {
         if(slot == Slot.PRIME || slot == Slot.RECENT || (slot instanceof Slot.PlacedSlot && ((Slot.PlacedSlot) slot).place == 0)) {
             return this;

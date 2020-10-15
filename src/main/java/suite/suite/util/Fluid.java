@@ -152,8 +152,8 @@ public interface Fluid extends Iterable<Subject> {
 
     static Fluid engageS(Iterable<?> keys, Iterable<?> values) {
         return () -> new Wave<>() {
-            final Iterator<?> keyIt = Wave.wave(keys.iterator());
-            final Iterator<?> valIt = Wave.wave(values.iterator());
+            final Iterator<?> keyIt = Wave.waveS(keys.iterator());
+            final Iterator<?> valIt = Wave.waveS(values.iterator());
 
             @Override
             public boolean hasNext() {
@@ -166,4 +166,30 @@ public interface Fluid extends Iterable<Subject> {
             }
         };
     }
+
+    static Fluid source(Iterable<Subject> iterable) {
+        return iterable instanceof Fluid ? (Fluid)iterable : () -> Wave.wave(iterable.iterator());
+    }
+
+    default Fluid append(Iterable<Subject> iterable) {
+        return () -> new Wave<>() {
+            Wave<Subject> selfWave = Fluid.this.iterator();
+            final Iterator<Subject> thatIterator = iterable.iterator();
+
+            @Override
+            public boolean hasNext() {
+                if(selfWave != null) {
+                    if(selfWave.hasNext()) return true;
+                    else selfWave = null;
+                }
+                return thatIterator.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                return selfWave != null ? selfWave.next() : thatIterator.next();
+            }
+        };
+    }
+
 }

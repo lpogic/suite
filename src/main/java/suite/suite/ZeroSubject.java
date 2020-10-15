@@ -72,6 +72,11 @@ class ZeroSubject implements Subject {
     }
 
     @Override
+    public Subject get(Object ... keys) {
+        return this;
+    }
+
+    @Override
     public Subject getAt(Slot slot) {
         return this;
     }
