@@ -14,7 +14,7 @@ public interface Fluid extends Iterable<Subject> {
         return new Cascade<>(iterator());
     }
 
-    default Fluid filter(Predicate<Subject> predicate) {
+    default Fluid all(Predicate<Subject> predicate) {
         return () -> new Wave<>() {
             final Iterator<Subject> origin = iterator();
             Subject next = null;
@@ -37,6 +37,33 @@ public interface Fluid extends Iterable<Subject> {
             @Override
             public Subject next() {
                 nextFound = false;
+                return next;
+            }
+        };
+    }
+
+    default Fluid first(Predicate<Subject> predicate) {
+        return () -> new Wave<>() {
+            final Iterator<Subject> origin = iterator();
+            Subject next = null;
+            boolean nextFound = false;
+
+            @Override
+            public boolean hasNext() {
+                if(nextFound) return false;
+                while (origin.hasNext()) {
+                    Subject s = origin.next();
+                    if(predicate.test(s)) {
+                        next = s;
+                        nextFound = true;
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public Subject next() {
                 return next;
             }
         };

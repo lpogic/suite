@@ -4,9 +4,14 @@ import suite.suite.Subject;
 import suite.suite.Suite;
 
 @FunctionalInterface
-public interface Statement extends Action {
+public interface Statement extends Impression {
 
     void revel();
+
+    @Override
+    default void revel(Subject in) {
+        revel();
+    }
 
     default Subject play() {
         revel();

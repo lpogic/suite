@@ -4,9 +4,14 @@ import suite.suite.Subject;
 import suite.suite.Suite;
 
 @FunctionalInterface
-public interface DiceyStatement extends Action {
+public interface DiceyStatement extends DiceyImpression {
 
     void strive() throws Exception;
+
+    @Override
+    default void strive(Subject in) throws Exception {
+        strive();
+    }
 
     default Subject play() {
         try {
