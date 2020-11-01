@@ -32,7 +32,7 @@ public interface Subject extends Fluid {
     Subject recent();
     Subject get(Object key);
     default Subject get(Object ... keys) {
-        Subject s = ZeroSubject.getInstance();
+        Subject s = Suite.set();
         for(Object k : keys) {
             s.inset(get(k));
         }
