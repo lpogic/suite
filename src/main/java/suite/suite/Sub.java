@@ -159,26 +159,26 @@ public class Sub<T> implements Fluid {
     }
 
     public <B extends T> boolean assigned(Class<B> type) {
-        return subject.assigned(type);
+        return subject.instanceOf(type);
     }
 
     public Sub<T> getSaved(Object key, T reserve) {
         Subject saved = subject.get(key);
-        if(saved.settled())return new Sub<>(saved);
+        if(saved.isNotEmpty())return new Sub<>(saved);
         subject = subject.set(key, reserve);
         return get(key);
     }
 
     public Sub<T> getDone(Object key, Supplier<T> supplier) {
         Subject done = subject.get(key);
-        if(done.settled())return new Sub<>(done);
+        if(done.isNotEmpty())return new Sub<>(done);
         subject = subject.set(key, supplier.get());
         return get(key);
     }
 
     public Sub<T> getDone(Object key, Function<Subject, T> function, Subject argument) {
         Subject done = subject.get(key);
-        if(done.settled())return new Sub<>(done);
+        if(done.isNotEmpty())return new Sub<>(done);
         subject = subject.set(key, function.apply(argument));
         return get(key);
     }
@@ -196,11 +196,11 @@ public class Sub<T> implements Fluid {
     }
 
     public boolean settled() {
-        return subject.settled();
+        return subject.isNotEmpty();
     }
 
     public boolean desolated() {
-        return subject.desolated();
+        return subject.isEmpty();
     }
 
     public int size() {

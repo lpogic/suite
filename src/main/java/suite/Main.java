@@ -13,7 +13,7 @@ public class Main {
         sub.setAt(Slot.recentBefore(s -> true), "d");
         System.out.println(sub);
         sub.setAt(Slot.primeAfter(s -> false), "e");
-        sub.setAt(Slot.primeAfter(s -> s.assigned(String.class)), "f");
+        sub.setAt(Slot.primeAfter(s -> s.instanceOf(String.class)), "f");
         System.out.println(sub);
         System.out.println("unsetting");
         for (var s : sub) {

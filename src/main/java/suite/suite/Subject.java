@@ -42,7 +42,15 @@ public interface Subject extends Fluid {
     Subject getAt(int slotIndex);
 
     default Subject at(Object key) {
-        return get(key).orDo(Suite::set);
+        Subject get = get(key);
+        if(get.instanceOf(Subject.class))return get.asExpected();
+        if(get.isNotEmpty())return get;
+        return Suite.set();
+    }
+    default Subject at(Object ... path) {
+        Subject at = this;
+        for(Object o : path) at = at.at(o);
+        return at;
     }
     Object direct();
     <B> B asExpected();
@@ -52,7 +60,7 @@ public interface Subject extends Fluid {
     <B> B asGiven(Glass<? super B, B> requestedType, B substitute);
     <B> B orGiven(B substitute);
     <B> B orDo(Supplier<B> supplier);
-    boolean assigned(Class<?> type);
+    boolean instanceOf(Class<?> type);
 
     default String asString() {
         return Objects.toString(direct(), "nuLL");
@@ -95,8 +103,8 @@ public interface Subject extends Fluid {
         return getDone(key, Suite::set).asExpected();
     }
 
-    boolean settled();
-    boolean desolated();
+    boolean isNotEmpty();
+    boolean isEmpty();
     int size();
 
     Wave<Subject> iterator(Slot slot, boolean reverse);

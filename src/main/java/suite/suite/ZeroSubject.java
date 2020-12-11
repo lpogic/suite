@@ -132,17 +132,17 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public boolean assigned(Class<?> type) {
+    public boolean instanceOf(Class<?> type) {
         return false;
     }
 
     @Override
-    public boolean settled() {
+    public boolean isNotEmpty() {
         return false;
     }
 
     @Override
-    public boolean desolated() {
+    public boolean isEmpty() {
         return true;
     }
 

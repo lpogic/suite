@@ -67,7 +67,7 @@ class MultiSubject implements Subject {
     @Override
     public Subject unsetAt(Slot slot) {
         Subject s = getAt(slot);
-        return s.settled() ? unset(s.key().direct()) : this;
+        return s.isNotEmpty() ? unset(s.key().direct()) : this;
     }
 
     @Override
@@ -168,17 +168,17 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public boolean assigned(Class<?> type) {
-        return chain.getFirst().subject.assigned(type);
+    public boolean instanceOf(Class<?> type) {
+        return chain.getFirst().subject.instanceOf(type);
     }
 
     @Override
-    public boolean settled() {
+    public boolean isNotEmpty() {
         return !chain.isEmpty();
     }
 
     @Override
-    public boolean desolated() {
+    public boolean isEmpty() {
         return chain.isEmpty();
     }
 

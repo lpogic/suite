@@ -32,7 +32,7 @@ public class Query {
 
     public<T> Query get(Object key, Class<T> type) {
         var s = source.get(key);
-        if(s.assigned(type)) {
+        if(s.instanceOf(type)) {
             result = s;
         }
         return this;
@@ -40,30 +40,30 @@ public class Query {
 
     public<T> Query get(Object key, Class<T> type, Function<T, Object> function) {
         var s = source.get(key);
-        if(s.assigned(type)) {
+        if(s.instanceOf(type)) {
             result = Suite.set(function.apply(s.asExpected()));
         }
         return this;
     }
 
     public Query or(Object key) {
-        return result.desolated() ? get(key) : this;
+        return result.isEmpty() ? get(key) : this;
     }
 
     public Query or(Object key, Subject map) {
-        return result.desolated() ? get(key, map) : this;
+        return result.isEmpty() ? get(key, map) : this;
     }
 
     public Query or(Object key, Action action) {
-        return result.desolated() ? get(key, action) : this;
+        return result.isEmpty() ? get(key, action) : this;
     }
 
     public<T> Query or(Object key, Class<T> type) {
-        return result.desolated() ? get(key, type) : this;
+        return result.isEmpty() ? get(key, type) : this;
     }
 
     public<T> Query or(Object key, Class<T> type, Function<T, Object> function) {
-        return result.desolated() ? get(key, type, function) : this;
+        return result.isEmpty() ? get(key, type, function) : this;
     }
 
     public<B> B orGiven(B substitute) {
@@ -75,7 +75,7 @@ public class Query {
     }
 
     public<B> B orDo(Function<Subject, B> function) {
-        return result.desolated() ? function.apply(source) : result.asExpected();
+        return result.isEmpty() ? function.apply(source) : result.asExpected();
     }
 
     public<B> B asExpected() {
@@ -104,7 +104,7 @@ public class Query {
 
     public<T> Query map(Class<T> mappedType, Function<T, Object> function) {
         for(var s : result.front()) {
-            if(s.assigned(mappedType)) {
+            if(s.instanceOf(mappedType)) {
                 result.set(s.key().direct(), function.apply(s.asExpected()));
             }
         }

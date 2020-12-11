@@ -43,7 +43,7 @@ public class Suite {
     }
 
     public static boolean isOk(Subject subject) {
-        return subject.get(OK).settled();
+        return subject.get(OK).isNotEmpty();
     }
 
     public static Subject error(Object cause) {

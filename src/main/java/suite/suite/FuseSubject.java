@@ -146,18 +146,18 @@ class FuseSubject implements Subject {
     }
 
     @Override
-    public boolean assigned(Class<?> type) {
-        return subject.assigned(type);
+    public boolean instanceOf(Class<?> type) {
+        return subject.instanceOf(type);
     }
 
     @Override
-    public boolean settled() {
-        return subject.settled();
+    public boolean isNotEmpty() {
+        return subject.isNotEmpty();
     }
 
     @Override
-    public boolean desolated() {
-        return subject.desolated();
+    public boolean isEmpty() {
+        return subject.isEmpty();
     }
 
     @Override

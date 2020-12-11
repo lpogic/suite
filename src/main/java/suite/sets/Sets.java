@@ -8,7 +8,7 @@ public class Sets {
 
     public static boolean contains(Subject major, Fluid minor) {
         for(var it : minor.keys()) {
-            if(major.get(it).desolated()) return false;
+            if(major.get(it).isEmpty()) return false;
         }
         return true;
     }
@@ -21,7 +21,7 @@ public class Sets {
         Subject sub = Suite.set();
         for(var o : fluid.keys()) {
             Subject s = strainer.get(o);
-            if(s.settled()) {
+            if(s.isNotEmpty()) {
                 sub.set(s.key().direct(), s.direct());
             }
         }

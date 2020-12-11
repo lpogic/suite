@@ -290,10 +290,10 @@ class ThreadySubject implements Subject {
     }
 
     @Override
-    public boolean assigned(Class<?> type) {
+    public boolean instanceOf(Class<?> type) {
         boolean is;
         try(var ignored = readLock.lock()) {
-            is = subject.assigned(type);
+            is = subject.instanceOf(type);
         }
         return is;
     }
@@ -303,7 +303,7 @@ class ThreadySubject implements Subject {
         Subject spared;
         try(var ignored = writeLock.lock()) {
             spared = subject.get(key);
-            if(!spared.settled()) {
+            if(!spared.isNotEmpty()) {
                 subject = subject.set(key, reserve);
                 spared = subject.get(key);
             }
@@ -316,7 +316,7 @@ class ThreadySubject implements Subject {
         Subject spared;
         try(var ignored = writeLock.lock()) {
             spared = subject.get(key);
-            if(!spared.settled()) {
+            if(!spared.isNotEmpty()) {
                 subject = subject.set(key, supplier.get());
                 spared = subject.get(key);
             }
@@ -329,7 +329,7 @@ class ThreadySubject implements Subject {
         Subject spared;
         try(var ignored = writeLock.lock()) {
             spared = subject.get(key);
-            if(!spared.settled()) {
+            if(!spared.isNotEmpty()) {
                 subject = subject.set(key, function.apply(argument));
                 spared = subject.get(key);
             }
@@ -352,25 +352,25 @@ class ThreadySubject implements Subject {
         Subject taken;
         try(var ignored = writeLock.lock()) {
             taken = subject.getAt(slot);
-            if(taken.settled()) subject = subject.unset(taken.key().direct());
+            if(taken.isNotEmpty()) subject = subject.unset(taken.key().direct());
         }
         return new SolidSubject(taken);
     }
 
     @Override
-    public boolean settled() {
+    public boolean isNotEmpty() {
         boolean settled;
         try(var ignored = readLock.lock()) {
-            settled = subject.settled();
+            settled = subject.isNotEmpty();
         }
         return settled;
     }
 
     @Override
-    public boolean desolated() {
+    public boolean isEmpty() {
         boolean desolated;
         try(var ignored = readLock.lock()) {
-            desolated = subject.desolated();
+            desolated = subject.isEmpty();
         }
         return desolated;
     }

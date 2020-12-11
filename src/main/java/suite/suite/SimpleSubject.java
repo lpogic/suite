@@ -25,7 +25,7 @@ public abstract class SimpleSubject implements Subject {
 
     @Override
     public Subject put(Object key, Object value) {
-        return get(key).settled() ? this : set(key, value);
+        return get(key).isNotEmpty() ? this : set(key, value);
     }
 
     @Override
@@ -99,24 +99,24 @@ public abstract class SimpleSubject implements Subject {
     }
 
     @Override
-    public boolean assigned(Class<?> type) {
-        return prime().assigned(type);
+    public boolean instanceOf(Class<?> type) {
+        return prime().instanceOf(type);
     }
 
     @Override
-    public boolean settled() {
-        return prime().settled();
+    public boolean isNotEmpty() {
+        return prime().isNotEmpty();
     }
 
     @Override
-    public boolean desolated() {
-        return prime().desolated();
+    public boolean isEmpty() {
+        return prime().isEmpty();
     }
 
     @Override
     public Subject getSaved(Object key, Object reserve) {
         Subject saved = get(key);
-        if(saved.settled())return saved;
+        if(saved.isNotEmpty())return saved;
         set(key, reserve);
         return get(key);
     }
@@ -124,7 +124,7 @@ public abstract class SimpleSubject implements Subject {
     @Override
     public Subject getDone(Object key, Supplier<?> supplier) {
         Subject done = get(key);
-        if(done.settled())return done;
+        if(done.isNotEmpty())return done;
         set(key, supplier.get());
         return get(key);
     }
@@ -132,7 +132,7 @@ public abstract class SimpleSubject implements Subject {
     @Override
     public Subject getDone(Object key, Function<Subject, ?> function, Subject argument) {
         Subject done = get(key);
-        if(done.settled())return done;
+        if(done.isNotEmpty())return done;
         set(key, function.apply(argument));
         return get(key);
     }
@@ -166,7 +166,7 @@ public abstract class SimpleSubject implements Subject {
 
     @Override
     public Subject putAt(Slot slot, Object key, Object value) {
-        return get(key).settled() ? this : setAt(slot, key, value);
+        return get(key).isNotEmpty() ? this : setAt(slot, key, value);
     }
 
     @Override

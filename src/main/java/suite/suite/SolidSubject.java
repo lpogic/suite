@@ -180,14 +180,14 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public boolean assigned(Class<?> type) {
-        return subject.assigned(type);
+    public boolean instanceOf(Class<?> type) {
+        return subject.instanceOf(type);
     }
 
     @Override
     public Subject getSaved(Object key, Object reserve) {
         Subject saved = subject.get(key);
-        if(saved.settled())return new SolidSubject(saved);
+        if(saved.isNotEmpty())return new SolidSubject(saved);
         subject = subject.set(key, reserve);
         return get(key);
     }
@@ -195,7 +195,7 @@ public class SolidSubject implements Subject {
     @Override
     public Subject getDone(Object key, Supplier<?> supplier) {
         Subject done = subject.get(key);
-        if(done.settled())return new SolidSubject(done);
+        if(done.isNotEmpty())return new SolidSubject(done);
         subject = subject.set(key, supplier.get());
         return get(key);
     }
@@ -203,7 +203,7 @@ public class SolidSubject implements Subject {
     @Override
     public Subject getDone(Object key, Function<Subject, ?> function, Subject argument) {
         Subject done = subject.get(key);
-        if(done.settled())return new SolidSubject(done);
+        if(done.isNotEmpty())return new SolidSubject(done);
         subject = subject.set(key, function.apply(argument));
         return get(key);
     }
@@ -211,25 +211,25 @@ public class SolidSubject implements Subject {
     @Override
     public Subject take(Object key) {
         Subject taken = get(key);
-        if(taken.settled()) subject = subject.unset(key);
+        if(taken.isNotEmpty()) subject = subject.unset(key);
         return taken;
     }
 
     @Override
     public Subject takeAt(Slot slot) {
         Subject taken = getAt(slot);
-        if(taken.settled()) subject = subject.unset(taken.key().direct());
+        if(taken.isNotEmpty()) subject = subject.unset(taken.key().direct());
         return taken;
     }
 
     @Override
-    public boolean settled() {
-        return subject.settled();
+    public boolean isNotEmpty() {
+        return subject.isNotEmpty();
     }
 
     @Override
-    public boolean desolated() {
-        return subject.desolated();
+    public boolean isEmpty() {
+        return subject.isEmpty();
     }
 
     @Override

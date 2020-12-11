@@ -59,7 +59,7 @@ class CoupleSubject implements Subject {
 
     @Override
     public Subject unsetAt(Slot slot) {
-        return getAt(slot).settled() ? ZeroSubject.getInstance() : this;
+        return getAt(slot).isNotEmpty() ? ZeroSubject.getInstance() : this;
     }
 
     @Override
@@ -150,17 +150,17 @@ class CoupleSubject implements Subject {
     }
 
     @Override
-    public boolean assigned(Class<?> type) {
+    public boolean instanceOf(Class<?> type) {
         return type.isInstance(primeValue);
     }
 
     @Override
-    public boolean settled() {
+    public boolean isNotEmpty() {
         return true;
     }
 
     @Override
-    public boolean desolated() {
+    public boolean isEmpty() {
         return false;
     }
 
