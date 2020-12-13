@@ -66,32 +66,32 @@ class MultiSubject implements Subject {
 
     @Override
     public Subject unsetAt(Slot slot) {
-        Subject s = getAt(slot);
+        Vendor s = getAt(slot);
         return s.isNotEmpty() ? unset(s.key().direct()) : this;
     }
 
     @Override
-    public Subject key() {
+    public Vendor key() {
         return chain.getFirst().subject.key();
     }
 
     @Override
-    public Subject prime() {
+    public Vendor prime() {
         return chain.getFirst().subject;
     }
 
     @Override
-    public Subject recent() {
+    public Vendor recent() {
         return chain.getLast().subject;
     }
 
     @Override
-    public Subject get(Object key) {
+    public Vendor get(Object key) {
         return chain.get(key).subject;
     }
 
     @Override
-    public Subject getAt(Slot slot) {
+    public Vendor getAt(Slot slot) {
         if(slot == Slot.PRIME) {
             return chain.getFirst().subject;
         } else if(slot == Slot.RECENT) {
@@ -104,15 +104,15 @@ class MultiSubject implements Subject {
                 Link link = chain.get(((Slot.SlotAfter) slot).key);
                 return link == chain.ward ? ZeroSubject.getInstance() : link.back.subject;
             } else if(slot instanceof Slot.RecentBeforeSlot) {
-                Predicate<Subject> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
-                for(Subject s : reverse()) {
-                    if(!isLater.test(s)) return s;
+                Predicate<Vendor> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
+                for(Vendor v : reverse()) {
+                    if(!isLater.test(v)) return v;
                 }
                 return ZeroSubject.getInstance();
             } else if(slot instanceof Slot.PrimeAfterSlot) {
-                Predicate<Subject> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
-                for(Subject s : front()) {
-                    if(!isEarlier.test(s)) return s;
+                Predicate<Vendor> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
+                for(Vendor v : front()) {
+                    if(!isEarlier.test(v)) return v;
                 }
                 return ZeroSubject.getInstance();
             } else if(slot instanceof Slot.PlacedSlot) {
@@ -123,7 +123,7 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Subject getAt(int slotIndex) {
+    public Vendor getAt(int slotIndex) {
         return chain.getNth(slotIndex).subject;
     }
 
@@ -225,24 +225,24 @@ class MultiSubject implements Subject {
                     throw new NoSuchElementException();
                 } else chain.put(link.back, key, value);
             } else if(slot instanceof Slot.RecentBeforeSlot) {
-                Predicate<Subject> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
+                Predicate<Vendor> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
                 boolean settled = false;
-                for(Subject s : reverse()) {
-                    settled = !isLater.test(s);
+                for(Vendor v : reverse()) {
+                    settled = !isLater.test(v);
                     if(settled) {
-                        chain.put(chain.get(s.key().direct()).back, key, value);
+                        chain.put(chain.get(v.key().direct()).back, key, value);
                         break;
                     }
                 } if(!settled) {
                     chain.put(chain.ward.back, key, value);
                 }
             } else if(slot instanceof Slot.PrimeAfterSlot) {
-                Predicate<Subject> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
+                Predicate<Vendor> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
                 boolean settled = false;
-                for(Subject s : front()) {
-                    settled = !isEarlier.test(s);
+                for(Vendor v : front()) {
+                    settled = !isEarlier.test(v);
                     if(settled) {
-                        chain.put(chain.get(s.key().direct()), key, value);
+                        chain.put(chain.get(v.key().direct()), key, value);
                         break;
                     }
                 } if(!settled) {
@@ -300,7 +300,7 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(Slot slot, boolean reverse) {
+    public Wave<Vendor> iterator(Slot slot, boolean reverse) {
         if(reverse) {
             if(slot == Slot.PRIME) {
                 Link link = chain.getFirst();

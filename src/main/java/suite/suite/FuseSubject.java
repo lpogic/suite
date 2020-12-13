@@ -71,37 +71,37 @@ class FuseSubject implements Subject {
     }
 
     @Override
-    public Subject prime() {
+    public Vendor prime() {
         return subject.prime();
     }
 
     @Override
-    public Subject recent() {
+    public Vendor recent() {
         return subject.recent();
     }
 
     @Override
-    public Subject get(Object key) {
+    public Vendor get(Object key) {
         return subject.get(key);
     }
 
     @Override
-    public Subject get(Object ... keys) {
+    public Vendor get(Object ... keys) {
         return subject.get(keys);
     }
 
     @Override
-    public Subject getAt(Slot slot) {
+    public Vendor getAt(Slot slot) {
         return subject.getAt(slot);
     }
 
     @Override
-    public Subject getAt(int slotIndex) {
+    public Vendor getAt(int slotIndex) {
         return subject.getAt(slotIndex);
     }
 
     @Override
-    public Subject key() {
+    public Vendor key() {
         return subject.key();
     }
 
@@ -176,7 +176,7 @@ class FuseSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator() {
+    public Wave<Vendor> iterator() {
         return subject.iterator();
     }
 
@@ -216,7 +216,7 @@ class FuseSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(Slot slot, boolean reverse) {
+    public Wave<Vendor> iterator(Slot slot, boolean reverse) {
         return subject.iterator(slot, reverse);
     }
 }

@@ -7,10 +7,10 @@ import java.util.function.Supplier;
 
 public class Query {
 
-    private final Subject source;
-    private Subject result;
+    private final Vendor source;
+    private Vendor result;
 
-    public Query(Subject source) {
+    public Query(Vendor source) {
         this.source = source;
         this.result = Suite.set();
     }
@@ -20,7 +20,7 @@ public class Query {
         return this;
     }
 
-    public Query get(Object key, Subject map) {
+    public Query get(Object key, Vendor map) {
         result = map.get(key);
         return this;
     }
@@ -74,7 +74,7 @@ public class Query {
         return result.orDo(supplier);
     }
 
-    public<B> B orDo(Function<Subject, B> function) {
+    public<B> B orDo(Function<Vendor, B> function) {
         return result.isEmpty() ? function.apply(source) : result.asExpected();
     }
 
@@ -86,7 +86,7 @@ public class Query {
         return result.direct();
     }
 
-    public Query map(Subject map) {
+    public Query map(Vendor map) {
         Subject r = Suite.set();
         for(var s : result.front()) {
             r.input(map.get(s.direct()).front());
@@ -96,18 +96,22 @@ public class Query {
     }
 
     public Query map(Action action) {
+        Subject r = Suite.set();
         for(var s : result.front()) {
-            result.inset(action.play(s).front());
+            r.inset(action.play(s).front());
         }
+        result = r;
         return this;
     }
 
     public<T> Query map(Class<T> mappedType, Function<T, Object> function) {
+        Subject r = Suite.set();
         for(var s : result.front()) {
             if(s.instanceOf(mappedType)) {
-                result.set(s.key().direct(), function.apply(s.asExpected()));
+                r.set(s.key().direct(), function.apply(s.asExpected()));
             }
         }
+        result = r;
         return this;
     }
 }

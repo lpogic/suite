@@ -1,7 +1,5 @@
 package suite.suite.util;
 
-import suite.suite.Subject;
-
 import java.util.Iterator;
 
 public interface Wave<T> extends Iterator<T> {

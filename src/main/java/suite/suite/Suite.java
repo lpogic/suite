@@ -7,7 +7,7 @@ public class Suite {
     public static class AutoKey {
         @Override
         public String toString() {
-            return "#";
+            return "€";
         }
     }
 
@@ -25,10 +25,10 @@ public class Suite {
     public static Subject add(Object element) {
         return new SolidSubject(new CoupleSubject(new AutoKey(), element));
     }
-    public static Subject inset(Iterable<Subject> source) {
+    public static Subject inset(Iterable<Vendor> source) {
         return new SolidSubject(ZeroSubject.getInstance().inset(source));
     }
-    public static Subject input(Iterable<Subject> source) {
+    public static Subject input(Iterable<Vendor> source) {
         return new SolidSubject(ZeroSubject.getInstance().input(source));
     }
     public static Subject setAll(Iterable<Object> source) {
@@ -36,18 +36,6 @@ public class Suite {
     }
     public static Subject addAll(Iterable<Object> source) {
         return new SolidSubject(ZeroSubject.getInstance().addAll(source));
-    }
-
-    public static Subject ok() {
-        return new SolidSubject(new BubbleSubject(OK));
-    }
-
-    public static boolean isOk(Subject subject) {
-        return subject.get(OK).isNotEmpty();
-    }
-
-    public static Subject error(Object cause) {
-        return new SolidSubject(new CoupleSubject("error", cause));
     }
 
     public static Subject fuse(Subject subject) {

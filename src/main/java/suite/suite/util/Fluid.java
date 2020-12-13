@@ -2,31 +2,32 @@ package suite.suite.util;
 
 import suite.suite.Subject;
 import suite.suite.Suite;
+import suite.suite.Vendor;
 import suite.suite.action.Action;
 
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public interface Fluid extends Iterable<Subject> {
-    Wave<Subject> iterator();
+public interface Fluid extends Iterable<Vendor> {
+    Wave<Vendor> iterator();
 
-    default Cascade<Subject> cascade() {
+    default Cascade<Vendor> cascade() {
         return new Cascade<>(iterator());
     }
 
-    default Fluid all(Predicate<Subject> predicate) {
+    default Fluid all(Predicate<Vendor> predicate) {
         return () -> new Wave<>() {
-            final Iterator<Subject> origin = iterator();
-            Subject next = null;
+            final Iterator<Vendor> origin = iterator();
+            Vendor next = null;
             boolean nextFound = false;
 
             @Override
             public boolean hasNext() {
                 if(nextFound) return true;
                 while (origin.hasNext()) {
-                    Subject s = origin.next();
-                    if(predicate.test(s)) {
-                        next = s;
+                    Vendor v = origin.next();
+                    if(predicate.test(v)) {
+                        next = v;
                         nextFound = true;
                         return true;
                     }
@@ -35,26 +36,26 @@ public interface Fluid extends Iterable<Subject> {
             }
 
             @Override
-            public Subject next() {
+            public Vendor next() {
                 nextFound = false;
                 return next;
             }
         };
     }
 
-    default Fluid first(Predicate<Subject> predicate) {
+    default Fluid first(Predicate<Vendor> predicate) {
         return () -> new Wave<>() {
-            final Iterator<Subject> origin = iterator();
-            Subject next = null;
+            final Iterator<Vendor> origin = iterator();
+            Vendor next = null;
             boolean nextFound = false;
 
             @Override
             public boolean hasNext() {
                 if(nextFound) return false;
                 while (origin.hasNext()) {
-                    Subject s = origin.next();
-                    if(predicate.test(s)) {
-                        next = s;
+                    Vendor v = origin.next();
+                    if(predicate.test(v)) {
+                        next = v;
                         nextFound = true;
                         return true;
                     }
@@ -63,7 +64,7 @@ public interface Fluid extends Iterable<Subject> {
             }
 
             @Override
-            public Subject next() {
+            public Vendor next() {
                 return next;
             }
         };
@@ -71,7 +72,7 @@ public interface Fluid extends Iterable<Subject> {
 
     default Fluid map(Action action) {
         return () -> new Wave<>() {
-            final Iterator<Subject> origin = iterator();
+            final Iterator<Vendor> origin = iterator();
 
             @Override
             public boolean hasNext() {
@@ -79,7 +80,7 @@ public interface Fluid extends Iterable<Subject> {
             }
 
             @Override
-            public Subject next() {
+            public Vendor next() {
                 return action.play(origin.next());
             }
         };
@@ -87,7 +88,7 @@ public interface Fluid extends Iterable<Subject> {
 
     default Slime<?> keys() {
         return () -> new Wave<>() {
-            final Iterator<Subject> subIt = iterator();
+            final Iterator<Vendor> subIt = iterator();
 
             @Override
             public boolean hasNext() {
@@ -103,7 +104,7 @@ public interface Fluid extends Iterable<Subject> {
 
     default<T> Slime<T> keys(Class<T> type) {
         return () -> new Wave<>() {
-            final Iterator<Subject> subIt = iterator();
+            final Iterator<Vendor> subIt = iterator();
 
             @Override
             public boolean hasNext() {
@@ -119,7 +120,7 @@ public interface Fluid extends Iterable<Subject> {
 
     default Slime<?> values() {
         return () -> new Wave<>() {
-            final Iterator<Subject> subIt = iterator();
+            final Iterator<Vendor> subIt = iterator();
 
             @Override
             public boolean hasNext() {
@@ -135,7 +136,7 @@ public interface Fluid extends Iterable<Subject> {
 
     default<T> Slime<T> values(Class<T> type) {
         return () -> new Wave<>() {
-            final Iterator<Subject> subIt = iterator();
+            final Iterator<Vendor> subIt = iterator();
 
             @Override
             public boolean hasNext() {
@@ -171,7 +172,7 @@ public interface Fluid extends Iterable<Subject> {
             }
 
             @Override
-            public Subject next() {
+            public Vendor next() {
                 return Suite.set(keyIt.next(), valIt.next());
             }
         };
@@ -188,19 +189,19 @@ public interface Fluid extends Iterable<Subject> {
             }
 
             @Override
-            public Subject next() {
+            public Vendor next() {
                 return Suite.set(keyIt.next(), valIt.next());
             }
         };
     }
 
-    static Fluid source(Iterable<Subject> iterable) {
+    static Fluid source(Iterable<Vendor> iterable) {
         return iterable instanceof Fluid ? (Fluid)iterable : () -> Wave.wave(iterable.iterator());
     }
 
     default Fluid append(Iterable<Subject> iterable) {
         return () -> new Wave<>() {
-            Wave<Subject> selfWave = Fluid.this.iterator();
+            Wave<Vendor> selfWave = Fluid.this.iterator();
             final Iterator<Subject> thatIterator = iterable.iterator();
 
             @Override
@@ -213,7 +214,7 @@ public interface Fluid extends Iterable<Subject> {
             }
 
             @Override
-            public Subject next() {
+            public Vendor next() {
                 return selfWave != null ? selfWave.next() : thatIterator.next();
             }
         };

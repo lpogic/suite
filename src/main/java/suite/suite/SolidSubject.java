@@ -9,10 +9,10 @@ import java.util.function.Supplier;
 
 public class SolidSubject implements Subject {
 
-    class HomogenizedSubjectIterator implements Wave<Subject> {
-        Subject sub;
+    class HomogenizedSubjectIterator implements Wave<Vendor> {
+        Vendor sub;
         boolean reverse;
-        Wave<Subject> it;
+        Wave<Vendor> it;
 
 
         HomogenizedSubjectIterator(Subject sub, boolean reverse, Slot slot) {
@@ -46,8 +46,9 @@ public class SolidSubject implements Subject {
         subject = ZeroSubject.getInstance();
     }
 
-    public SolidSubject(Subject subject) {
-        this.subject = subject;
+    public SolidSubject(Vendor vendor) {
+        if(vendor instanceof Subject) this.subject = (Subject)vendor;
+        else this.subject = Suite.inset(vendor);
     }
 
     @Override
@@ -105,37 +106,37 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Subject prime() {
+    public Vendor prime() {
         return new SolidSubject(subject.prime().exclude());
     }
 
     @Override
-    public Subject recent() {
+    public Vendor recent() {
         return new SolidSubject(subject.recent().exclude());
     }
 
     @Override
-    public Subject get(Object key) {
+    public Vendor get(Object key) {
         return new SolidSubject(subject.get(key).exclude());
     }
 
     @Override
-    public Subject get(Object ... keys) {
+    public Vendor get(Object ... keys) {
         return new SolidSubject(subject.get(keys).exclude());
     }
 
     @Override
-    public Subject getAt(Slot slot) {
+    public Vendor getAt(Slot slot) {
         return new SolidSubject(subject.getAt(slot).exclude());
     }
 
     @Override
-    public Subject getAt(int slotIndex) {
+    public Vendor getAt(int slotIndex) {
         return new SolidSubject(subject.getAt(slotIndex).exclude());
     }
 
     @Override
-    public Subject key() {
+    public Vendor key() {
         return new SolidSubject(subject.key().exclude());
     }
 
@@ -185,39 +186,39 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Subject getSaved(Object key, Object reserve) {
-        Subject saved = subject.get(key);
+    public Vendor getSaved(Object key, Object reserve) {
+        Vendor saved = subject.get(key);
         if(saved.isNotEmpty())return new SolidSubject(saved);
         subject = subject.set(key, reserve);
         return get(key);
     }
 
     @Override
-    public Subject getDone(Object key, Supplier<?> supplier) {
-        Subject done = subject.get(key);
+    public Vendor getDone(Object key, Supplier<?> supplier) {
+        Vendor done = subject.get(key);
         if(done.isNotEmpty())return new SolidSubject(done);
         subject = subject.set(key, supplier.get());
         return get(key);
     }
 
     @Override
-    public Subject getDone(Object key, Function<Subject, ?> function, Subject argument) {
-        Subject done = subject.get(key);
+    public Vendor getDone(Object key, Function<Subject, ?> function, Subject argument) {
+        Vendor done = subject.get(key);
         if(done.isNotEmpty())return new SolidSubject(done);
         subject = subject.set(key, function.apply(argument));
         return get(key);
     }
 
     @Override
-    public Subject take(Object key) {
-        Subject taken = get(key);
+    public Vendor take(Object key) {
+        Vendor taken = get(key);
         if(taken.isNotEmpty()) subject = subject.unset(key);
         return taken;
     }
 
     @Override
-    public Subject takeAt(Slot slot) {
-        Subject taken = getAt(slot);
+    public Vendor takeAt(Slot slot) {
+        Vendor taken = getAt(slot);
         if(taken.isNotEmpty()) subject = subject.unset(taken.key().direct());
         return taken;
     }
@@ -258,18 +259,18 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(Slot slot, boolean reverse) {
+    public Wave<Vendor> iterator(Slot slot, boolean reverse) {
         return new HomogenizedSubjectIterator(subject, reverse, slot);
     }
 
     @Override
-    public Subject inset(Iterable<Subject> iterable) {
+    public Subject inset(Iterable<Vendor> iterable) {
         subject = subject.inset(iterable);
         return this;
     }
 
     @Override
-    public Subject input(Iterable<Subject> iterable) {
+    public Subject input(Iterable<Vendor> iterable) {
         subject = subject.input(iterable);
         return this;
     }

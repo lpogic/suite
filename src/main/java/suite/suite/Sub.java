@@ -12,13 +12,13 @@ import java.util.function.Supplier;
 
 public class Sub<T> implements Fluid {
 
-    class HomogenizedSubjectIterator implements Wave<Subject> {
-        Subject sub;
+    class HomogenizedSubjectIterator implements Wave<Vendor> {
+        Vendor sub;
         boolean reverse;
-        Wave<Subject> it;
+        Wave<Vendor> it;
 
 
-        HomogenizedSubjectIterator(Subject sub, boolean reverse, Slot slot) {
+        HomogenizedSubjectIterator(Vendor sub, boolean reverse, Slot slot) {
             this.sub = sub;
             this.reverse = reverse;
             this.it = sub.iterator(slot, reverse);
@@ -38,7 +38,7 @@ public class Sub<T> implements Fluid {
         }
 
         @Override
-        public Subject next() {
+        public Vendor next() {
             return new SolidSubject(it.next().exclude());
         }
     }
@@ -49,8 +49,8 @@ public class Sub<T> implements Fluid {
         subject = ZeroSubject.getInstance();
     }
 
-    Sub(Subject subject) {
-        this.subject = subject;
+    Sub(Vendor vendor) {
+        this.subject = vendor instanceof Subject ? (Subject)vendor : vendor.set();
     }
 
     public Sub<T> set(T element) {
@@ -163,21 +163,21 @@ public class Sub<T> implements Fluid {
     }
 
     public Sub<T> getSaved(Object key, T reserve) {
-        Subject saved = subject.get(key);
+        Vendor saved = subject.get(key);
         if(saved.isNotEmpty())return new Sub<>(saved);
         subject = subject.set(key, reserve);
         return get(key);
     }
 
     public Sub<T> getDone(Object key, Supplier<T> supplier) {
-        Subject done = subject.get(key);
+        Vendor done = subject.get(key);
         if(done.isNotEmpty())return new Sub<>(done);
         subject = subject.set(key, supplier.get());
         return get(key);
     }
 
     public Sub<T> getDone(Object key, Function<Subject, T> function, Subject argument) {
-        Subject done = subject.get(key);
+        Vendor done = subject.get(key);
         if(done.isNotEmpty())return new Sub<>(done);
         subject = subject.set(key, function.apply(argument));
         return get(key);
@@ -223,11 +223,11 @@ public class Sub<T> implements Fluid {
         return () -> new HomogenizedSubjectIterator(subject, true, slot);
     }
 
-    public Wave<Subject> iterator(Slot slot, boolean reverse) {
+    public Wave<Vendor> iterator(Slot slot, boolean reverse) {
         return new HomogenizedSubjectIterator(subject, reverse, slot);
     }
 
-    public Wave<Subject> iterator() {
+    public Wave<Vendor> iterator() {
         return iterator(Slot.PRIME, false);
     }
 
@@ -286,7 +286,7 @@ public class Sub<T> implements Fluid {
 
     public Slime<T> keys() {
         return () -> new Wave<>() {
-            final Iterator<Subject> subIt = iterator();
+            final Iterator<Vendor> subIt = iterator();
 
             @Override
             public boolean hasNext() {
@@ -302,7 +302,7 @@ public class Sub<T> implements Fluid {
 
     public Slime<T> values() {
         return () -> new Wave<>() {
-            final Iterator<Subject> subIt = iterator();
+            final Iterator<Vendor> subIt = iterator();
 
             @Override
             public boolean hasNext() {

@@ -11,15 +11,15 @@ import java.util.function.Supplier;
 
 public class WonkySubject extends SolidSubject {
 
-    class HomogenizedSubjectIterator implements Wave<Subject> {
-        Subject sub;
+    class HomogenizedSubjectIterator implements Wave<Vendor> {
+        Vendor sub;
         boolean reverse;
-        Wave<Subject> it;
+        Wave<Vendor> it;
 
         boolean hasNext;
-        Subject next;
+        Vendor next;
 
-        HomogenizedSubjectIterator(Subject sub, boolean reverse, Slot slot) {
+        HomogenizedSubjectIterator(Vendor sub, boolean reverse, Slot slot) {
             this.sub = sub;
             this.reverse = reverse;
             this.it = sub.iterator(slot, reverse);
@@ -38,10 +38,10 @@ public class WonkySubject extends SolidSubject {
                 sub = subject;
             }
             while (hasNext = it.hasNext()) {
-                Subject s = it.next();
-                s = unweak(s);
-                if(s != ZeroSubject.getInstance()) {
-                    next = s;
+                Vendor v = it.next();
+                v = unweak(v);
+                if(v != ZeroSubject.getInstance()) {
+                    next = v;
                     return true;
                 }
             }
@@ -49,7 +49,7 @@ public class WonkySubject extends SolidSubject {
         }
 
         @Override
-        public Subject next() {
+        public Vendor next() {
             if(hasNext) {
                 hasNext = false;
                 return new SolidSubject(next);
@@ -67,7 +67,7 @@ public class WonkySubject extends SolidSubject {
         return o == null ? null : new WeakReference<>(o);
     }
 
-    private Subject unweak(Subject s) {
+    private Vendor unweak(Vendor s) {
         WeakReference<Object> ref = s.orGiven(null);
         if(ref == null) return s;
         Object o = ref.get();
@@ -134,34 +134,34 @@ public class WonkySubject extends SolidSubject {
     }
 
     @Override
-    public Subject prime() {
-        Iterator<Subject> it = iterator(Slot.PRIME, false);
+    public Vendor prime() {
+        Iterator<Vendor> it = iterator(Slot.PRIME, false);
         return it.hasNext() ? it.next() : new SolidSubject(ZeroSubject.getInstance());
     }
 
     @Override
-    public Subject recent() {
-        Iterator<Subject> it = iterator(Slot.RECENT, true);
+    public Vendor recent() {
+        Iterator<Vendor> it = iterator(Slot.RECENT, true);
         return it.hasNext() ? it.next() : new SolidSubject(ZeroSubject.getInstance());
     }
 
     @Override
-    public Subject get(Object key) {
+    public Vendor get(Object key) {
         return unweak(subject.get(key));
     }
 
     @Override
-    public Subject getAt(Slot slot) {
+    public Vendor getAt(Slot slot) {
         return new SolidSubject(unweak(subject.getAt(slot)));
     }
 
     @Override
-    public Subject getAt(int slotIndex) {
+    public Vendor getAt(int slotIndex) {
         return new SolidSubject(unweak(subject.getAt(slotIndex)));
     }
 
     @Override
-    public Subject key() {
+    public Vendor key() {
         return new SolidSubject(subject.key());
     }
 
@@ -211,39 +211,39 @@ public class WonkySubject extends SolidSubject {
     }
 
     @Override
-    public Subject getSaved(Object key, Object reserve) {
-        Subject saved = unweak(subject.get(key));
+    public Vendor getSaved(Object key, Object reserve) {
+        Vendor saved = unweak(subject.get(key));
         if(saved.isNotEmpty())return new SolidSubject(saved);
         subject = subject.set(key, weak(reserve));
         return get(key);
     }
 
     @Override
-    public Subject getDone(Object key, Supplier<?> supplier) {
-        Subject done = unweak(subject.get(key));
+    public Vendor getDone(Object key, Supplier<?> supplier) {
+        Vendor done = unweak(subject.get(key));
         if(done.isNotEmpty())return new SolidSubject(done);
         subject = subject.set(key, weak(supplier.get()));
         return get(key);
     }
 
     @Override
-    public Subject getDone(Object key, Function<Subject, ?> function, Subject argument) {
-        Subject done = unweak(subject.get(key));
+    public Vendor getDone(Object key, Function<Subject, ?> function, Subject argument) {
+        Vendor done = unweak(subject.get(key));
         if(done.isNotEmpty())return new SolidSubject(done);
         subject = subject.set(key, weak(function.apply(argument)));
         return get(key);
     }
 
     @Override
-    public Subject take(Object key) {
-        Subject taken = get(key);
+    public Vendor take(Object key) {
+        Vendor taken = get(key);
         if(taken.isNotEmpty()) subject = subject.unset(key);
         return unweak(taken);
     }
 
     @Override
-    public Subject takeAt(Slot slot) {
-        Subject taken = getAt(slot);
+    public Vendor takeAt(Slot slot) {
+        Vendor taken = getAt(slot);
         if(taken.isNotEmpty()) subject = subject.unset(taken.key().direct());
         return unweak(taken);
     }
@@ -284,22 +284,22 @@ public class WonkySubject extends SolidSubject {
     }
 
     @Override
-    public Wave<Subject> iterator(Slot slot, boolean reverse) {
+    public Wave<Vendor> iterator(Slot slot, boolean reverse) {
         return new HomogenizedSubjectIterator(subject, reverse, slot);
     }
 
     @Override
-    public Subject inset(Iterable<Subject> iterable) {
-        for(Subject s : iterable) {
-            subject = subject.set(s.key().direct(), s.direct());
+    public Subject inset(Iterable<Vendor> iterable) {
+        for(Vendor v : iterable) {
+            subject = subject.set(v.key().direct(), v.direct());
         }
         return this;
     }
 
     @Override
-    public Subject input(Iterable<Subject> iterable) {
-        for(Subject s : iterable) {
-            subject = subject.put(s.key().direct(), s.direct());
+    public Subject input(Iterable<Vendor> iterable) {
+        for(Vendor v : iterable) {
+            subject = subject.put(v.key().direct(), v.direct());
         }
         return this;
     }

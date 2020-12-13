@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public interface Subject extends Fluid {
+public interface Subject extends Vendor {
 
     Subject set(Object element);
     Subject set(Object key, Object value);
@@ -27,104 +27,23 @@ public interface Subject extends Fluid {
     Subject unset(Object key, Object value);
     Subject unsetAt(Slot slot);
 
-    Subject key();
-    Subject prime();
-    Subject recent();
-    Subject get(Object key);
-    default Subject get(Object ... keys) {
-        Subject s = Suite.set();
-        for(Object k : keys) {
-            s.inset(get(k));
-        }
-        return s;
-    }
-    Subject getAt(Slot slot);
-    Subject getAt(int slotIndex);
-
-    default Subject at(Object key) {
-        Subject get = get(key);
-        if(get.instanceOf(Subject.class))return get.asExpected();
-        if(get.isNotEmpty())return get;
-        return Suite.set();
-    }
-    default Subject at(Object ... path) {
-        Subject at = this;
-        for(Object o : path) at = at.at(o);
-        return at;
-    }
-    Object direct();
-    <B> B asExpected();
-    <B> B asGiven(Class<B> requestedType);
-    <B> B asGiven(Glass<? super B, B> requestedType);
-    <B> B asGiven(Class<B> requestedType, B substitute);
-    <B> B asGiven(Glass<? super B, B> requestedType, B substitute);
-    <B> B orGiven(B substitute);
-    <B> B orDo(Supplier<B> supplier);
-    boolean instanceOf(Class<?> type);
-
-    default String asString() {
-        return Objects.toString(direct(), "nuLL");
-    }
-    default int asInt() {
-        return asGiven(Number.class).intValue();
-    }
-    default short asShort() {
-        return asGiven(Number.class).shortValue();
-    }
-    default long asLong() {
-        return asGiven(Number.class).longValue();
-    }
-    default double asDouble() {
-        return asGiven(Number.class).doubleValue();
-    }
-    default float asFloat() {
-        return asGiven(Number.class).floatValue();
-    }
-    default short asByte() {
-        return asGiven(Number.class).byteValue();
-    }
-
-    default Subject getSaved(Object key, Object substitute) {
+    default Vendor getSaved(Object key, Object substitute) {
         throw new UnsupportedOperationException();
     }
-    default Subject getDone(Object key, Supplier<?> supplier) {
+    default Vendor getDone(Object key, Supplier<?> supplier) {
         throw new UnsupportedOperationException();
     }
-    default Subject getDone(Object key, Function<Subject, ?> function, Subject argument) {
+    default Vendor getDone(Object key, Function<Subject, ?> function, Subject argument) {
         throw new UnsupportedOperationException();
     }
-    default Subject take(Object key) {
+    default Vendor take(Object key) {
         throw new UnsupportedOperationException();
     }
-    default Subject takeAt(Slot slot) {
+    default Vendor takeAt(Slot slot) {
         throw new UnsupportedOperationException();
     }
     default Subject into(Object key) {
         return getDone(key, Suite::set).asExpected();
-    }
-
-    boolean isNotEmpty();
-    boolean isEmpty();
-    int size();
-
-    Wave<Subject> iterator(Slot slot, boolean reverse);
-
-    @Override
-    default Wave<Subject> iterator() {
-        return iterator(Slot.PRIME, false);
-    }
-
-    default Fluid front() {
-        return () -> iterator(Slot.PRIME, false);
-    }
-    default Fluid front(Slot slot) {
-        return () -> iterator(slot, false);
-    }
-    default Fluid reverse() {
-        return () -> iterator(Slot.RECENT, true);
-    }
-    default Fluid reverse(Slot slot) {
-        return () -> iterator(slot, true);
     }
 
     default boolean fused() {
@@ -134,17 +53,17 @@ public interface Subject extends Fluid {
         return this;
     }
 
-    default Subject inset(Iterable<Subject> iterable) {
+    default Subject inset(Iterable<Vendor> iterable) {
         Subject subject = this;
-        for(Subject it : iterable) {
+        for(var it : iterable) {
             subject = subject.set(it.key().direct(), it.direct());
         }
         return subject;
     }
 
-    default Subject input(Iterable<Subject> iterable) {
+    default Subject input(Iterable<Vendor> iterable) {
         Subject subject = this;
-        for(Subject it : iterable) {
+        for(var it : iterable) {
             subject = subject.put(it.key().direct(), it.direct());
         }
         return subject;

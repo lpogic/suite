@@ -57,37 +57,37 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public Subject prime() {
+    public Vendor prime() {
         return this;
     }
 
     @Override
-    public Subject recent() {
+    public Vendor recent() {
         return this;
     }
 
     @Override
-    public Subject get(Object key) {
+    public Vendor get(Object key) {
         return this;
     }
 
     @Override
-    public Subject get(Object ... keys) {
+    public Vendor get(Object ... keys) {
         return this;
     }
 
     @Override
-    public Subject getAt(Slot slot) {
+    public Vendor getAt(Slot slot) {
         return this;
     }
 
     @Override
-    public Subject getAt(int slotIndex) {
+    public Vendor getAt(int slotIndex) {
         return this;
     }
 
     @Override
-    public Subject key() {
+    public Vendor key() {
         return this;
     }
 
@@ -182,7 +182,7 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(Slot slot, boolean reverse) {
+    public Wave<Vendor> iterator(Slot slot, boolean reverse) {
         return Wave.empty();
     }
 }

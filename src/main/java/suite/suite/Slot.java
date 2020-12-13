@@ -22,11 +22,11 @@ public interface Slot {
         return new PlacedSlot(place);
     }
 
-    static Slot recentBefore(Predicate<Subject> isLater) {
+    static Slot recentBefore(Predicate<Vendor> isLater) {
         return new RecentBeforeSlot(isLater);
     }
 
-    static Slot primeAfter(Predicate<Subject> isEarlier) {
+    static Slot primeAfter(Predicate<Vendor> isEarlier) {
         return new PrimeAfterSlot(isEarlier);
     }
 
@@ -63,17 +63,17 @@ public interface Slot {
     }
 
     class RecentBeforeSlot implements Slot {
-        Predicate<Subject> isLater;
+        Predicate<Vendor> isLater;
 
-        RecentBeforeSlot(Predicate<Subject> isLater) {
+        RecentBeforeSlot(Predicate<Vendor> isLater) {
             this.isLater = isLater;
         }
     }
 
     class PrimeAfterSlot implements Slot {
-        Predicate<Subject> isEarlier;
+        Predicate<Vendor> isEarlier;
 
-        PrimeAfterSlot(Predicate<Subject> isEarlier) {
+        PrimeAfterSlot(Predicate<Vendor> isEarlier) {
             this.isEarlier = isEarlier;
         }
     }

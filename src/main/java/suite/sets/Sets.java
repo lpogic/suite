@@ -2,6 +2,7 @@ package suite.sets;
 
 import suite.suite.Subject;
 import suite.suite.Suite;
+import suite.suite.Vendor;
 import suite.suite.util.Fluid;
 
 public class Sets {
@@ -20,9 +21,9 @@ public class Sets {
     public static Subject insec(Subject strainer, Fluid fluid) {
         Subject sub = Suite.set();
         for(var o : fluid.keys()) {
-            Subject s = strainer.get(o);
-            if(s.isNotEmpty()) {
-                sub.set(s.key().direct(), s.direct());
+            Vendor v = strainer.get(o);
+            if(v.isNotEmpty()) {
+                sub.set(v.key().direct(), v.direct());
             }
         }
         return sub;

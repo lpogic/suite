@@ -63,27 +63,27 @@ class CoupleSubject implements Subject {
     }
 
     @Override
-    public Subject key() {
+    public Vendor key() {
         return new BubbleSubject(primeKey);
     }
 
     @Override
-    public Subject prime() {
+    public Vendor prime() {
         return this;
     }
 
     @Override
-    public Subject recent() {
+    public Vendor recent() {
         return this;
     }
 
     @Override
-    public Subject get(Object key) {
+    public Vendor get(Object key) {
         return Objects.equals(primeKey, key) ? this : ZeroSubject.getInstance();
     }
 
     @Override
-    public Subject get(Object ... keys) {
+    public Vendor get(Object ... keys) {
         for(Object k : keys) {
             if(Objects.equals(primeKey, k)) return this;
         }
@@ -91,21 +91,21 @@ class CoupleSubject implements Subject {
     }
 
     @Override
-    public Subject getAt(Slot slot) {
+    public Vendor getAt(Slot slot) {
         if(slot == Slot.PRIME || slot == Slot.RECENT || (slot instanceof Slot.PlacedSlot && ((Slot.PlacedSlot) slot).place == 0)) {
             return this;
         } else if(slot instanceof Slot.RecentBeforeSlot) {
-            Predicate<Subject> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
+            Predicate<Vendor> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
             return isLater.test(this) ? ZeroSubject.getInstance() : this;
         } else if(slot instanceof Slot.PrimeAfterSlot) {
-            Predicate<Subject> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
+            Predicate<Vendor> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
             return isEarlier.test(this) ? ZeroSubject.getInstance() : this;
         }
         return ZeroSubject.getInstance();
     }
 
     @Override
-    public Subject getAt(int slotIndex) {
+    public Vendor getAt(int slotIndex) {
         return slotIndex == 0 ? this : ZeroSubject.getInstance();
     }
 
@@ -213,7 +213,7 @@ class CoupleSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(Slot slot, boolean reverse) {
+    public Wave<Vendor> iterator(Slot slot, boolean reverse) {
         link();
         if(slot == Slot.PRIME) {
             return new LinkIterator(reverse, ward, ward);
@@ -225,10 +225,10 @@ class CoupleSubject implements Subject {
             } else if(slot instanceof Slot.SlotAfter) {
                 return Wave.empty();
             } else if(slot instanceof Slot.RecentBeforeSlot) {
-                Predicate<Subject> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
+                Predicate<Vendor> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
                 return isLater.test(new SolidSubject(this)) ? Wave.empty() : new LinkIterator(reverse, ward, ward);
             } else if(slot instanceof Slot.PrimeAfterSlot) {
-                Predicate<Subject> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
+                Predicate<Vendor> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
                 return isEarlier.test(new SolidSubject(this)) ? Wave.empty() : new LinkIterator(reverse, ward, ward);
             } else if(slot instanceof Slot.PlacedSlot) {
                 return ((Slot.PlacedSlot) slot).place == 0 ? new LinkIterator(reverse, ward, ward) : Wave.empty();

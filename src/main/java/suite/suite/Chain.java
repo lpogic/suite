@@ -158,15 +158,15 @@ class Chain implements Fluid {
     }
 
     @Override
-    public Wave<Subject> iterator() {
+    public Wave<Vendor> iterator() {
         return new LinkIterator(ward);
     }
 
-    public Wave<Subject> iterator(boolean reverse) {
+    public Wave<Vendor> iterator(boolean reverse) {
         return new LinkIterator(reverse, ward, ward);
     }
 
-    public Wave<Subject> iterator(boolean reverse, Link link) {
+    public Wave<Vendor> iterator(boolean reverse, Link link) {
         return new LinkIterator(reverse, link, ward);
     }
 

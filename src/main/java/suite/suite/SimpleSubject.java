@@ -39,22 +39,22 @@ public abstract class SimpleSubject implements Subject {
     }
 
     @Override
-    public Subject key() {
+    public Vendor key() {
         return prime().key();
     }
 
     @Override
-    public Subject prime() {
+    public Vendor prime() {
         return getAt(Slot.PRIME);
     }
 
     @Override
-    public Subject recent() {
+    public Vendor recent() {
         return getAt(Slot.RECENT);
     }
 
     @Override
-    public Subject getAt(int slotIndex) {
+    public Vendor getAt(int slotIndex) {
         return getAt(Slot.in(slotIndex));
     }
 
@@ -114,39 +114,39 @@ public abstract class SimpleSubject implements Subject {
     }
 
     @Override
-    public Subject getSaved(Object key, Object reserve) {
-        Subject saved = get(key);
+    public Vendor getSaved(Object key, Object reserve) {
+        Vendor saved = get(key);
         if(saved.isNotEmpty())return saved;
         set(key, reserve);
         return get(key);
     }
 
     @Override
-    public Subject getDone(Object key, Supplier<?> supplier) {
-        Subject done = get(key);
+    public Vendor getDone(Object key, Supplier<?> supplier) {
+        Vendor done = get(key);
         if(done.isNotEmpty())return done;
         set(key, supplier.get());
         return get(key);
     }
 
     @Override
-    public Subject getDone(Object key, Function<Subject, ?> function, Subject argument) {
-        Subject done = get(key);
+    public Vendor getDone(Object key, Function<Subject, ?> function, Subject argument) {
+        Vendor done = get(key);
         if(done.isNotEmpty())return done;
         set(key, function.apply(argument));
         return get(key);
     }
 
     @Override
-    public Subject take(Object key) {
-        Subject taken = get(key);
+    public Vendor take(Object key) {
+        Vendor taken = get(key);
         unset(key);
         return taken;
     }
 
     @Override
-    public Subject takeAt(Slot slot) {
-        Subject taken = getAt(slot);
+    public Vendor takeAt(Slot slot) {
+        Vendor taken = getAt(slot);
         unsetAt(slot);
         return taken;
     }

@@ -2,7 +2,7 @@ package suite.suite;
 
 import suite.suite.util.Wave;
 
-public class LinkIterator implements Wave<Subject> {
+public class LinkIterator implements Wave<Vendor> {
 
     private final boolean reverse;
     private Link current;
@@ -22,7 +22,7 @@ public class LinkIterator implements Wave<Subject> {
         return (reverse ? current.front() : current.back()) != ward;
     }
 
-    public Subject next() {
+    public Vendor next() {
         current = reverse ? current.front() : current.back();
         return current.subject;
     }
