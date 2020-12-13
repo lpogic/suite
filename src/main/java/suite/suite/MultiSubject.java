@@ -97,7 +97,10 @@ class MultiSubject implements Subject {
         } else if(slot == Slot.RECENT) {
             return chain.getLast().subject;
         } else {
-            if(slot instanceof Slot.SlotBefore) {
+            if(slot instanceof Slot.SlotOf) {
+                Link link = chain.get(((Slot.SlotOf) slot).key);
+                return link == chain.ward ? ZeroSubject.getInstance() : link.subject;
+            } else if(slot instanceof Slot.SlotBefore) {
                 Link link = chain.get(((Slot.SlotBefore) slot).key);
                 return link == chain.ward ? ZeroSubject.getInstance() : link.front.subject;
             } else if(slot instanceof Slot.SlotAfter) {
@@ -214,7 +217,12 @@ class MultiSubject implements Subject {
         } else if(slot == Slot.RECENT) {
             chain.putLast(key, value);
         } else {
-            if(slot instanceof Slot.SlotBefore) {
+            if(slot instanceof Slot.SlotOf) {
+                Link link = chain.get(((Slot.SlotOf) slot).key);
+                if(link == chain.ward) {
+                    throw new NoSuchElementException();
+                } else chain.put(link.front, key, value);
+            } else if(slot instanceof Slot.SlotBefore) {
                 Link link = chain.get(((Slot.SlotBefore) slot).key);
                 if(link == chain.ward) {
                     throw new NoSuchElementException();
