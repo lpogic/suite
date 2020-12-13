@@ -1,8 +1,5 @@
 package suite.suite;
 
-import suite.suite.util.*;
-
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -53,7 +50,7 @@ public interface Subject extends Vendor {
         return this;
     }
 
-    default Subject inset(Iterable<Vendor> iterable) {
+    default Subject inset(Iterable<? extends Vendor> iterable) {
         Subject subject = this;
         for(var it : iterable) {
             subject = subject.set(it.key().direct(), it.direct());
@@ -61,7 +58,7 @@ public interface Subject extends Vendor {
         return subject;
     }
 
-    default Subject input(Iterable<Vendor> iterable) {
+    default Subject input(Iterable<? extends Vendor> iterable) {
         Subject subject = this;
         for(var it : iterable) {
             subject = subject.put(it.key().direct(), it.direct());
@@ -91,5 +88,12 @@ public interface Subject extends Vendor {
             subject = subject.add(it);
         }
         return subject;
+    }
+
+    default Subject set() {
+        return this;
+    }
+    default Subject put() {
+        return this;
     }
 }

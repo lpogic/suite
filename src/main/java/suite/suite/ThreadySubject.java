@@ -394,7 +394,7 @@ class ThreadySubject implements Subject {
     }
 
     @Override
-    public Subject inset(Iterable<Vendor> iterable) {
+    public Subject inset(Iterable<? extends Vendor> iterable) {
         try(var ignored = writeLock.lock()) {
             subject = subject.inset(iterable);
         }
@@ -402,7 +402,7 @@ class ThreadySubject implements Subject {
     }
 
     @Override
-    public Subject input(Iterable<Vendor> iterable) {
+    public Subject input(Iterable<? extends Vendor> iterable) {
         try(var ignored = writeLock.lock()) {
             subject = subject.input(iterable);
         }

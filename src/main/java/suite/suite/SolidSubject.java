@@ -264,13 +264,13 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Subject inset(Iterable<Vendor> iterable) {
+    public Subject inset(Iterable<? extends Vendor> iterable) {
         subject = subject.inset(iterable);
         return this;
     }
 
     @Override
-    public Subject input(Iterable<Vendor> iterable) {
+    public Subject input(Iterable<? extends Vendor> iterable) {
         subject = subject.input(iterable);
         return this;
     }

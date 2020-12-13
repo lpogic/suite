@@ -289,7 +289,7 @@ public class WonkySubject extends SolidSubject {
     }
 
     @Override
-    public Subject inset(Iterable<Vendor> iterable) {
+    public Subject inset(Iterable<? extends Vendor> iterable) {
         for(Vendor v : iterable) {
             subject = subject.set(v.key().direct(), v.direct());
         }
@@ -297,7 +297,7 @@ public class WonkySubject extends SolidSubject {
     }
 
     @Override
-    public Subject input(Iterable<Vendor> iterable) {
+    public Subject input(Iterable<? extends Vendor> iterable) {
         for(Vendor v : iterable) {
             subject = subject.put(v.key().direct(), v.direct());
         }

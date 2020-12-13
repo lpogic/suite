@@ -27,7 +27,7 @@ public interface Vendor extends Fluid {
     default Vendor at(Object key) {
         Vendor v = get(key);
         if(v.instanceOf(Vendor.class))return v.asExpected();
-        if(v.isNotEmpty())return v;
+        if(v.isNotEmpty())return Suite.set(v.direct());
         return Suite.set();
     }
     default Vendor at(Object ... path) {
