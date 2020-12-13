@@ -53,7 +53,10 @@ public interface Subject extends Vendor {
     default Subject inset(Iterable<? extends Vendor> iterable) {
         Subject subject = this;
         for(var it : iterable) {
-            subject = subject.setAt(Slot.before(it.key().direct()), it.key().direct(), it.direct());
+            Object key = it.key().direct();
+            if(subject.get(key).isNotEmpty())
+                subject = subject.setAt(Slot.before(key), key, it.direct());
+            else subject = subject.set(key, it.direct());
         }
         return subject;
     }
