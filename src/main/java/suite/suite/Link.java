@@ -24,7 +24,7 @@ public class Link {
     }
 
     Link(Link front, Link back, Object key, Object value) {
-        subject = new CoupleSubject(key, value);
+        subject = key == value ? new BubbleSubject(key) : new CoupleSubject(key, value);
         this.front = front;
         this.back = back;
     }
