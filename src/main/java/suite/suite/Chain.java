@@ -80,7 +80,7 @@ class Chain implements Fluid {
 
             seniorValue = linkSenior.subject.direct();
             linkSenior.setValue(value);
-            if(linkSenior != before.front) {
+            if(linkSenior != before && linkSenior != before.front) {
 
                 linkSenior.front.back = linkSenior.back;
                 linkSenior.back.front = linkSenior.front;
@@ -172,7 +172,7 @@ class Chain implements Fluid {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder("[\n  ");
+        StringBuilder stringBuilder = new StringBuilder("[\n");
         forEach(s -> stringBuilder.append("  ").append(s.toString()).append("\n"));
         stringBuilder.append("]");
         return stringBuilder.toString();

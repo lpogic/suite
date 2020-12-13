@@ -25,5 +25,8 @@ public class Main {
         }
 
         System.out.println("end");
+        System.out.println(sub);
+        sub.inset(Suite.set("B", "b").set("A", "a").set("C", "c"));
+        System.out.println(sub);
     }
 }
