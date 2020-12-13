@@ -10,7 +10,7 @@ public abstract class Glass<C, G extends C> implements Serializable {
     public abstract G cast(Object o);
     public abstract Glass[] getGenerics();
 
-    private Class<C> c;
+    private final Class<C> c;
 
     public Glass(Class<C> c) {
         this.c = c;
@@ -20,7 +20,7 @@ public abstract class Glass<C, G extends C> implements Serializable {
         return c.isInstance(o);
     }
 
-    Class<C> getMainClass() {
+    public Class<C> getMainClass() {
         return c;
     }
 
