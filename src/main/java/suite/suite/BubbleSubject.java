@@ -170,7 +170,7 @@ class BubbleSubject implements Subject {
 
     @Override
     public String toString() {
-        return "[" + bubbled + "]" + bubbled;
+        return "[ " + bubbled + " " + bubbled + "]";
     }
 
     @Override
