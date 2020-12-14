@@ -4,6 +4,7 @@ import suite.suite.util.Glass;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("unchecked")
 public abstract class SimpleVendor implements Vendor {
 
     @Override
@@ -33,7 +34,7 @@ public abstract class SimpleVendor implements Vendor {
 
     @Override
     public <B> B asGiven(Class<B> requestedType) {
-        return requestedType.cast(direct());
+        return asGiven(Glass.of(requestedType));
     }
 
     @Override
@@ -43,8 +44,7 @@ public abstract class SimpleVendor implements Vendor {
 
     @Override
     public <B> B asGiven(Class<B> requestedType, B substitute) {
-        Object o = direct();
-        return requestedType.isInstance(o) ? requestedType.cast(o) : substitute;
+        return asGiven(Glass.of(requestedType), substitute);
     }
 
     @Override
@@ -71,7 +71,7 @@ public abstract class SimpleVendor implements Vendor {
     }
 
     @Override
-    public boolean isNotEmpty() {
+    public boolean notEmpty() {
         return size() > 0;
     }
 

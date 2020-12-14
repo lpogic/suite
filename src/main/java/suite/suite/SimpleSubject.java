@@ -25,7 +25,7 @@ public abstract class SimpleSubject implements Subject {
 
     @Override
     public Subject put(Object key, Object value) {
-        return get(key).isNotEmpty() ? this : set(key, value);
+        return get(key).notEmpty() ? this : set(key, value);
     }
 
     @Override
@@ -104,8 +104,8 @@ public abstract class SimpleSubject implements Subject {
     }
 
     @Override
-    public boolean isNotEmpty() {
-        return prime().isNotEmpty();
+    public boolean notEmpty() {
+        return prime().notEmpty();
     }
 
     @Override
@@ -116,7 +116,7 @@ public abstract class SimpleSubject implements Subject {
     @Override
     public Vendor getSaved(Object key, Object reserve) {
         Vendor saved = get(key);
-        if(saved.isNotEmpty())return saved;
+        if(saved.notEmpty())return saved;
         set(key, reserve);
         return get(key);
     }
@@ -124,7 +124,7 @@ public abstract class SimpleSubject implements Subject {
     @Override
     public Vendor getDone(Object key, Supplier<?> supplier) {
         Vendor done = get(key);
-        if(done.isNotEmpty())return done;
+        if(done.notEmpty())return done;
         set(key, supplier.get());
         return get(key);
     }
@@ -132,7 +132,7 @@ public abstract class SimpleSubject implements Subject {
     @Override
     public Vendor getDone(Object key, Function<Subject, ?> function, Subject argument) {
         Vendor done = get(key);
-        if(done.isNotEmpty())return done;
+        if(done.notEmpty())return done;
         set(key, function.apply(argument));
         return get(key);
     }
@@ -166,7 +166,7 @@ public abstract class SimpleSubject implements Subject {
 
     @Override
     public Subject putAt(Slot slot, Object key, Object value) {
-        return get(key).isNotEmpty() ? this : setAt(slot, key, value);
+        return get(key).notEmpty() ? this : setAt(slot, key, value);
     }
 
     @Override

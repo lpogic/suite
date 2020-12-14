@@ -213,7 +213,7 @@ public class WonkySubject extends SolidSubject {
     @Override
     public Vendor getSaved(Object key, Object reserve) {
         Vendor saved = unweak(subject.get(key));
-        if(saved.isNotEmpty())return new SolidSubject(saved);
+        if(saved.notEmpty())return new SolidSubject(saved);
         subject = subject.set(key, weak(reserve));
         return get(key);
     }
@@ -221,7 +221,7 @@ public class WonkySubject extends SolidSubject {
     @Override
     public Vendor getDone(Object key, Supplier<?> supplier) {
         Vendor done = unweak(subject.get(key));
-        if(done.isNotEmpty())return new SolidSubject(done);
+        if(done.notEmpty())return new SolidSubject(done);
         subject = subject.set(key, weak(supplier.get()));
         return get(key);
     }
@@ -229,7 +229,7 @@ public class WonkySubject extends SolidSubject {
     @Override
     public Vendor getDone(Object key, Function<Subject, ?> function, Subject argument) {
         Vendor done = unweak(subject.get(key));
-        if(done.isNotEmpty())return new SolidSubject(done);
+        if(done.notEmpty())return new SolidSubject(done);
         subject = subject.set(key, weak(function.apply(argument)));
         return get(key);
     }
@@ -237,25 +237,25 @@ public class WonkySubject extends SolidSubject {
     @Override
     public Vendor take(Object key) {
         Vendor taken = get(key);
-        if(taken.isNotEmpty()) subject = subject.unset(key);
+        if(taken.notEmpty()) subject = subject.unset(key);
         return unweak(taken);
     }
 
     @Override
     public Vendor takeAt(Slot slot) {
         Vendor taken = getAt(slot);
-        if(taken.isNotEmpty()) subject = subject.unset(taken.key().direct());
+        if(taken.notEmpty()) subject = subject.unset(taken.key().direct());
         return unweak(taken);
     }
 
     @Override
-    public boolean isNotEmpty() {
+    public boolean notEmpty() {
         return iterator(Slot.PRIME, false).hasNext();
     }
 
     @Override
     public boolean isEmpty() {
-        return !isNotEmpty();
+        return !notEmpty();
     }
 
     @Override

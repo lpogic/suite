@@ -157,7 +157,7 @@ public interface Fluid extends Iterable<Vendor> {
         return Suite.input(this);
     }
 
-    static Fluid empty() {
+    static Fluid emptyFluid() {
         return Wave::empty;
     }
 

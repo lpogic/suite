@@ -58,7 +58,7 @@ class BubbleSubject implements Subject {
 
     @Override
     public Subject unsetAt(Slot slot) {
-        return getAt(slot).isNotEmpty() ? ZeroSubject.getInstance() : this;
+        return getAt(slot).notEmpty() ? ZeroSubject.getInstance() : this;
     }
 
     @Override
@@ -154,7 +154,7 @@ class BubbleSubject implements Subject {
     }
 
     @Override
-    public boolean isNotEmpty() {
+    public boolean notEmpty() {
         return true;
     }
 

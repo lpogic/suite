@@ -22,7 +22,7 @@ public class Sets {
         Subject sub = Suite.set();
         for(var o : fluid.keys()) {
             Vendor v = strainer.get(o);
-            if(v.isNotEmpty()) {
+            if(v.notEmpty()) {
                 sub.set(v.key().direct(), v.direct());
             }
         }

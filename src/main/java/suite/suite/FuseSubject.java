@@ -151,8 +151,8 @@ class FuseSubject implements Subject {
     }
 
     @Override
-    public boolean isNotEmpty() {
-        return subject.isNotEmpty();
+    public boolean notEmpty() {
+        return subject.notEmpty();
     }
 
     @Override

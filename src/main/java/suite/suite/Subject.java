@@ -54,7 +54,7 @@ public interface Subject extends Vendor {
         Subject subject = this;
         for(var it : iterable) {
             Object key = it.key().direct();
-            if(subject.get(key).isNotEmpty())
+            if(subject.get(key).notEmpty())
                 subject = subject.setAt(Slot.before(key), key, it.direct());
             else subject = subject.set(key, it.direct());
         }

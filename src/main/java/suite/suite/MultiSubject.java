@@ -67,7 +67,7 @@ class MultiSubject implements Subject {
     @Override
     public Subject unsetAt(Slot slot) {
         Vendor s = getAt(slot);
-        return s.isNotEmpty() ? unset(s.key().direct()) : this;
+        return s.notEmpty() ? unset(s.key().direct()) : this;
     }
 
     @Override
@@ -176,7 +176,7 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public boolean isNotEmpty() {
+    public boolean notEmpty() {
         return !chain.isEmpty();
     }
 

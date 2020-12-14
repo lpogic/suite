@@ -5,7 +5,6 @@ import suite.suite.util.Glass;
 import suite.suite.util.Wave;
 
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public interface Vendor extends Fluid {
@@ -27,7 +26,7 @@ public interface Vendor extends Fluid {
     default Vendor at(Object key) {
         Vendor v = get(key);
         if(v.instanceOf(Vendor.class))return v.asExpected();
-        if(v.isNotEmpty())return Suite.set(v.direct());
+        if(v.notEmpty())return Suite.set(v.direct());
         return Suite.set();
     }
     default Vendor at(Object ... path) {
@@ -67,7 +66,7 @@ public interface Vendor extends Fluid {
         return asGiven(Number.class).byteValue();
     }
 
-    boolean isNotEmpty();
+    boolean notEmpty();
     boolean isEmpty();
     int size();
 

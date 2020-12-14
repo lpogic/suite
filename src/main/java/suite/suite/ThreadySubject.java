@@ -303,7 +303,7 @@ class ThreadySubject implements Subject {
         Vendor spared;
         try(var ignored = writeLock.lock()) {
             spared = subject.get(key);
-            if(!spared.isNotEmpty()) {
+            if(!spared.notEmpty()) {
                 subject = subject.set(key, reserve);
                 spared = subject.get(key);
             }
@@ -316,7 +316,7 @@ class ThreadySubject implements Subject {
         Vendor spared;
         try(var ignored = writeLock.lock()) {
             spared = subject.get(key);
-            if(!spared.isNotEmpty()) {
+            if(!spared.notEmpty()) {
                 subject = subject.set(key, supplier.get());
                 spared = subject.get(key);
             }
@@ -329,7 +329,7 @@ class ThreadySubject implements Subject {
         Vendor spared;
         try(var ignored = writeLock.lock()) {
             spared = subject.get(key);
-            if(!spared.isNotEmpty()) {
+            if(!spared.notEmpty()) {
                 subject = subject.set(key, function.apply(argument));
                 spared = subject.get(key);
             }
@@ -352,16 +352,16 @@ class ThreadySubject implements Subject {
         Vendor taken;
         try(var ignored = writeLock.lock()) {
             taken = subject.getAt(slot);
-            if(taken.isNotEmpty()) subject = subject.unset(taken.key().direct());
+            if(taken.notEmpty()) subject = subject.unset(taken.key().direct());
         }
         return new SolidSubject(taken);
     }
 
     @Override
-    public boolean isNotEmpty() {
+    public boolean notEmpty() {
         boolean settled;
         try(var ignored = readLock.lock()) {
-            settled = subject.isNotEmpty();
+            settled = subject.notEmpty();
         }
         return settled;
     }

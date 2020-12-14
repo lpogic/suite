@@ -164,21 +164,21 @@ public class Sub<T> implements Fluid {
 
     public Sub<T> getSaved(Object key, T reserve) {
         Vendor saved = subject.get(key);
-        if(saved.isNotEmpty())return new Sub<>(saved);
+        if(saved.notEmpty())return new Sub<>(saved);
         subject = subject.set(key, reserve);
         return get(key);
     }
 
     public Sub<T> getDone(Object key, Supplier<T> supplier) {
         Vendor done = subject.get(key);
-        if(done.isNotEmpty())return new Sub<>(done);
+        if(done.notEmpty())return new Sub<>(done);
         subject = subject.set(key, supplier.get());
         return get(key);
     }
 
     public Sub<T> getDone(Object key, Function<Subject, T> function, Subject argument) {
         Vendor done = subject.get(key);
-        if(done.isNotEmpty())return new Sub<>(done);
+        if(done.notEmpty())return new Sub<>(done);
         subject = subject.set(key, function.apply(argument));
         return get(key);
     }
@@ -196,7 +196,7 @@ public class Sub<T> implements Fluid {
     }
 
     public boolean settled() {
-        return subject.isNotEmpty();
+        return subject.notEmpty();
     }
 
     public boolean desolated() {

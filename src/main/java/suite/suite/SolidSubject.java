@@ -188,7 +188,7 @@ public class SolidSubject implements Subject {
     @Override
     public Vendor getSaved(Object key, Object reserve) {
         Vendor saved = subject.get(key);
-        if(saved.isNotEmpty())return new SolidSubject(saved);
+        if(saved.notEmpty())return new SolidSubject(saved);
         subject = subject.set(key, reserve);
         return get(key);
     }
@@ -196,7 +196,7 @@ public class SolidSubject implements Subject {
     @Override
     public Vendor getDone(Object key, Supplier<?> supplier) {
         Vendor done = subject.get(key);
-        if(done.isNotEmpty())return new SolidSubject(done);
+        if(done.notEmpty())return new SolidSubject(done);
         subject = subject.set(key, supplier.get());
         return get(key);
     }
@@ -204,7 +204,7 @@ public class SolidSubject implements Subject {
     @Override
     public Vendor getDone(Object key, Function<Subject, ?> function, Subject argument) {
         Vendor done = subject.get(key);
-        if(done.isNotEmpty())return new SolidSubject(done);
+        if(done.notEmpty())return new SolidSubject(done);
         subject = subject.set(key, function.apply(argument));
         return get(key);
     }
@@ -212,20 +212,20 @@ public class SolidSubject implements Subject {
     @Override
     public Vendor take(Object key) {
         Vendor taken = get(key);
-        if(taken.isNotEmpty()) subject = subject.unset(key);
+        if(taken.notEmpty()) subject = subject.unset(key);
         return taken;
     }
 
     @Override
     public Vendor takeAt(Slot slot) {
         Vendor taken = getAt(slot);
-        if(taken.isNotEmpty()) subject = subject.unset(taken.key().direct());
+        if(taken.notEmpty()) subject = subject.unset(taken.key().direct());
         return taken;
     }
 
     @Override
-    public boolean isNotEmpty() {
-        return subject.isNotEmpty();
+    public boolean notEmpty() {
+        return subject.notEmpty();
     }
 
     @Override
