@@ -20,7 +20,7 @@ class Chain implements Fluid {
         this.ward = ward;
         Link link = ward.front;
         while (link != ward) {
-            data.put(link.subject.key().direct(), link);
+            data.put(link.subject.key(), link);
             link = link.front;
         }
     }
@@ -158,15 +158,15 @@ class Chain implements Fluid {
     }
 
     @Override
-    public Wave<Vendor> iterator() {
+    public Wave<Subject> iterator() {
         return new LinkIterator(ward);
     }
 
-    public Wave<Vendor> iterator(boolean reverse) {
+    public Wave<Subject> iterator(boolean reverse) {
         return new LinkIterator(reverse, ward, ward);
     }
 
-    public Wave<Vendor> iterator(boolean reverse, Link link) {
+    public Wave<Subject> iterator(boolean reverse, Link link) {
         return new LinkIterator(reverse, link, ward);
     }
 

@@ -2,175 +2,135 @@ package suite.suite;
 
 import suite.suite.util.Glass;
 
-import java.util.Objects;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
-public abstract class SimpleSubject implements Subject {
+public interface SimpleSubject extends Subject {
 
     @Override
-    public Subject set(Object key, Object value) {
-        return setAt(Slot.RECENT, key, value);
+    default Object key() {
+        return get().key();
     }
 
     @Override
-    public Subject set(Object element) {
-        return set(element, element);
-    }
-
-    @Override
-    public Subject put(Object element) {
-        return put(element, element);
-    }
-
-    @Override
-    public Subject put(Object key, Object value) {
-        return get(key).notEmpty() ? this : set(key, value);
-    }
-
-    @Override
-    public Subject add(Object element) {
-        return set(new Suite.AutoKey(), element);
-    }
-
-    @Override
-    public Subject unset(Object key, Object value) {
-        return Objects.equals(get(key).direct(), value) ? unset(key) : this;
-    }
-
-    @Override
-    public Vendor key() {
-        return prime().key();
-    }
-
-    @Override
-    public Vendor prime() {
+    default Subject get() {
         return getAt(Slot.PRIME);
     }
 
     @Override
-    public Vendor recent() {
-        return getAt(Slot.RECENT);
+    default Subject get(Object key) {
+        return getAt(Slot.of(key));
     }
 
     @Override
-    public Vendor getAt(int slotIndex) {
+    default Subject getAt(int slotIndex) {
         return getAt(Slot.in(slotIndex));
     }
 
     @Override
-    public Object direct() {
-        return prime().direct();
+    default Object direct() {
+        return get().direct();
     }
 
     @Override
-    public <B> B asExpected() {
-        return prime().asExpected();
+    default <B> B asExpected() {
+        return get().asExpected();
     }
 
     @Override
-    public <B> B asGiven(Class<B> requestedType) {
-        return prime().asGiven(requestedType);
+    default <B> B asGiven(Class<B> requestedType) {
+        return get().asGiven(requestedType);
     }
 
     @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType) {
-        return prime().asGiven(requestedType);
+    default <B> B asGiven(Glass<? super B, B> requestedType) {
+        return get().asGiven(requestedType);
     }
 
     @Override
-    public <B> B asGiven(Class<B> requestedType, B substitute) {
-        return prime().asGiven(requestedType, substitute);
+    default <B> B asGiven(Class<B> requestedType, B substitute) {
+        return get().asGiven(requestedType, substitute);
     }
 
     @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType, B substitute) {
-        return prime().asGiven(requestedType, substitute);
+    default <B> B asGiven(Glass<? super B, B> requestedType, B substitute) {
+        return get().asGiven(requestedType, substitute);
     }
 
     @Override
-    public <B> B orGiven(B substitute) {
-        return prime().orGiven(substitute);
+    default <B> B orGiven(B substitute) {
+        return get().orGiven(substitute);
     }
 
     @Override
-    public <B> B orDo(Supplier<B> supplier) {
-        return prime().orDo(supplier);
+    default <B> B orDo(Supplier<B> supplier) {
+        return get().orDo(supplier);
     }
 
     @Override
-    public boolean instanceOf(Class<?> type) {
-        return prime().instanceOf(type);
+    default boolean instanceOf(Class<?> type) {
+        return get().instanceOf(type);
     }
 
     @Override
-    public boolean notEmpty() {
-        return prime().notEmpty();
+    default boolean notEmpty() {
+        return get().notEmpty();
     }
 
     @Override
-    public boolean isEmpty() {
-        return prime().isEmpty();
+    default boolean isEmpty() {
+        return get().isEmpty();
+    }
+    
+    @Override
+    default Subject set(Object key, Object value) {
+        return setAt(Slot.RECENT, key, value);
     }
 
     @Override
-    public Vendor getSaved(Object key, Object reserve) {
-        Vendor saved = get(key);
-        if(saved.notEmpty())return saved;
-        set(key, reserve);
-        return get(key);
+    default Subject set(Object element) {
+        return set(element, element);
     }
 
     @Override
-    public Vendor getDone(Object key, Supplier<?> supplier) {
-        Vendor done = get(key);
-        if(done.notEmpty())return done;
-        set(key, supplier.get());
-        return get(key);
+    default Subject put(Object element) {
+        return put(element, element);
     }
 
     @Override
-    public Vendor getDone(Object key, Function<Subject, ?> function, Subject argument) {
-        Vendor done = get(key);
-        if(done.notEmpty())return done;
-        set(key, function.apply(argument));
-        return get(key);
+    default Subject put(Object key, Object value) {
+        return get(key).notEmpty() ? this : set(key, value);
     }
 
     @Override
-    public Vendor take(Object key) {
-        Vendor taken = get(key);
-        unset(key);
-        return taken;
+    default Subject add(Object element) {
+        return set(new Suite.AutoKey(), element);
     }
 
     @Override
-    public Vendor takeAt(Slot slot) {
-        Vendor taken = getAt(slot);
-        unsetAt(slot);
-        return taken;
+    default Subject unset(Object key) {
+        return unsetAt(Slot.of(key));
     }
+    
+    @Override
+    Subject unset();
 
     @Override
-    public abstract Subject unset();
-
-    @Override
-    public Subject setAt(Slot slot, Object element) {
+    default Subject setAt(Slot slot, Object element) {
         return setAt(slot, element, element);
     }
 
     @Override
-    public Subject putAt(Slot slot, Object element) {
+    default Subject putAt(Slot slot, Object element) {
         return putAt(slot, element, element);
     }
 
     @Override
-    public Subject putAt(Slot slot, Object key, Object value) {
+    default Subject putAt(Slot slot, Object key, Object value) {
         return get(key).notEmpty() ? this : setAt(slot, key, value);
     }
 
     @Override
-    public Subject addAt(Slot slot, Object element) {
+    default Subject addAt(Slot slot, Object element) {
         return setAt(slot, new Suite.AutoKey(), element);
     }
 }

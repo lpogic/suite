@@ -17,77 +17,32 @@ class ZeroSubject implements Subject {
     private ZeroSubject() {}
 
     @Override
-    public Subject set(Object element) {
-        return new BubbleSubject(element);
+    public Object key() {
+        throw new NullPointerException("Zero subject is empty");
     }
 
     @Override
-    public Subject set(Object key, Object value) {
-        return new CoupleSubject(key, value);
-    }
-
-    @Override
-    public Subject put(Object element) {
-        return set(element);
-    }
-
-    @Override
-    public Subject put(Object key, Object value) {
-        return set(key, value);
-    }
-
-    @Override
-    public Subject add(Object element) {
-        return new CoupleSubject(new Suite.AutoKey(), element);
-    }
-
-    @Override
-    public Subject unset(Object key) {
+    public Subject get() {
         return this;
     }
 
     @Override
-    public Subject unset(Object key, Object value) {
+    public Subject get(Object key) {
         return this;
     }
 
     @Override
-    public Subject unsetAt(Slot slot) {
+    public Subject get(Object ... keys) {
         return this;
     }
 
     @Override
-    public Vendor prime() {
+    public Subject getAt(Slot slot) {
         return this;
     }
 
     @Override
-    public Vendor recent() {
-        return this;
-    }
-
-    @Override
-    public Vendor get(Object key) {
-        return this;
-    }
-
-    @Override
-    public Vendor get(Object ... keys) {
-        return this;
-    }
-
-    @Override
-    public Vendor getAt(Slot slot) {
-        return this;
-    }
-
-    @Override
-    public Vendor getAt(int slotIndex) {
-        return this;
-    }
-
-    @Override
-    public Vendor key() {
+    public Subject getAt(int slotIndex) {
         return this;
     }
 
@@ -157,32 +112,69 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public Subject setAt(Slot slot, Object element) {
+    public Wave<Subject> iterator(boolean reverse) {
+        return Wave.emptyWave();
+    }
+
+    @Override
+    public Subject set(Object element) {
+        return new BubbleSubject(element);
+    }
+
+    @Override
+    public Subject set(Object key, Object value) {
+        return key == value ? set(key) : new CoupleSubject(key, value);
+    }
+
+    @Override
+    public Subject put(Object element) {
         return set(element);
     }
 
     @Override
-    public Subject setAt(Slot slot, Object key, Object value) {
+    public Subject put(Object key, Object value) {
         return set(key, value);
     }
 
     @Override
+    public Subject add(Object element) {
+        return new CoupleSubject(new Suite.AutoKey(), element);
+    }
+
+    @Override
+    public Subject unset(Object key) {
+        return this;
+    }
+
+    @Override
+    public Subject unsetAt(Slot slot) {
+        return this;
+    }
+
+    @Override
+    public Subject setAt(Slot slot, Object element) {
+        return slot == Slot.PRIME || slot == Slot.RECENT || slot instanceof Slot.PlacedSlot ?
+                set(element) : this;
+    }
+
+    @Override
+    public Subject setAt(Slot slot, Object key, Object value) {
+        return slot == Slot.PRIME || slot == Slot.RECENT || slot instanceof Slot.PlacedSlot ?
+            set(key, value) : this;
+    }
+
+    @Override
     public Subject putAt(Slot slot, Object element) {
-        return put(element);
+        return setAt(slot, element);
     }
 
     @Override
     public Subject putAt(Slot slot, Object key, Object value) {
-        return put(key, value);
+        return setAt(slot, key, value);
     }
 
     @Override
     public Subject addAt(Slot slot, Object element) {
-        return add(element);
-    }
-
-    @Override
-    public Wave<Vendor> iterator(Slot slot, boolean reverse) {
-        return Wave.empty();
+        return setAt(slot, new Suite.AutoKey(), element);
     }
 }

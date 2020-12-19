@@ -17,31 +17,7 @@ public interface Slime<T> extends Iterable<T>{
     }
 
     default <F> Slime<F> filter(Class<F> requestedType) {
-        return () -> new Wave<>() {
-            final Iterator<T> origin = iterator();
-            F next = null;
-            boolean nextFound = false;
-
-            @Override
-            public boolean hasNext() {
-                if(nextFound) return true;
-                while (origin.hasNext()) {
-                    Object o = origin.next();
-                    if(requestedType.isInstance(o)) {
-                        next = requestedType.cast(o);
-                        nextFound = true;
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public F next() {
-                nextFound = false;
-                return next;
-            }
-        };
+        return filter(Glass.of(requestedType));
     }
 
     default <F> Slime<F> filter(Glass<? super F, F> requestedType) {
@@ -101,7 +77,7 @@ public interface Slime<T> extends Iterable<T>{
     }
 
     static<I> Slime<I> empty() {
-        return Wave::empty;
+        return Wave::emptyWave;
     }
 
     default<O> Slime<O> map(Function<T, O> function) {

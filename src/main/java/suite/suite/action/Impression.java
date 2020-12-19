@@ -1,33 +1,33 @@
 package suite.suite.action;
 
-import suite.suite.Vendor;
+import suite.suite.Subject;
 import suite.suite.Suite;
 
 @FunctionalInterface
 public interface Impression extends Action {
 
-    void revel(Vendor in);
+    void revel(Subject in);
 
     @Override
-    default Vendor play() {
+    default Subject play() {
         revel(Suite.set());
         return Suite.set();
     }
 
     @Override
-    default Vendor play(Vendor in) {
+    default Subject play(Subject in) {
         revel(in);
         return Suite.set();
     }
 
     @Override
-    default Vendor gamble() throws Exception {
+    default Subject gamble() throws Exception {
         revel(Suite.set());
         return Suite.set();
     }
 
     @Override
-    default Vendor gamble(Vendor in) throws Exception {
+    default Subject gamble(Subject in) throws Exception {
         revel(in);
         return Suite.set();
     }

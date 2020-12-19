@@ -30,7 +30,7 @@ public class Link {
     }
 
     void setValue(Object value) {
-        subject = subject.set(subject.key().direct(), value);
+        subject = subject.set(subject.key(), value);
     }
 
     Link front() {

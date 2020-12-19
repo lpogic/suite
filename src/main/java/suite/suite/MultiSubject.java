@@ -2,8 +2,6 @@ package suite.suite;
 
 import suite.suite.util.*;
 
-import java.util.NoSuchElementException;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 class MultiSubject implements Subject {
@@ -25,7 +23,7 @@ class MultiSubject implements Subject {
 
     @Override
     public Subject set(Object key, Object value) {
-        chain.putLast(key, value);
+        chain.put(chain.get(key), key, value);
         return this;
     }
 
@@ -59,74 +57,56 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Subject unset(Object key, Object value) {
-        chain.remove(key, value);
+    public Subject unsetAt(Slot slot) {
+        Subject s = getAt(slot);
+        if(s.notEmpty()) unset(s.key());
         return this;
     }
 
     @Override
-    public Subject unsetAt(Slot slot) {
-        Vendor s = getAt(slot);
-        return s.notEmpty() ? unset(s.key().direct()) : this;
-    }
-
-    @Override
-    public Vendor key() {
+    public Object key() {
         return chain.getFirst().subject.key();
     }
 
     @Override
-    public Vendor prime() {
+    public Subject get() {
         return chain.getFirst().subject;
     }
 
     @Override
-    public Vendor recent() {
-        return chain.getLast().subject;
-    }
-
-    @Override
-    public Vendor get(Object key) {
+    public Subject get(Object key) {
         return chain.get(key).subject;
     }
 
     @Override
-    public Vendor getAt(Slot slot) {
+    public Subject getAt(Slot slot) {
         if(slot == Slot.PRIME) {
             return chain.getFirst().subject;
+
         } else if(slot == Slot.RECENT) {
             return chain.getLast().subject;
-        } else {
-            if(slot instanceof Slot.SlotOf) {
-                Link link = chain.get(((Slot.SlotOf) slot).key);
-                return link == chain.ward ? ZeroSubject.getInstance() : link.subject;
-            } else if(slot instanceof Slot.SlotBefore) {
-                Link link = chain.get(((Slot.SlotBefore) slot).key);
-                return link == chain.ward ? ZeroSubject.getInstance() : link.front.subject;
-            } else if(slot instanceof Slot.SlotAfter) {
-                Link link = chain.get(((Slot.SlotAfter) slot).key);
-                return link == chain.ward ? ZeroSubject.getInstance() : link.back.subject;
-            } else if(slot instanceof Slot.RecentBeforeSlot) {
-                Predicate<Vendor> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
-                for(Vendor v : reverse()) {
-                    if(!isLater.test(v)) return v;
-                }
-                return ZeroSubject.getInstance();
-            } else if(slot instanceof Slot.PrimeAfterSlot) {
-                Predicate<Vendor> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
-                for(Vendor v : front()) {
-                    if(!isEarlier.test(v)) return v;
-                }
-                return ZeroSubject.getInstance();
-            } else if(slot instanceof Slot.PlacedSlot) {
-                Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
-                return link.subject;
-            } else return ZeroSubject.getInstance();
-        }
+
+        } else if(slot instanceof Slot.SlotOf) {
+            Link link = chain.get(((Slot.SlotOf) slot).key);
+            return link.subject;
+
+        } else if(slot instanceof Slot.SlotBefore) {
+            Link link = chain.get(((Slot.SlotBefore) slot).key);
+            return link == chain.ward ? link.subject : link.front.subject;
+
+        } else if(slot instanceof Slot.SlotAfter) {
+            Link link = chain.get(((Slot.SlotAfter) slot).key);
+            return link == chain.ward ? link.subject : link.back.subject;
+
+        } else if(slot instanceof Slot.PlacedSlot) {
+            Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
+            return link.subject;
+
+        } else return ZeroSubject.getInstance();
     }
 
     @Override
-    public Vendor getAt(int slotIndex) {
+    public Subject getAt(int slotIndex) {
         return chain.getNth(slotIndex).subject;
     }
 
@@ -214,47 +194,22 @@ class MultiSubject implements Subject {
     public Subject setAt(Slot slot, Object key, Object value) {
         if(slot == Slot.PRIME) {
             chain.putFirst(key, value);
+
         } else if(slot == Slot.RECENT) {
             chain.putLast(key, value);
-        } else {
-            if(slot instanceof Slot.SlotBefore) {
-                Link link = chain.get(((Slot.SlotBefore) slot).key);
-                if(link == chain.ward) {
-                    throw new NoSuchElementException();
-                } else chain.put(link, key, value);
-            } else if(slot instanceof Slot.SlotAfter) {
-                Link link = chain.get(((Slot.SlotAfter) slot).key);
-                if (link == chain.ward) {
-                    throw new NoSuchElementException();
-                } else chain.put(link.back, key, value);
-            } else if(slot instanceof Slot.RecentBeforeSlot) {
-                Predicate<Vendor> isLater = ((Slot.RecentBeforeSlot) slot).isLater;
-                boolean settled = false;
-                for(Vendor v : reverse()) {
-                    settled = !isLater.test(v);
-                    if(settled) {
-                        chain.put(chain.get(v.key().direct()).back, key, value);
-                        break;
-                    }
-                } if(!settled) {
-                    chain.put(chain.ward.back, key, value);
-                }
-            } else if(slot instanceof Slot.PrimeAfterSlot) {
-                Predicate<Vendor> isEarlier = ((Slot.PrimeAfterSlot) slot).isEarlier;
-                boolean settled = false;
-                for(Vendor v : front()) {
-                    settled = !isEarlier.test(v);
-                    if(settled) {
-                        chain.put(chain.get(v.key().direct()), key, value);
-                        break;
-                    }
-                } if(!settled) {
-                    chain.put(chain.ward, key, value);
-                }
-            } else if(slot instanceof Slot.PlacedSlot) {
-                Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
-                chain.put(link, key, value);
-            } else throw new UnsupportedOperationException();
+
+        } else if(slot instanceof Slot.SlotBefore) {
+            Link link = chain.get(((Slot.SlotBefore) slot).key);
+            if(link != chain.ward) chain.put(link, key, value);
+
+        } else if(slot instanceof Slot.SlotAfter) {
+            Link link = chain.get(((Slot.SlotAfter) slot).key);
+            if (link != chain.ward) chain.put(link.back, key, value);
+
+        } else if(slot instanceof Slot.PlacedSlot) {
+            Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
+            chain.put(link, key, value);
+
         }
         return this;
     }
@@ -268,31 +223,22 @@ class MultiSubject implements Subject {
     public Subject putAt(Slot slot, Object key, Object value) {
         if(slot == Slot.PRIME) {
             chain.putFirstIfAbsent(key, value);
+
         } else if(slot == Slot.RECENT) {
             chain.putLastIfAbsent(key, value);
-        } else {
-            if(slot instanceof Slot.SlotBefore) {
-                Link link = chain.get(((Slot.SlotBefore) slot).key);
-                if(link == chain.ward) {
-                    throw new NoSuchElementException();
-                } else chain.putIfAbsent(link, key, value);
-            } else if(slot instanceof Slot.SlotAfter) {
-                Link link = chain.get(((Slot.SlotAfter) slot).key);
-                if(link == chain.ward) {
-                    throw new NoSuchElementException();
-                } else chain.putIfAbsent(link.back, key, value);
-            } else if(slot instanceof Slot.RecentBeforeSlot) {
-                if(chain.get(key) == chain.ward) {
-                    setAt(slot, key, value);
-                }
-            } else if(slot instanceof Slot.PrimeAfterSlot) {
-                if(chain.get(key) == chain.ward) {
-                    setAt(slot, key, value);
-                }
-            } else if(slot instanceof Slot.PlacedSlot) {
-                Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
-                chain.putIfAbsent(link, key, value);
-            } else throw new UnsupportedOperationException();
+
+        } else if(slot instanceof Slot.SlotBefore) {
+            Link link = chain.get(((Slot.SlotBefore) slot).key);
+            if(link != chain.ward) chain.putIfAbsent(link, key, value);
+
+        } else if(slot instanceof Slot.SlotAfter) {
+            Link link = chain.get(((Slot.SlotAfter) slot).key);
+            if(link != chain.ward) chain.putIfAbsent(link.back, key, value);
+
+        } else if(slot instanceof Slot.PlacedSlot) {
+            Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
+            chain.putIfAbsent(link, key, value);
+
         }
         return this;
     }
@@ -303,46 +249,7 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Wave<Vendor> iterator(Slot slot, boolean reverse) {
-        if(reverse) {
-            if(slot == Slot.PRIME) {
-                Link link = chain.getFirst();
-                return link == chain.ward ? Wave.empty() : chain.iterator(true, link.back);
-            } else if(slot == Slot.RECENT) {
-                return chain.iterator(true);
-            } else {
-                if(slot instanceof Slot.SlotBefore) {
-                    Link link = chain.get(((Slot.SlotBefore) slot).key);
-                    return link == chain.ward ? Wave.empty() : chain.iterator(true, link);
-                } else if(slot instanceof Slot.SlotAfter) {
-                    Link link = chain.get(((Slot.SlotAfter) slot).key);
-                    return link == chain.ward || link.back == chain.ward ?
-                            Wave.empty() : chain.iterator(true, link.back.back);
-                } else if(slot instanceof Slot.PlacedSlot) {
-                    Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
-                    return link == chain.ward ? Wave.empty() : chain.iterator(false, link.back);
-                }
-            }
-        } else {
-            if(slot == Slot.PRIME) {
-                return chain.iterator();
-            } else if(slot == Slot.RECENT) {
-                Link link = chain.getLast();
-                return link == chain.ward ? Wave.empty() : chain.iterator(false, link.front);
-            } else {
-                if(slot instanceof Slot.SlotBefore) {
-                    Link link = chain.get(((Slot.SlotBefore) slot).key);
-                    return link == chain.ward || link.front == chain.ward ?
-                            Wave.empty() : chain.iterator(false, link.front.front);
-                } else if(slot instanceof Slot.SlotAfter) {
-                    Link link = chain.get(((Slot.SlotAfter) slot).key);
-                    return link == chain.ward ? Wave.empty() : chain.iterator(false, link);
-                } else if(slot instanceof Slot.PlacedSlot) {
-                    Link link = chain.getNth(((Slot.PlacedSlot) slot).place);
-                    return link == chain.ward ? Wave.empty() : chain.iterator(false, link.front);
-                }
-            }
-        }
-        throw new UnsupportedOperationException();
+    public Wave<Subject> iterator(boolean reverse) {
+        return chain.iterator(reverse);
     }
 }

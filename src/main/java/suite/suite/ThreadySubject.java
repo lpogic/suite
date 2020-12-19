@@ -8,17 +8,17 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-class ThreadySubject implements Subject {
+class ThreadySubject {}/* implements Subject {
 
-    class HomogenizedSubjectIterator implements Wave<Vendor> {
-        Vendor sub;
+    class HomogenizedSubjectIterator implements Wave<Subject> {
+        Subject sub;
         boolean reverse;
-        Wave<Vendor> it;
+        Wave<Subject> it;
 
         boolean hasNext;
-        Vendor next;
+        Subject next;
 
-        HomogenizedSubjectIterator(Vendor sub, boolean reverse, Slot slot) {
+        HomogenizedSubjectIterator(Subject sub, boolean reverse, Slot slot) {
             this.sub = sub;
             this.reverse = reverse;
             this.it = sub.iterator(slot, reverse);
@@ -33,7 +33,7 @@ class ThreadySubject implements Subject {
                     if(sub == ZeroSubject.getInstance()) {
                         it = reverse ? subject.iterator(Slot.RECENT, true) : subject.iterator(Slot.PRIME, false);
                     } else if(subject == ZeroSubject.getInstance()) {
-                        it = Wave.empty();
+                        it = Wave.emptyWave();
                     }
                     sub = subject;
                 }
@@ -44,7 +44,7 @@ class ThreadySubject implements Subject {
         }
 
         @Override
-        public Vendor next() {
+        public Subject next() {
             hasNext = false;
             return new SolidSubject(next.exclude());
         }
@@ -300,7 +300,7 @@ class ThreadySubject implements Subject {
 
     @Override
     public Subject getSaved(Object key, Object reserve) {
-        Vendor spared;
+        Subject spared;
         try(var ignored = writeLock.lock()) {
             spared = subject.get(key);
             if(!spared.notEmpty()) {
@@ -313,7 +313,7 @@ class ThreadySubject implements Subject {
 
     @Override
     public Subject getDone(Object key, Supplier<?> supplier) {
-        Vendor spared;
+        Subject spared;
         try(var ignored = writeLock.lock()) {
             spared = subject.get(key);
             if(!spared.notEmpty()) {
@@ -326,7 +326,7 @@ class ThreadySubject implements Subject {
 
     @Override
     public Subject getDone(Object key, Function<Subject, ?> function, Subject argument) {
-        Vendor spared;
+        Subject spared;
         try(var ignored = writeLock.lock()) {
             spared = subject.get(key);
             if(!spared.notEmpty()) {
@@ -339,7 +339,7 @@ class ThreadySubject implements Subject {
 
     @Override
     public Subject take(Object key) {
-        Vendor taken;
+        Subject taken;
         try(var ignored = writeLock.lock()) {
             taken = subject.get(key);
             subject = subject.unset(key);
@@ -349,7 +349,7 @@ class ThreadySubject implements Subject {
 
     @Override
     public Subject takeAt(Slot slot) {
-        Vendor taken;
+        Subject taken;
         try(var ignored = writeLock.lock()) {
             taken = subject.getAt(slot);
             if(taken.notEmpty()) subject = subject.unset(taken.key().direct());
@@ -385,8 +385,8 @@ class ThreadySubject implements Subject {
     }
 
     @Override
-    public Wave<Vendor> iterator(Slot slot, boolean reverse) {
-        Wave<Vendor> it;
+    public Wave<Subject> iterator(Slot slot, boolean reverse) {
+        Wave<Subject> it;
         try(var ignored = writeLock.lock()) {
             it = new HomogenizedSubjectIterator(subject, reverse, slot);
         }
@@ -394,7 +394,7 @@ class ThreadySubject implements Subject {
     }
 
     @Override
-    public Subject inset(Iterable<? extends Vendor> iterable) {
+    public Subject inset(Iterable<? extends Subject> iterable) {
         try(var ignored = writeLock.lock()) {
             subject = subject.inset(iterable);
         }
@@ -402,7 +402,7 @@ class ThreadySubject implements Subject {
     }
 
     @Override
-    public Subject input(Iterable<? extends Vendor> iterable) {
+    public Subject input(Iterable<? extends Subject> iterable) {
         try(var ignored = writeLock.lock()) {
             subject = subject.input(iterable);
         }
@@ -466,4 +466,4 @@ class ThreadySubject implements Subject {
         }
         return this;
     }
-}
+}*/

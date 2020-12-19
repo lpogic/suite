@@ -12,25 +12,25 @@ import java.util.function.Supplier;
 
 public class Sub<T> implements Fluid {
 
-    class HomogenizedSubjectIterator implements Wave<Vendor> {
-        Vendor sub;
+    class HomogenizedSubjectIterator implements Wave<Subject> {
+        Subject sub;
         boolean reverse;
-        Wave<Vendor> it;
+        Wave<Subject> it;
 
 
-        HomogenizedSubjectIterator(Vendor sub, boolean reverse, Slot slot) {
+        HomogenizedSubjectIterator(Subject sub, boolean reverse) {
             this.sub = sub;
             this.reverse = reverse;
-            this.it = sub.iterator(slot, reverse);
+            this.it = sub.iterator(reverse);
         }
 
         @Override
         public boolean hasNext() {
             if(sub != subject) {
                 if(sub == ZeroSubject.getInstance()) {
-                    it = reverse ? subject.iterator(Slot.RECENT, true) : subject.iterator(Slot.PRIME, false);
+                    it = subject.iterator(reverse);
                 } else if(subject == ZeroSubject.getInstance()) {
-                    it = Wave.empty();
+                    it = Wave.emptyWave();
                 }
                 sub = subject;
             }
@@ -38,7 +38,7 @@ public class Sub<T> implements Fluid {
         }
 
         @Override
-        public Vendor next() {
+        public Subject next() {
             return new SolidSubject(it.next().exclude());
         }
     }
@@ -49,8 +49,109 @@ public class Sub<T> implements Fluid {
         subject = ZeroSubject.getInstance();
     }
 
-    Sub(Vendor vendor) {
-        this.subject = vendor instanceof Subject ? (Subject)vendor : vendor.set();
+    Sub(Subject subject) {
+        this.subject = subject;
+    }
+
+    public Object key() {
+        return subject.key();
+    }
+
+    public Subject get() {
+        return subject.get().exclude();
+    }
+
+    public Sub<T> recent() {
+        return new Sub<>(subject.get().exclude());
+    }
+
+    public Sub<T> get(Object key) {
+        return new Sub<>(subject.get(key).exclude());
+    }
+
+    public Sub<T> get(Object ... keys) {
+        return new Sub<>(subject.get(keys).exclude());
+    }
+
+    public Sub<T> getAt(Slot slot) {
+        return new Sub<>(subject.getAt(slot).exclude());
+    }
+
+    public Sub<T> getAt(int slotIndex) {
+        return new Sub<>(subject.getAt(slotIndex).exclude());
+    }
+
+    public T direct() {
+        return subject.orGiven(null);
+    }
+
+    public <B extends T> B asExpected() {
+        return subject.asExpected();
+    }
+
+    public <B extends T> B asGiven(Class<B> requestedType) {
+        return subject.asGiven(requestedType);
+    }
+
+    public <B extends T> B asGiven(Glass<? super B, B> requestedType) {
+        return subject.asGiven(requestedType);
+    }
+
+    public <B extends T> B asGiven(Class<B> requestedType, B substitute) {
+        return subject.asGiven(requestedType, substitute);
+    }
+
+    public <B extends T> B asGiven(Glass<? super B, B> requestedType, B substitute) {
+        return subject.asGiven(requestedType, substitute);
+    }
+
+    public <B extends T> B orGiven(B substitute) {
+        return subject.orGiven(substitute);
+    }
+
+    public <B extends T> B orDo(Supplier<B> supplier) {
+        return subject.orDo(supplier);
+    }
+
+    public <B extends T> boolean instanceOf(Class<B> type) {
+        return subject.instanceOf(type);
+    }
+
+    public String asString() {
+        return Objects.toString(direct(), "nuLL");
+    }
+
+    public boolean notEmpty() {
+        return subject.notEmpty();
+    }
+
+    public boolean isEmpty() {
+        return subject.isEmpty();
+    }
+
+    public int size() {
+        return subject.size();
+    }
+
+    public Wave<Subject> iterator(boolean reverse) {
+        return new HomogenizedSubjectIterator(subject, reverse);
+    }
+
+    public Wave<Subject> iterator() {
+        return iterator(false);
+    }
+
+    public Fluid front() {
+        return () -> new HomogenizedSubjectIterator(subject, false);
+    }
+
+    public Fluid reverse() {
+        return () -> new HomogenizedSubjectIterator(subject, true);
+    }
+
+    @Override
+    public String toString() {
+        return subject.toString();
     }
 
     public Sub<T> set(T element) {
@@ -88,96 +189,27 @@ public class Sub<T> implements Fluid {
         return this;
     }
 
-    public Sub<T> unset(Object key, Object value) {
-        subject = subject.unset(key, value);
-        return this;
-    }
-
     public Sub<T> unsetAt(Slot slot) {
         subject = subject.unsetAt(slot);
         return this;
     }
 
-    public Sub<T> prime() {
-        return new Sub<>(subject.prime().exclude());
-    }
-
-    public Sub<T> recent() {
-        return new Sub<>(subject.recent().exclude());
-    }
-
-    public Sub<T> get(Object key) {
-        return new Sub<>(subject.get(key).exclude());
-    }
-
-    public Sub<T> get(Object ... keys) {
-        return new Sub<>(subject.get(keys).exclude());
-    }
-
-    public Sub<T> getAt(Slot slot) {
-        return new Sub<>(subject.getAt(slot).exclude());
-    }
-
-    public Sub<T> getAt(int slotIndex) {
-        return new Sub<>(subject.getAt(slotIndex).exclude());
-    }
-
-    public Subject key() {
-        return new SolidSubject(subject.key().exclude());
-    }
-
-    public T direct() {
-        return subject.orGiven(null);
-    }
-
-    public <B extends T> B asExpected() {
-        return subject.asExpected();
-    }
-
-    public <B extends T> B asGiven(Class<B> requestedType) {
-        return subject.asGiven(requestedType);
-    }
-
-    public <B extends T> B asGiven(Glass<? super B, B> requestedType) {
-        return subject.asGiven(requestedType);
-    }
-
-    public <B extends T> B asGiven(Class<B> requestedType, B substitute) {
-        return subject.asGiven(requestedType, substitute);
-    }
-
-    public <B extends T> B asGiven(Glass<? super B, B> requestedType, B substitute) {
-        return subject.asGiven(requestedType, substitute);
-    }
-
-    public <B extends T> B orGiven(B substitute) {
-        return subject.orGiven(substitute);
-    }
-
-    public <B extends T> B orDo(Supplier<B> supplier) {
-        return subject.orDo(supplier);
-    }
-
-    public <B extends T> boolean assigned(Class<B> type) {
-        return subject.instanceOf(type);
-    }
-
     public Sub<T> getSaved(Object key, T reserve) {
-        Vendor saved = subject.get(key);
+        Subject saved = subject.get(key);
         if(saved.notEmpty())return new Sub<>(saved);
         subject = subject.set(key, reserve);
         return get(key);
     }
 
     public Sub<T> getDone(Object key, Supplier<T> supplier) {
-        Vendor done = subject.get(key);
+        Subject done = subject.get(key);
         if(done.notEmpty())return new Sub<>(done);
         subject = subject.set(key, supplier.get());
         return get(key);
     }
 
     public Sub<T> getDone(Object key, Function<Subject, T> function, Subject argument) {
-        Vendor done = subject.get(key);
+        Subject done = subject.get(key);
         if(done.notEmpty())return new Sub<>(done);
         subject = subject.set(key, function.apply(argument));
         return get(key);
@@ -185,59 +217,18 @@ public class Sub<T> implements Fluid {
 
     public Sub<T> take(Object key) {
         Sub<T> taken = get(key);
-        if(taken.settled()) subject = subject.unset(key);
+        if(taken.notEmpty()) subject = subject.unset(key);
         return taken;
     }
 
     public Sub<T> takeAt(Slot slot) {
         Sub<T> taken = getAt(slot);
-        if(taken.settled()) subject = subject.unset(taken.key().direct());
+        if(taken.notEmpty()) subject = subject.unset(taken.key());
         return taken;
-    }
-
-    public boolean settled() {
-        return subject.notEmpty();
-    }
-
-    public boolean desolated() {
-        return subject.isEmpty();
-    }
-
-    public int size() {
-        return subject.size();
-    }
-
-    public Fluid front() {
-        return () -> new HomogenizedSubjectIterator(subject, false, Slot.PRIME);
-    }
-
-    public Fluid front(Slot slot) {
-        return () -> new HomogenizedSubjectIterator(subject, false, slot);
-    }
-
-    public Fluid reverse() {
-        return () -> new HomogenizedSubjectIterator(subject, true, Slot.RECENT);
-    }
-
-    public Fluid reverse(Slot slot) {
-        return () -> new HomogenizedSubjectIterator(subject, true, slot);
-    }
-
-    public Wave<Vendor> iterator(Slot slot, boolean reverse) {
-        return new HomogenizedSubjectIterator(subject, reverse, slot);
-    }
-
-    public Wave<Vendor> iterator() {
-        return iterator(Slot.PRIME, false);
     }
 
     public boolean fused() {
         return subject.fused();
-    }
-
-    @Override
-    public String toString() {
-        return subject.toString();
     }
 
     public Sub<T> setAt(Slot slot, T element) {
@@ -265,10 +256,6 @@ public class Sub<T> implements Fluid {
         return this;
     }
 
-    public String asString() {
-        return Objects.toString(direct(), "nuLL");
-    }
-
     public Sub<T> setAll(Iterable<T> iterable) {
         subject = subject.setAll(iterable);
         return this;
@@ -284,9 +271,10 @@ public class Sub<T> implements Fluid {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public Slime<T> keys() {
         return () -> new Wave<>() {
-            final Iterator<Vendor> subIt = iterator();
+            final Iterator<Subject> subIt = iterator();
 
             @Override
             public boolean hasNext() {
@@ -295,14 +283,14 @@ public class Sub<T> implements Fluid {
 
             @Override
             public T next() {
-                return subIt.next().key().asExpected();
+                return (T)subIt.next().key();
             }
         };
     }
 
     public Slime<T> values() {
         return () -> new Wave<>() {
-            final Iterator<Vendor> subIt = iterator();
+            final Iterator<Subject> subIt = iterator();
 
             @Override
             public boolean hasNext() {

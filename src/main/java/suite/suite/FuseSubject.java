@@ -6,7 +6,7 @@ import suite.suite.util.Glass;
 
 import java.util.function.Supplier;
 
-class FuseSubject implements Subject {
+class FuseSubject {}/* implements Subject {
 
     private Subject subject;
     private boolean active = true;
@@ -71,37 +71,37 @@ class FuseSubject implements Subject {
     }
 
     @Override
-    public Vendor prime() {
+    public Subject prime() {
         return subject.prime();
     }
 
     @Override
-    public Vendor recent() {
+    public Subject recent() {
         return subject.recent();
     }
 
     @Override
-    public Vendor get(Object key) {
+    public Subject get(Object key) {
         return subject.get(key);
     }
 
     @Override
-    public Vendor get(Object ... keys) {
+    public Subject get(Object ... keys) {
         return subject.get(keys);
     }
 
     @Override
-    public Vendor getAt(Slot slot) {
+    public Subject getAt(Slot slot) {
         return subject.getAt(slot);
     }
 
     @Override
-    public Vendor getAt(int slotIndex) {
+    public Subject getAt(int slotIndex) {
         return subject.getAt(slotIndex);
     }
 
     @Override
-    public Vendor key() {
+    public Subject key() {
         return subject.key();
     }
 
@@ -176,7 +176,7 @@ class FuseSubject implements Subject {
     }
 
     @Override
-    public Wave<Vendor> iterator() {
+    public Wave<Subject> iterator() {
         return subject.iterator();
     }
 
@@ -216,7 +216,8 @@ class FuseSubject implements Subject {
     }
 
     @Override
-    public Wave<Vendor> iterator(Slot slot, boolean reverse) {
+    public Wave<Subject> iterator(Slot slot, boolean reverse) {
         return subject.iterator(slot, reverse);
     }
 }
+*/
