@@ -108,7 +108,7 @@ class ZeroSubject implements Subject {
 
     @Override
     public String toString() {
-        return "[]";
+        return "$0";
     }
 
     @Override
