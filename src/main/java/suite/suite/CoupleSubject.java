@@ -114,7 +114,7 @@ class CoupleSubject implements Subject {
 
     @Override
     public String toString() {
-        return primeKey + " [ " + primeValue + "]";
+        return primeKey + " [ " + primeValue + " ]";
     }
 
     @Override
