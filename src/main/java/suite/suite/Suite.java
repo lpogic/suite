@@ -65,14 +65,14 @@ public class Suite {
         return inset(Fluid.engage(keys, values));
     }
 
-    public static String toString(Subject $sub) {
+    public static String asString(Fluid $sub) {
         StringBuilder sb = new StringBuilder();
         Stack<Iterator<Subject>> stack = new Stack<>();
         stack.add($sub.iterator());
         int goTo = 0;
         while(!stack.empty()) {
             for(Subject $s : (Iterable<Subject>) stack::peek) {
-                if($s.instanceOf(Subject.class)) {
+                if($s.instanceOf(Fluid.class)) {
                     Subject $ = $s.at();
                     sb.append("\t".repeat(stack.size() - 1)).append($s.key()).append(" [\n");
                     stack.add($.iterator());
@@ -88,6 +88,34 @@ public class Suite {
             }
             stack.pop();
             if(stack.size() > 0)sb.append("\t".repeat(stack.size() - 1)).append("]\n");
+        }
+        return sb.toString();
+    }
+
+    public static String asString(Fluid $sub, boolean compressed) {
+        if(!compressed)return asString($sub);
+        StringBuilder sb = new StringBuilder();
+        Stack<Iterator<Subject>> stack = new Stack<>();
+        stack.add($sub.iterator());
+        int goTo = 0;
+        while(!stack.empty()) {
+            for(Subject $s : (Iterable<Subject>) stack::peek) {
+                if($s.instanceOf(Fluid.class)) {
+                    Subject $ = $s.at();
+                    sb.append($s.key()).append("[");
+                    stack.add($.iterator());
+                    goTo = 1;
+                    break;
+                } else {
+                    sb.append($s.key()).append("[").append($s.direct()).append("]");
+                }
+            }
+            if(goTo == 1) {
+                goTo = 0;
+                continue;
+            }
+            stack.pop();
+            if(stack.size() > 0)sb.append("]");
         }
         return sb.toString();
     }
