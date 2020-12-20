@@ -7,7 +7,7 @@ public class Suite {
     public static class AutoKey {
         @Override
         public String toString() {
-            return "€";
+            return "$A";
         }
     }
 
