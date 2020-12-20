@@ -173,7 +173,7 @@ class Chain implements Fluid {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        forEach(s -> stringBuilder.append("  ").append(s.toString()).append("\n"));
+        forEach(s -> stringBuilder.append(s).append(" "));
         return stringBuilder.toString();
     }
 }

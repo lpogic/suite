@@ -22,6 +22,9 @@ public interface Subject extends Fluid {
     Subject getAt(Slot slot);
     Subject getAt(int slotIndex);
 
+    default Subject at() {
+        return at(key());
+    }
     default Subject at(Object key) {
         Subject $ = get(key);
         if($.instanceOf(Subject.class))return $.asExpected();

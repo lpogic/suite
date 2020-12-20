@@ -2,6 +2,9 @@ package suite.suite;
 
 import suite.suite.util.Fluid;
 
+import java.util.Iterator;
+import java.util.Stack;
+
 public class Suite {
 
     public static class AutoKey {
@@ -60,6 +63,33 @@ public class Suite {
 
     public static Subject zip(Iterable<Object> keys, Iterable<Object> values) {
         return inset(Fluid.engage(keys, values));
+    }
+
+    public static String toString(Subject $sub) {
+        StringBuilder sb = new StringBuilder();
+        Stack<Iterator<Subject>> stack = new Stack<>();
+        stack.add($sub.iterator());
+        int goTo = 0;
+        while(!stack.empty()) {
+            for(Subject $s : (Iterable<Subject>) stack::peek) {
+                if($s.instanceOf(Subject.class)) {
+                    Subject $ = $s.at();
+                    sb.append("\t".repeat(stack.size() - 1)).append($s.key()).append(" [\n");
+                    stack.add($.iterator());
+                    goTo = 1;
+                    break;
+                } else {
+                    sb.append("\t".repeat(stack.size() - 1)).append($s.key()).append(" [ ").append($s.direct()).append(" ]\n");
+                }
+            }
+            if(goTo == 1) {
+                goTo = 0;
+                continue;
+            }
+            stack.pop();
+            if(stack.size() > 0)sb.append("\t".repeat(stack.size() - 1)).append("]\n");
+        }
+        return sb.toString();
     }
 
 }
