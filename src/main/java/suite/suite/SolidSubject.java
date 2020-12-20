@@ -287,11 +287,6 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public String toString() {
-        return subject.toString();
-    }
-
-    @Override
     public Subject setAt(Slot slot, Object element) {
         subject = subject.setAt(slot, element);
         return this;

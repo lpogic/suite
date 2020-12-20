@@ -107,11 +107,6 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public String toString() {
-        return "$0";
-    }
-
-    @Override
     public Wave<Subject> iterator(boolean reverse) {
         return Wave.emptyWave();
     }

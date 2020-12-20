@@ -68,18 +68,20 @@ public class Suite {
     public static String asString(Fluid $sub) {
         StringBuilder sb = new StringBuilder();
         Stack<Iterator<Subject>> stack = new Stack<>();
+        Subject printed = Suite.set();
         stack.add($sub.iterator());
         int goTo = 0;
         while(!stack.empty()) {
             for(Subject $s : (Iterable<Subject>) stack::peek) {
-                if($s.instanceOf(Fluid.class)) {
+                if(!$s.instanceOf(Fluid.class) || printed.get($s.direct()).notEmpty()) {
+                    sb.append("\t".repeat(stack.size() - 1)).append($s.key()).append(" [ ").append($s.get().direct()).append(" ]\n");
+                } else {
                     Subject $ = $s.at();
                     sb.append("\t".repeat(stack.size() - 1)).append($s.key()).append(" [\n");
                     stack.add($.iterator());
+                    printed.set($);
                     goTo = 1;
                     break;
-                } else {
-                    sb.append("\t".repeat(stack.size() - 1)).append($s.key()).append(" [ ").append($s.direct()).append(" ]\n");
                 }
             }
             if(goTo == 1) {

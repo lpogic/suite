@@ -111,11 +111,6 @@ class BubbleSubject implements Subject {
     }
 
     @Override
-    public String toString() {
-        return bubbled + " []";
-    }
-
-    @Override
     public Subject set(Object element) {
         return Objects.equals(bubbled, element) ? new BubbleSubject(element) :
                 new MultiSubject(link()).set(element, element);

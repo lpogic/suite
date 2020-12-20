@@ -319,9 +319,4 @@ public class WonkySubject extends SolidSubject {
     public boolean fused() {
         return subject.fused();
     }
-
-    @Override
-    public String toString() {
-        return subject.toString();
-    }
 }

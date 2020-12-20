@@ -25,7 +25,13 @@ public class Main {
         System.out.println(sub);
         sub.inset(Suite.set("B", "b").set("A", "a").set("C", "c"));
         System.out.println(sub);
-        var $ = Suite.set("a", Suite.set("b").set("c", Suite.set("d")).set("c1", Suite.set("d").set("x")).set("e", "f"));
+        var $1 = Suite.set("d");
+        var $ = Suite.set("a", Suite.set("b").set("c", $1).set("c1", Suite.set("d").set($1)).set("e", "f"));
         System.out.println(Suite.asString($));
+        $.direct() // = "a"
+        $.at("a").set("b") // "b"
+        $.at("a").at("b").set("c");
+        $.at("e").direct() // "f"
+        $.get("a", "e").first().direct() // $
     }
 }

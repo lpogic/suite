@@ -181,11 +181,6 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public String toString() {
-        return chain.toString();
-    }
-
-    @Override
     public Subject setAt(Slot slot, Object element) {
         return setAt(slot, element, element);
     }

@@ -113,11 +113,6 @@ class CoupleSubject implements Subject {
     }
 
     @Override
-    public String toString() {
-        return primeKey + " [ " + primeValue + " ]";
-    }
-
-    @Override
     public Subject set(Object element) {
         return Objects.equals(primeKey, element) ? new BubbleSubject(element) :
                 new MultiSubject(link()).set(element, element);
