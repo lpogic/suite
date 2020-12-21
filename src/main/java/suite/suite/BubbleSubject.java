@@ -4,50 +4,49 @@ import suite.suite.util.Wave;
 import suite.suite.util.Glass;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unchecked")
 class BubbleSubject implements Subject {
 
     private final Object bubbled;
+    private Subject subject;
     private Link ward;
 
-    BubbleSubject(Object bubbled) {
+    public BubbleSubject(Object bubbled) {
         this.bubbled = bubbled;
+        this.subject = Suite.set();
+    }
+
+    public BubbleSubject(Object bubbled, Subject subject) {
+        this.bubbled = bubbled;
+        this.subject = subject;
     }
 
     @Override
-    public Object key() {
-        return bubbled;
-    }
-
-    @Override
-    public Subject get() {
+    public Subject atFirst() {
         return this;
     }
 
     @Override
-    public Subject get(Object key) {
-        return Objects.equals(bubbled, key) ? this : ZeroSubject.getInstance();
+    public Subject atLast() {
+        return this;
     }
 
     @Override
-    public Subject get(Object ... keys) {
-        for(Object k : keys) {
-            if(Objects.equals(bubbled, k)) return this;
-        }
-        return ZeroSubject.getInstance();
+    public Subject at(Object element) {
+        return Objects.equals(bubbled, element) ? this : ZeroSubject.getInstance();
     }
 
     @Override
-    public Subject getAt(Slot slot) {
-        return slot == Slot.PRIME || slot == Slot.RECENT || (slot instanceof Slot.PlacedSlot && ((Slot.PlacedSlot) slot).place == 0) ?
-            this : ZeroSubject.getInstance();
+    public Subject get() {
+        return subject;
     }
 
     @Override
-    public Subject getAt(int slotIndex) {
-        return slotIndex == 0 ? this : ZeroSubject.getInstance();
+    public Subject get(Object element) {
+        return Objects.equals(bubbled, element) ? subject : ZeroSubject.getInstance();
     }
 
     @Override
@@ -62,12 +61,12 @@ class BubbleSubject implements Subject {
 
     @Override
     public <B> B asGiven(Class<B> requestedType) {
-        return (B)bubbled;
+        return requestedType.cast(bubbled);
     }
 
     @Override
     public <B> B asGiven(Glass<? super B, B> requestedType) {
-        return (B)bubbled;
+        return requestedType.cast(bubbled);
     }
 
     @Override
@@ -110,74 +109,6 @@ class BubbleSubject implements Subject {
         return 1;
     }
 
-    @Override
-    public Subject set(Object element) {
-        return Objects.equals(bubbled, element) ? new BubbleSubject(element) :
-                new MultiSubject(link()).set(element, element);
-    }
-
-    @Override
-    public Subject set(Object key, Object value) {
-        return Objects.equals(bubbled, key) ? new CoupleSubject(key, value) :
-                new MultiSubject(link()).set(key, value);
-    }
-
-    @Override
-    public Subject put(Object element) {
-        return Objects.equals(bubbled, element) ? this :
-                new MultiSubject(link()).set(element, element);
-    }
-
-    @Override
-    public Subject put(Object key, Object value) {
-        return Objects.equals(bubbled, key) ? this :
-                new MultiSubject(link()).set(key, value);
-    }
-
-    @Override
-    public Subject add(Object element) {
-        return new MultiSubject(link()).add(element);
-    }
-
-    @Override
-    public Subject unset(Object key) {
-        return Objects.equals(bubbled, key) ? ZeroSubject.getInstance() : this;
-    }
-
-    @Override
-    public Subject unsetAt(Slot slot) {
-        return getAt(slot).notEmpty() ? ZeroSubject.getInstance() : this;
-    }
-
-    @Override
-    public Subject setAt(Slot slot, Object element) {
-        return Objects.equals(bubbled, element) ? new BubbleSubject(element) :
-                new MultiSubject(link()).setAt(slot, element);
-    }
-
-    @Override
-    public Subject setAt(Slot slot, Object key, Object value) {
-        return Objects.equals(bubbled, key) ? new CoupleSubject(key, value) :
-                new MultiSubject(link()).setAt(slot, key, value);
-    }
-
-    @Override
-    public Subject putAt(Slot slot, Object element) {
-        return Objects.equals(bubbled, element) ? this :
-                new MultiSubject(link()).setAt(slot, element);
-    }
-
-    @Override
-    public Subject putAt(Slot slot, Object key, Object value) {
-        return Objects.equals(bubbled, key) ? this :
-                new MultiSubject(link()).setAt(slot, key, value);
-    }
-
-    @Override
-    public Subject addAt(Slot slot, Object element) {
-        return new MultiSubject(link()).addAt(slot, element);
-    }
-
     private Link link() {
         if(ward == null) {
             ward = new Link();
@@ -194,7 +125,51 @@ class BubbleSubject implements Subject {
     }
 
     @Override
-    public Subject exclude() {
-        return new BubbleSubject(bubbled);
+    public Subject set(Object element) {
+        if(Objects.equals(bubbled, element)) {
+            subject = Suite.set();
+            return this;
+        } else {
+            return new MultiSubject(link()).set(element);
+        }
+    }
+
+    @Override
+    public Subject set(Object element, Subject $set) {
+        if(Objects.equals(bubbled, element)) {
+            subject = $set;
+            return this;
+        } else {
+            return new MultiSubject(link()).set(element, $set);
+        }
+    }
+
+    @Override
+    public Subject unset() {
+        return ZeroSubject.getInstance();
+    }
+
+    @Override
+    public Subject unset(Object element) {
+        return Objects.equals(bubbled, element) ? ZeroSubject.getInstance() : this;
+    }
+
+    @Override
+    public Subject in() {
+        return new MultiSubject(link()).in();
+    }
+
+    @Override
+    public Subject in(Object element) {
+        if(Objects.equals(bubbled, element)) {
+            return subject;
+        } else {
+            return new MultiSubject(link()).in(element);
+        }
+    }
+
+    @Override
+    public Subject separate() {
+        return new BubbleSubject(bubbled, subject);
     }
 }

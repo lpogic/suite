@@ -42,7 +42,11 @@ public interface Fluid extends Iterable<Subject> {
         };
     }
 
-    default Subject get() {
+    default Fluid exclude(Predicate<Subject> predicate) {
+        return select(predicate.negate());
+    }
+
+    default Subject atFirst() {
         Wave<Subject> slime = iterator();
         return slime.hasNext() ? slime.next() : Suite.set();
     }
@@ -95,7 +99,7 @@ public interface Fluid extends Iterable<Subject> {
 
             @Override
             public Object next() {
-                return subIt.next().key();
+                return subIt.next().direct();
             }
         };
     }
@@ -111,12 +115,12 @@ public interface Fluid extends Iterable<Subject> {
 
             @Override
             public T next() {
-                return type.cast(subIt.next().key());
+                return subIt.next().asGiven(type);
             }
         };
     }
 
-    default Slime<?> values() {
+    default Fluid values() {
         return () -> new Wave<>() {
             final Iterator<Subject> subIt = iterator();
 
@@ -126,33 +130,14 @@ public interface Fluid extends Iterable<Subject> {
             }
 
             @Override
-            public Object next() {
-                return subIt.next().direct();
-            }
-        };
-    }
-
-    default<T> Slime<T> values(Class<T> type) {
-        return () -> new Wave<>() {
-            final Iterator<Subject> subIt = iterator();
-
-            @Override
-            public boolean hasNext() {
-                return subIt.hasNext();
-            }
-
-            @Override
-            public T next() {
-                return subIt.next().asExpected();
+            public Subject next() {
+                return subIt.next().get();
             }
         };
     }
 
     default Subject set() {
         return Suite.inset(this);
-    }
-    default Subject put() {
-        return Suite.input(this);
     }
 
     static Fluid source(Iterable<Subject> iterable) {
@@ -175,7 +160,7 @@ public interface Fluid extends Iterable<Subject> {
 
             @Override
             public Subject next() {
-                return Suite.set(keyIt.next(), valIt.next());
+                return Suite.set(keyIt.next(), Suite.set(valIt.next()));
             }
         };
     }

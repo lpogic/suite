@@ -4,7 +4,7 @@ import suite.suite.util.Wave;
 import suite.suite.util.Fluid;
 import suite.suite.util.Glass;
 
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class SolidSubject implements Subject {
@@ -36,7 +36,7 @@ public class SolidSubject implements Subject {
 
         @Override
         public Subject next() {
-            return new SolidSubject(it.next().exclude());
+            return new SolidSubject(it.next().separate());
         }
     }
 
@@ -47,37 +47,208 @@ public class SolidSubject implements Subject {
     }
 
     public SolidSubject(Subject subject) {
-        this.subject = subject.exclude();
+        this.subject = subject.separate();
     }
 
     @Override
+    public Subject atFirst() {
+        return subject.atFirst();
+    }
+
+    @Override
+    public Subject atLast() {
+        return subject.atLast();
+    }
+
+    @Override
+    public Subject at(Object key) {
+        return subject.at(key);
+    }
+
+    @Override
+    public Subject get() {
+        return subject.get();
+    }
+
+    @Override
+    public Subject get(Object key) {
+        return subject.get(key);
+    }
+
+    @Override
+    public Object direct() {
+        return subject.direct();
+    }
+
+    @Override
+    public <B> B asExpected() {
+        return subject.asExpected();
+    }
+
+    @Override
+    public <B> B asGiven(Class<B> requestedType) {
+        return subject.asGiven(requestedType);
+    }
+
+    @Override
+    public <B> B asGiven(Glass<? super B, B> requestedType) {
+        return subject.asGiven(requestedType);
+    }
+
+    @Override
+    public <B> B asGiven(Class<B> requestedType, B reserve) {
+        return subject.asGiven(requestedType, reserve);
+    }
+
+    @Override
+    public <B> B asGiven(Glass<? super B, B> requestedType, B reserve) {
+        return subject.asGiven(requestedType, reserve);
+    }
+
+    @Override
+    public <B> B orGiven(B reserve) {
+        return subject.orGiven(reserve);
+    }
+
+    @Override
+    public <B> B orDo(Supplier<B> supplier) {
+        return subject.orDo(supplier);
+    }
+
+    @Override
+    public boolean instanceOf(Class<?> type) {
+        return subject.instanceOf(type);
+    }
+
+    @Override
+    public boolean notEmpty() {
+        return subject.notEmpty();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return subject.isEmpty();
+    }
+
+    @Override
+    public int size() {
+        return subject.size();
+    }
+
+    @Override
+    public Wave<Subject> iterator(boolean reverse) {
+        return new HomogenizedSubjectIterator(subject, reverse);
+    }
+
+    @Override
+    public Subject set(Object element) {
+        subject = subject.set(element);
+        return this;
+    }
+
+    @Override
+    public Subject set(Object element, Subject $set) {
+        subject = subject.set(element, $set);
+        return this;
+    }
+
+    @Override
+    public Subject setIf(Object element, Predicate<Subject> test) {
+        subject = subject.setIf(element, test);
+        return this;
+    }
+
+    @Override
+    public Subject unset() {
+        subject = subject.unset();
+        return this;
+    }
+
+    @Override
+    public Subject unset(Object element) {
+        subject = subject.unset(element);
+        return this;
+    }
+
+    @Override
+    public Subject in() {
+        var k = new Suite.AutoKey();
+        subject = subject.set(k);
+        return subject.at(k);
+    }
+
+    @Override
+    public Subject in(Object key) {
+        subject = subject.setIf(key, new IsFree(key));
+        return subject.at(key);
+    }
+
+    @Override
+    public Fluid front() {
+        return this;
+    }
+
+    @Override
+    public Fluid reverse() {
+        return () -> iterator(true);
+    }
+
+    @Override
+    public Subject take(Object key) {
+        Subject taken = at(key);
+        if(taken.notEmpty()) subject = subject.unset(key);
+        return taken;
+    }
+
+    @Override
+    public Subject inset(Iterable<? extends Subject> iterable) {
+        for(var it : iterable) {
+            subject = subject.set(it.direct(), it.get());
+        }
+        return this;
+    }
+
+    @Override
+    public Subject setAll(Iterable<?> iterable) {
+        for(Object it : iterable) {
+            subject = subject.set(it);
+        }
+        return this;
+    }
+
+    @Override
+    public Subject separate() {
+        return subject.separate();
+    }
+
+    /*@Override
     public Object key() {
         return subject.key();
     }
 
     @Override
     public Subject get() {
-        return new SolidSubject(subject.get().exclude());
+        return new SolidSubject(subject.get().separate());
     }
 
     @Override
     public Subject get(Object key) {
-        return new SolidSubject(subject.get(key).exclude());
+        return new SolidSubject(subject.get(key).separate());
     }
 
     @Override
     public Subject get(Object ... keys) {
-        return new SolidSubject(subject.get(keys).exclude());
+        return new SolidSubject(subject.get(keys).separate());
     }
 
     @Override
     public Subject getAt(Slot slot) {
-        return new SolidSubject(subject.getAt(slot).exclude());
+        return new SolidSubject(subject.getAt(slot).separate());
     }
 
     @Override
     public Subject getAt(int slotIndex) {
-        return new SolidSubject(subject.getAt(slotIndex).exclude());
+        return new SolidSubject(subject.getAt(slotIndex).separate());
     }
 
     @Override
@@ -317,7 +488,7 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Subject exclude() {
-        return subject.exclude();
-    }
+    public Subject separate() {
+        return subject.separate();
+    }*/
 }

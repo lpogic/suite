@@ -194,7 +194,7 @@ class CoupleSubject implements Subject {
     }
 
     @Override
-    public Subject exclude() {
+    public Subject separate() {
         return new CoupleSubject(primeKey, primeValue);
     }
 }

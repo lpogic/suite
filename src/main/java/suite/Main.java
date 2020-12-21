@@ -33,5 +33,12 @@ public class Main {
         $.at("a").at("b").set("c");
         $.at("e").direct() // "f"
         $.get("a", "e").first().direct() // $
+        $.up("a").up("b").up("c");
+        $.up("a").up("b").up("d");
+        $.up("a").up("b").direct(); // "c"
+        $.up("a").up("b").get("c", "d");
+        Suite.set("a", Suite.set("x").set("y").set("z"));
+
+        $.set("a", Suite.set())
     }
 }

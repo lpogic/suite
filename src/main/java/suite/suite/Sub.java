@@ -39,7 +39,7 @@ public class Sub<T> implements Fluid {
 
         @Override
         public Subject next() {
-            return new SolidSubject(it.next().exclude());
+            return new SolidSubject(it.next().separate());
         }
     }
 
@@ -58,19 +58,19 @@ public class Sub<T> implements Fluid {
     }
 
     public Subject get() {
-        return subject.get().exclude();
+        return subject.get().separate();
     }
 
     public Sub<T> recent() {
-        return new Sub<>(subject.get().exclude());
+        return new Sub<>(subject.get().separate());
     }
 
     public Sub<T> get(Object key) {
-        return new Sub<>(subject.get(key).exclude());
+        return new Sub<>(subject.get(key).separate());
     }
 
     public Sub<T> get(Object ... keys) {
-        return new Sub<>(subject.get(keys).exclude());
+        return new Sub<>(subject.get(keys).separate());
     }
 
     public Sub<T> getAt(Slot slot) {

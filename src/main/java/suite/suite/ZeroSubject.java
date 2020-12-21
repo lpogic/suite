@@ -17,8 +17,18 @@ class ZeroSubject implements Subject {
     private ZeroSubject() {}
 
     @Override
-    public Object key() {
-        throw new NullPointerException("Zero subject is empty");
+    public Subject atFirst() {
+        return this;
+    }
+
+    @Override
+    public Subject atLast() {
+        return this;
+    }
+
+    @Override
+    public Subject at(Object element) {
+        return this;
     }
 
     @Override
@@ -27,22 +37,7 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public Subject get(Object key) {
-        return this;
-    }
-
-    @Override
-    public Subject get(Object ... keys) {
-        return this;
-    }
-
-    @Override
-    public Subject getAt(Slot slot) {
-        return this;
-    }
-
-    @Override
-    public Subject getAt(int slotIndex) {
+    public Subject get(Object element) {
         return this;
     }
 
@@ -53,27 +48,27 @@ class ZeroSubject implements Subject {
 
     @Override
     public <B> B asExpected() {
-        throw new NoSuchElementException("ZeroSubject contains no values");
+        throw new NoSuchElementException("ZeroSubject");
     }
 
     @Override
     public <B> B asGiven(Class<B> requestedType) {
-        throw new NoSuchElementException("ZeroSubject contains no values");
+        throw new NoSuchElementException("ZeroSubject");
     }
 
     @Override
     public <B> B asGiven(Glass<? super B, B> requestedType) {
-        throw new NoSuchElementException("ZeroSubject contains no values");
+        throw new NoSuchElementException("ZeroSubject");
     }
 
     @Override
-    public <B> B asGiven(Class<B> requestedType, B substitute) {
-        return substitute;
+    public <B> B asGiven(Class<B> requestedType, B reserve) {
+        return reserve;
     }
 
     @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType, B substitute) {
-        return substitute;
+    public <B> B asGiven(Glass<? super B, B> requestedType, B reserve) {
+        return reserve;
     }
 
     @Override
@@ -93,12 +88,12 @@ class ZeroSubject implements Subject {
 
     @Override
     public boolean notEmpty() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEmpty() {
-        return true;
+        return false;
     }
 
     @Override
@@ -117,59 +112,27 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public Subject set(Object key, Object value) {
-        return key == value ? set(key) : new CoupleSubject(key, value);
+    public Subject set(Object element, Subject $set) {
+        return new BubbleSubject(element, $set);
     }
 
     @Override
-    public Subject put(Object element) {
-        return set(element);
-    }
-
-    @Override
-    public Subject put(Object key, Object value) {
-        return set(key, value);
-    }
-
-    @Override
-    public Subject add(Object element) {
-        return new CoupleSubject(new Suite.AutoKey(), element);
-    }
-
-    @Override
-    public Subject unset(Object key) {
+    public Subject unset() {
         return this;
     }
 
     @Override
-    public Subject unsetAt(Slot slot) {
+    public Subject unset(Object element) {
         return this;
     }
 
     @Override
-    public Subject setAt(Slot slot, Object element) {
-        return slot == Slot.PRIME || slot == Slot.RECENT || slot instanceof Slot.PlacedSlot ?
-                set(element) : this;
+    public Subject in() {
+        return new BubbleSubject(new Suite.AutoKey());
     }
 
     @Override
-    public Subject setAt(Slot slot, Object key, Object value) {
-        return slot == Slot.PRIME || slot == Slot.RECENT || slot instanceof Slot.PlacedSlot ?
-            set(key, value) : this;
-    }
-
-    @Override
-    public Subject putAt(Slot slot, Object element) {
-        return setAt(slot, element);
-    }
-
-    @Override
-    public Subject putAt(Slot slot, Object key, Object value) {
-        return setAt(slot, key, value);
-    }
-
-    @Override
-    public Subject addAt(Slot slot, Object element) {
-        return setAt(slot, new Suite.AutoKey(), element);
+    public Subject in(Object element) {
+        return new BubbleSubject(element);
     }
 }

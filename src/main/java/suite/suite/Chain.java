@@ -20,7 +20,7 @@ class Chain implements Fluid {
         this.ward = ward;
         Link link = ward.front;
         while (link != ward) {
-            data.put(link.subject.key(), link);
+            data.put(link.subject.direct(), link);
             link = link.front;
         }
     }
@@ -37,30 +37,41 @@ class Chain implements Fluid {
         return ward.front;
     }
 
-    Link getNth(int n) {
-        Link link;
-        if(n >= 0) {
-            link = ward;
-            for (; n >= 0; --n) {
-                link = link.back;
-                if (link == ward) return ward;
-            }
-        } else {
-            link = ward;
-            for (; n < 0; ++n) {
-                link = link.front;
-                if (link == ward) return ward;
-            }
-        }
-        return link;
-    }
-
     public int size() {
         return data.size();
     }
 
-    public boolean isEmpty() {
-        return data.size() == 0;
+    Link put(Object o) {
+        Link link = data.get(o);
+        if(link != null) {
+            link.subject = new BubbleSubject(o);
+        } else {
+            link = new Link(ward.front, ward, new BubbleSubject(o));
+            ward.front = ward.front.back = link;
+        }
+        return link;
+    }
+
+    Link put(Object o, Subject $) {
+        Link link = data.get(o);
+        if(link != null) {
+            link.subject = new BubbleSubject(o, $);
+        } else {
+            link = new Link(ward.front, ward, new BubbleSubject(o, $));
+            ward.front = ward.front.back = link;
+        }
+        return link;
+    }
+
+    Link putIfAbsent(Object o) {
+        Link link = data.get(o);
+        if(link != null) {
+            return link;
+        } else {
+            link = new Link(ward.front, ward, new BubbleSubject(o));
+            ward.front = ward.front.back = link;
+        }
+        return link;
     }
 
     Object put(Link before, Object key, Object value) {
@@ -88,9 +99,7 @@ class Chain implements Fluid {
                 linkSenior.front = before.front;
                 linkSenior.back = before;
                 before.front = linkSenior;
-
             }
-
         }
 
         return seniorValue;
@@ -139,14 +148,6 @@ class Chain implements Fluid {
             linkSenior.subject = null;
         }
 
-    }
-
-    public void remove(Object key, Object value) {
-
-        Link link = data.get(key);
-        if (link != null && link.equals(value)) {
-            remove(key);
-        }
     }
 
     public void clear() {

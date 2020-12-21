@@ -4,13 +4,70 @@ import suite.suite.util.*;
 
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public interface Subject extends Fluid {
 
+    Subject atFirst();
+    Subject atLast();
+    Subject at(Object element);
+    Subject get();
+    Subject get(Object element);
+    Object direct();
+    <B> B asExpected();
+    <B> B asGiven(Class<B> requestedType);
+    <B> B asGiven(Glass<? super B, B> requestedType);
+    <B> B asGiven(Class<B> requestedType, B reserve);
+    <B> B asGiven(Glass<? super B, B> requestedType, B reserve);
+    <B> B orGiven(B reserve);
+    <B> B orDo(Supplier<B> supplier);
+    boolean instanceOf(Class<?> type);
+    boolean notEmpty();
+    boolean isEmpty();
+    int size();
+    Wave<Subject> iterator(boolean reverse);
+    Subject set(Object element);
+    Subject set(Object element, Subject $set);
+    Subject unset();
+    Subject unset(Object element);
+    Subject in();
+    Subject in(Object element);
+
+    default Wave<Subject> iterator() {
+        return iterator(false);
+    }
+
+    default Subject setIf(Object element, Predicate<Subject> test) {
+        return test.test(this) ? set(element) : this;
+    }
+
+    default Fluid front() {
+        throw new UnsupportedOperationException("Solid method");
+    }
+    default Fluid reverse() {
+        throw new UnsupportedOperationException("Solid method");
+    }
+
+    default Subject take(Object key) {
+        throw new UnsupportedOperationException("Solid method");
+    }
+
+    default Subject inset(Iterable<? extends Subject> iterable) {
+        throw new UnsupportedOperationException("Solid method");
+    }
+
+    default Subject setAll(Iterable<?> iterable) {
+        throw new UnsupportedOperationException("Solid method");
+    }
+
+    default Subject separate() {
+        return this;
+    }
+
     /* Vendor methods */
 
-    Object key();
+    /*Object key();
     Subject get(Object key);
     default Subject get(Object ... keys) {
         Subject s = Suite.set();
@@ -87,7 +144,7 @@ public interface Subject extends Fluid {
     }
 
 
-    /* Collector methods */
+    *//* Collector methods *//*
 
     Subject set(Object element);
     Subject set(Object key, Object value);
@@ -146,7 +203,7 @@ public interface Subject extends Fluid {
         throw new UnsupportedOperationException("Only in Solid version allowed");
     }
 
-    /* Other methods */
+    *//* Other methods *//*
 
     default Subject set() {
         return this;
@@ -157,7 +214,7 @@ public interface Subject extends Fluid {
     default boolean fused() {
         return false;
     }
-    default Subject exclude() {
+    default Subject separate() {
         return this;
-    }
+    }*/
 }

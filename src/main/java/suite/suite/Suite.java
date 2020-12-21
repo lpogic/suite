@@ -20,23 +20,14 @@ public class Suite {
     public static Subject set(Object element) {
         return new SolidSubject(new BubbleSubject(element));
     }
-    public static Subject set(Object key, Object value) {
-        return new SolidSubject(new CoupleSubject(key, value));
-    }
-    public static Subject add(Object element) {
-        return new SolidSubject(new CoupleSubject(new AutoKey(), element));
+    public static Subject set(Object element, Subject $) {
+        return new SolidSubject(new BubbleSubject(element, $));
     }
     public static Subject inset(Iterable<Subject> source) {
         return new SolidSubject().inset(source);
     }
-    public static Subject input(Iterable<Subject> source) {
-        return new SolidSubject().input(source);
-    }
     public static Subject setAll(Iterable<Object> source) {
         return new SolidSubject().setAll(source);
-    }
-    public static Subject addAll(Iterable<Object> source) {
-        return new SolidSubject().addAll(source);
     }
 
 //    public static Subject fuse(Subject subject) {
@@ -74,10 +65,10 @@ public class Suite {
         while(!stack.empty()) {
             for(Subject $s : (Iterable<Subject>) stack::peek) {
                 if(!$s.instanceOf(Fluid.class) || printed.get($s.direct()).notEmpty()) {
-                    sb.append("\t".repeat(stack.size() - 1)).append($s.key()).append(" [ ").append($s.get().direct()).append(" ]\n");
+                    sb.append("\t".repeat(stack.size() - 1)).append($s.direct()).append(" [ ").append($s.get().direct()).append(" ]\n");
                 } else {
-                    Subject $ = $s.at();
-                    sb.append("\t".repeat(stack.size() - 1)).append($s.key()).append(" [\n");
+                    Subject $ = $s.get();
+                    sb.append("\t".repeat(stack.size() - 1)).append($s.direct()).append(" [\n");
                     stack.add($.iterator());
                     printed.set($);
                     goTo = 1;
@@ -103,13 +94,13 @@ public class Suite {
         while(!stack.empty()) {
             for(Subject $s : (Iterable<Subject>) stack::peek) {
                 if($s.instanceOf(Fluid.class)) {
-                    Subject $ = $s.at();
-                    sb.append($s.key()).append("[");
+                    Subject $ = $s.get();
+                    sb.append($s.direct()).append("[");
                     stack.add($.iterator());
                     goTo = 1;
                     break;
                 } else {
-                    sb.append($s.key()).append("[").append($s.direct()).append("]");
+                    sb.append($s.direct()).append("[").append($s.direct()).append("]");
                 }
             }
             if(goTo == 1) {
