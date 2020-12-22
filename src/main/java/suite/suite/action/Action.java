@@ -34,7 +34,7 @@ public interface Action {
     }
 
     static<T1, T2, U> Action biFunction(Class<T1> arg1Type, Class<T2> arg2Type, BiFunction<T1, T2, U> function) {
-        return s -> Suite.set(function.apply(s.asExpected(), s.getAt(1).asExpected()));
+        return s -> Suite.set(function.apply(s.asExpected(), s.atLast().asExpected()));
     }
 
     static<U> Action supplier(Supplier<U> supplier) {

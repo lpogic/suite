@@ -11,26 +11,10 @@ public class Link {
         back = this;
     }
 
-    Link(Subject subject) {
-        this.subject = subject;
-        front = this;
-        back = this;
-    }
-
     Link(Link front, Link back, Subject subject) {
         this.subject = subject;
         this.front = front;
         this.back = back;
-    }
-
-    Link(Link front, Link back, Object key, Object value) {
-        subject = key == value ? new BubbleSubject(key) : new CoupleSubject(key, value);
-        this.front = front;
-        this.back = back;
-    }
-
-    void setValue(Object value) {
-        subject = subject.set(subject.key(), value);
     }
 
     Link front() {

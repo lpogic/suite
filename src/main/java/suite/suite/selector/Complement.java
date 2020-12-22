@@ -1,4 +1,6 @@
-package suite.suite;
+package suite.suite.selector;
+
+import suite.suite.Subject;
 
 import java.util.function.Predicate;
 

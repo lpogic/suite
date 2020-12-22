@@ -8,9 +8,11 @@ import java.lang.ref.WeakReference;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class WonkySubject extends SolidSubject {
+public class WonkySubject {} //  extends SolidSubject {
 
-    class HomogenizedSubjectIterator implements Wave<Subject> {
+
+
+    /*class HomogenizedSubjectIterator implements Wave<Subject> {
         Subject sub;
         boolean reverse;
         Wave<Subject> it;
@@ -111,23 +113,23 @@ public class WonkySubject extends SolidSubject {
     }
 
     @Override
-    public <B> B asGiven(Class<B> requestedType) {
-        return get().asGiven(requestedType);
+    public <B> B as(Class<B> requestedType) {
+        return get().as(requestedType);
     }
 
     @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType) {
-        return get().asGiven(requestedType);
+    public <B> B as(Glass<? super B, B> requestedType) {
+        return get().as(requestedType);
     }
 
     @Override
-    public <B> B asGiven(Class<B> requestedType, B substitute) {
-        return get().asGiven(requestedType, substitute);
+    public <B> B as(Class<B> requestedType, B substitute) {
+        return get().as(requestedType, substitute);
     }
 
     @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType, B substitute) {
-        return get().asGiven(requestedType, substitute);
+    public <B> B as(Glass<? super B, B> requestedType, B substitute) {
+        return get().as(requestedType, substitute);
     }
 
     @Override
@@ -319,4 +321,4 @@ public class WonkySubject extends SolidSubject {
     public boolean fused() {
         return subject.fused();
     }
-}
+}*/

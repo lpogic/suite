@@ -41,100 +41,60 @@ class Chain implements Fluid {
         return data.size();
     }
 
-    Link put(Object o) {
+    void put(Object o) {
         Link link = data.get(o);
         if(link != null) {
-            link.subject = new BubbleSubject(o);
+            link.subject = new BasicSubject(o);
         } else {
-            link = new Link(ward.front, ward, new BubbleSubject(o));
+            link = new Link(ward.front, ward, new BasicSubject(o));
             ward.front = ward.front.back = link;
+            data.put(o, link);
         }
-        return link;
     }
 
-    Link put(Object o, Subject $) {
+    void put(Object o, Subject $) {
         Link link = data.get(o);
         if(link != null) {
-            link.subject = new BubbleSubject(o, $);
+            link.subject = new MonoSubject(o, $);
         } else {
-            link = new Link(ward.front, ward, new BubbleSubject(o, $));
+            link = new Link(ward.front, ward, new MonoSubject(o, $));
             ward.front = ward.front.back = link;
+            data.put(o, link);
         }
-        return link;
     }
 
-    Link putIfAbsent(Object o) {
+    void put(Link sequent, Object o) {
         Link link = data.get(o);
         if(link != null) {
-            return link;
+            link.subject = new BasicSubject(o);
+            if(link != sequent) moveBefore(link, sequent);
         } else {
-            link = new Link(ward.front, ward, new BubbleSubject(o));
-            ward.front = ward.front.back = link;
+            link = new Link(sequent.front, sequent, new BasicSubject(o));
+            sequent.front = sequent.front.back = link;
+            data.put(o, link);
         }
-        return link;
     }
 
-    Object put(Link before, Object key, Object value) {
-
-        Link linkJunior = new Link(null, null, key, value);
-        Link linkSenior = data.putIfAbsent(key, linkJunior);
-        Object seniorValue = null;
-
-        if(linkSenior == null) {
-
-            before.front.back = linkJunior;
-            linkJunior.front = before.front;
-            linkJunior.back = before;
-            before.front = linkJunior;
-
+    void put(Link sequent, Object o, Subject $) {
+        Link link = data.get(o);
+        if(link != null) {
+            link.subject = new MonoSubject(o, $);
+            if(link != sequent) moveBefore(link, sequent);
         } else {
-
-            seniorValue = linkSenior.subject.direct();
-            linkSenior.setValue(value);
-            if(linkSenior != before && linkSenior != before.front) {
-
-                linkSenior.front.back = linkSenior.back;
-                linkSenior.back.front = linkSenior.front;
-                before.front.back = linkSenior;
-                linkSenior.front = before.front;
-                linkSenior.back = before;
-                before.front = linkSenior;
-            }
+            link = new Link(sequent.front, sequent, new MonoSubject(o, $));
+            sequent.front = sequent.front.back = link;
+            data.put(o, link);
         }
-
-        return seniorValue;
     }
 
-    void putIfAbsent(Link before, Object key, Object value) {
+    void moveBefore(Link link, Link sequent) {
+        link.front.back = link.back;
+        link.back.front = link.front;
 
-        Link linkJunior = new Link(null, null, key, value);
-        Link linkSenior = data.putIfAbsent(key, linkJunior);
+        link.back = sequent;
+        link.front = sequent.front;
 
-        if(linkSenior == null) {
-
-            before.front.back = linkJunior;
-            linkJunior.front = before.front;
-            linkJunior.back = before;
-            before.front = linkJunior;
-
-        }
-
-    }
-
-    public Object putLast(Object key, Object value) {
-        return put(ward, key, value);
-    }
-
-    public void putLastIfAbsent(Object key, Object value) {
-        putIfAbsent(ward, key, value);
-    }
-
-    public Object putFirst(Object key, Object value) {
-        return put(ward.back, key, value);
-    }
-
-    public void putFirstIfAbsent(Object key, Object value) {
-        putIfAbsent(ward.back, key, value);
+        sequent.front = sequent.front.back = link;
     }
 
     public void remove(Object key) {

@@ -1,4 +1,6 @@
-package suite.suite;
+package suite.suite.tester;
+
+import suite.suite.Subject;
 
 import java.util.function.Predicate;
 

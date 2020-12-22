@@ -16,10 +16,10 @@ public interface Subject extends Fluid {
     Subject get(Object element);
     Object direct();
     <B> B asExpected();
-    <B> B asGiven(Class<B> requestedType);
-    <B> B asGiven(Glass<? super B, B> requestedType);
-    <B> B asGiven(Class<B> requestedType, B reserve);
-    <B> B asGiven(Glass<? super B, B> requestedType, B reserve);
+    <B> B as(Class<B> requestedType);
+    <B> B as(Glass<? super B, B> requestedType);
+    <B> B as(Class<B> requestedType, B reserve);
+    <B> B as(Glass<? super B, B> requestedType, B reserve);
     <B> B orGiven(B reserve);
     <B> B orDo(Supplier<B> supplier);
     boolean instanceOf(Class<?> type);
@@ -29,10 +29,16 @@ public interface Subject extends Fluid {
     Wave<Subject> iterator(boolean reverse);
     Subject set(Object element);
     Subject set(Object element, Subject $set);
+    Subject setBefore(Object sequent, Object element);
+    Subject setBefore(Object sequent, Object element, Subject $set);
     Subject unset();
     Subject unset(Object element);
-    Subject in();
-    Subject in(Object element);
+    default Subject in() {
+        throw new UnsupportedOperationException("Solid method");
+    }
+    default Subject in(Object element) {
+        throw new UnsupportedOperationException("Solid method");
+    }
 
     default Wave<Subject> iterator() {
         return iterator(false);
@@ -58,6 +64,10 @@ public interface Subject extends Fluid {
     }
 
     default Subject setAll(Iterable<?> iterable) {
+        throw new UnsupportedOperationException("Solid method");
+    }
+
+    default Subject unsetAll(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
 
@@ -95,10 +105,10 @@ public interface Subject extends Fluid {
     }
     Object direct();
     <B> B asExpected();
-    <B> B asGiven(Class<B> requestedType);
-    <B> B asGiven(Glass<? super B, B> requestedType);
-    <B> B asGiven(Class<B> requestedType, B substitute);
-    <B> B asGiven(Glass<? super B, B> requestedType, B substitute);
+    <B> B as(Class<B> requestedType);
+    <B> B as(Glass<? super B, B> requestedType);
+    <B> B as(Class<B> requestedType, B substitute);
+    <B> B as(Glass<? super B, B> requestedType, B substitute);
     <B> B orGiven(B substitute);
     <B> B orDo(Supplier<B> supplier);
     boolean instanceOf(Class<?> type);
@@ -107,22 +117,22 @@ public interface Subject extends Fluid {
         return Objects.toString(direct(), "nuLL");
     }
     default int asInt() {
-        return asGiven(Number.class).intValue();
+        return as(Number.class).intValue();
     }
     default short asShort() {
-        return asGiven(Number.class).shortValue();
+        return as(Number.class).shortValue();
     }
     default long asLong() {
-        return asGiven(Number.class).longValue();
+        return as(Number.class).longValue();
     }
     default double asDouble() {
-        return asGiven(Number.class).doubleValue();
+        return as(Number.class).doubleValue();
     }
     default float asFloat() {
-        return asGiven(Number.class).floatValue();
+        return as(Number.class).floatValue();
     }
     default short asByte() {
-        return asGiven(Number.class).byteValue();
+        return as(Number.class).byteValue();
     }
 
     boolean notEmpty();

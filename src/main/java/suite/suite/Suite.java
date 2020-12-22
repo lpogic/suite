@@ -1,6 +1,7 @@
 package suite.suite;
 
 import suite.suite.util.Fluid;
+import suite.suite.util.Query;
 
 import java.util.Iterator;
 import java.util.Stack;
@@ -18,17 +19,19 @@ public class Suite {
         return new SolidSubject();
     }
     public static Subject set(Object element) {
-        return new SolidSubject(new BubbleSubject(element));
+        return new SolidSubject(new MonoSubject(element));
     }
     public static Subject set(Object element, Subject $) {
-        return new SolidSubject(new BubbleSubject(element, $));
+        return new SolidSubject(new MonoSubject(element, $));
     }
     public static Subject inset(Iterable<Subject> source) {
         return new SolidSubject().inset(source);
     }
-    public static Subject setAll(Iterable<Object> source) {
+    public static Subject setAll(Iterable<?> source) {
         return new SolidSubject().setAll(source);
     }
+
+
 
 //    public static Subject fuse(Subject subject) {
 //        if(subject == null) {
@@ -44,31 +47,33 @@ public class Suite {
 //        return new ThreadySubject();
 //    }
 
-    public static Subject wonky() {
-        return new WonkySubject();
-    }
+//    public static Subject wonky() {
+//        return new WonkySubject();
+//    }
 
-    public static Query from(Subject sub) {
-        return new Query(sub);
+    public static Query from(Subject $) {
+        return new Query($);
     }
 
     public static Subject zip(Iterable<Object> keys, Iterable<Object> values) {
         return inset(Fluid.engage(keys, values));
     }
 
-    public static String asString(Fluid $sub) {
+    public static String describe(Fluid $sub) {
         StringBuilder sb = new StringBuilder();
         Stack<Iterator<Subject>> stack = new Stack<>();
         Subject printed = Suite.set();
         stack.add($sub.iterator());
         int goTo = 0;
         while(!stack.empty()) {
-            for(Subject $s : (Iterable<Subject>) stack::peek) {
-                if(!$s.instanceOf(Fluid.class) || printed.get($s.direct()).notEmpty()) {
-                    sb.append("\t".repeat(stack.size() - 1)).append($s.direct()).append(" [ ").append($s.get().direct()).append(" ]\n");
+            Iterator<Subject> it = stack.peek();
+            for(Subject $s : (Iterable<Subject>) () -> it) {
+                sb.append("\t".repeat(stack.size() - 1)).append($s.direct());
+                Subject $ = $s.get();
+                if($.isEmpty()) {
+                    if(it.hasNext())sb.append(" []\n");
                 } else {
-                    Subject $ = $s.get();
-                    sb.append("\t".repeat(stack.size() - 1)).append($s.direct()).append(" [\n");
+                    sb.append(" [\n");
                     stack.add($.iterator());
                     printed.set($);
                     goTo = 1;
@@ -85,8 +90,8 @@ public class Suite {
         return sb.toString();
     }
 
-    public static String asString(Fluid $sub, boolean compressed) {
-        if(!compressed)return asString($sub);
+    public static String describe(Fluid $sub, boolean compressed) {
+        if(!compressed)return describe($sub);
         StringBuilder sb = new StringBuilder();
         Stack<Iterator<Subject>> stack = new Stack<>();
         stack.add($sub.iterator());

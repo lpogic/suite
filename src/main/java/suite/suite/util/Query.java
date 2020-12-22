@@ -1,5 +1,7 @@
-package suite.suite;
+package suite.suite.util;
 
+import suite.suite.Subject;
+import suite.suite.Suite;
 import suite.suite.action.Action;
 
 import java.util.function.Function;
@@ -87,31 +89,18 @@ public class Query {
     }
 
     public Query map(Subject $map) {
-        Subject $r = Suite.set();
-        for(var $s : $result.front()) {
-            $r.input($map.get($s.direct()).front());
-        }
-        $result = $r;
+        $result = $result.convert($ -> $map.at($.direct())).set();
         return this;
     }
 
     public Query map(Action action) {
-        Subject $r = Suite.set();
-        for(var $s : $result.front()) {
-            $r.inset(action.play($s).front());
-        }
-        $result = $r;
+        $result = $result.convert(action).set();
         return this;
     }
 
     public<T> Query map(Class<T> mappedType, Function<T, Object> function) {
-        Subject $r = Suite.set();
-        for(var $s : $result.front()) {
-            if($s.instanceOf(mappedType)) {
-                $r.set($s.key(), function.apply($s.asExpected()));
-            }
-        }
-        $result = $r;
+        $result = $result.convert($ -> $.instanceOf(mappedType) ?
+                Suite.set($.direct(), Suite.set(function.apply($.get().asExpected()))) : $).set();
         return this;
     }
 }

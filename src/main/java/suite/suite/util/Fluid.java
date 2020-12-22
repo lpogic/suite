@@ -47,8 +47,8 @@ public interface Fluid extends Iterable<Subject> {
     }
 
     default Subject atFirst() {
-        Wave<Subject> slime = iterator();
-        return slime.hasNext() ? slime.next() : Suite.set();
+        Wave<Subject> wave = iterator();
+        return wave.hasNext() ? wave.next() : Suite.set();
     }
 
     default Fluid convert(Action action) {
@@ -88,7 +88,7 @@ public interface Fluid extends Iterable<Subject> {
         };
     }
 
-    default Slime<?> keys() {
+    default Slime<?> eachDirect() {
         return () -> new Wave<>() {
             final Iterator<Subject> subIt = iterator();
 
@@ -104,7 +104,7 @@ public interface Fluid extends Iterable<Subject> {
         };
     }
 
-    default<T> Slime<T> keys(Class<T> type) {
+    default<T> Slime<T> eachAs(Class<T> type) {
         return () -> new Wave<>() {
             final Iterator<Subject> subIt = iterator();
 
@@ -115,12 +115,28 @@ public interface Fluid extends Iterable<Subject> {
 
             @Override
             public T next() {
-                return subIt.next().asGiven(type);
+                return subIt.next().as(type);
             }
         };
     }
 
-    default Fluid values() {
+    default<T> Slime<T> eachAs(Glass<? super T,T> type) {
+        return () -> new Wave<>() {
+            final Iterator<Subject> subIt = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return subIt.hasNext();
+            }
+
+            @Override
+            public T next() {
+                return subIt.next().as(type);
+            }
+        };
+    }
+
+    default Fluid eachGet() {
         return () -> new Wave<>() {
             final Iterator<Subject> subIt = iterator();
 
@@ -134,6 +150,10 @@ public interface Fluid extends Iterable<Subject> {
                 return subIt.next().get();
             }
         };
+    }
+
+    default Object direct() {
+        return atFirst().direct();
     }
 
     default Subject set() {

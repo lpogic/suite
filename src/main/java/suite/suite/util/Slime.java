@@ -129,14 +129,8 @@ public interface Slime<T> extends Iterable<T>{
         return list;
     }
 
-    default Subject toSubject(Iterable<?> keysSource) {
-        Iterator<?> v = iterator();
-        Iterator<?> k = keysSource.iterator();
-        Subject subject = Suite.set();
-        while (v.hasNext() && k.hasNext()) {
-            subject.set(k.next(), v.next());
-        }
-        return subject;
+    default Subject toSubject() {
+        return Suite.setAll(this);
     }
 
     default String toString(String separator) {

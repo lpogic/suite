@@ -236,37 +236,37 @@ class ThreadySubject {}/* implements Subject {
     }
 
     @Override
-    public <B> B asGiven(Class<B> requestedType) {
+    public <B> B as(Class<B> requestedType) {
         B b;
         try(var ignored = readLock.lock()) {
-            b = subject.asGiven(requestedType);
+            b = subject.as(requestedType);
         }
         return b;
     }
 
     @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType) {
+    public <B> B as(Glass<? super B, B> requestedType) {
         B b;
         try(var ignored = readLock.lock()) {
-            b = subject.asGiven(requestedType);
+            b = subject.as(requestedType);
         }
         return b;
     }
 
     @Override
-    public <B> B asGiven(Class<B> requestedType, B reserve) {
+    public <B> B as(Class<B> requestedType, B reserve) {
         B b;
         try(var ignored = readLock.lock()) {
-            b = subject.asGiven(requestedType, reserve);
+            b = subject.as(requestedType, reserve);
         }
         return b;
     }
 
     @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType, B reserve) {
+    public <B> B as(Glass<? super B, B> requestedType, B reserve) {
         B b;
         try(var ignored = readLock.lock()) {
-            b = subject.asGiven(requestedType, reserve);
+            b = subject.as(requestedType, reserve);
         }
         return b;
     }

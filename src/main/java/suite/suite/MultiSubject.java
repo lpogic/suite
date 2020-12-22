@@ -52,23 +52,23 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public <B> B asGiven(Class<B> requestedType) {
-        return chain.getFirst().subject.asGiven(requestedType);
+    public <B> B as(Class<B> requestedType) {
+        return chain.getFirst().subject.as(requestedType);
     }
 
     @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType) {
-        return chain.getFirst().subject.asGiven(requestedType);
+    public <B> B as(Glass<? super B, B> requestedType) {
+        return chain.getFirst().subject.as(requestedType);
     }
 
     @Override
-    public <B> B asGiven(Class<B> requestedType, B reserve) {
-        return chain.getFirst().subject.asGiven(requestedType, reserve);
+    public <B> B as(Class<B> requestedType, B reserve) {
+        return chain.getFirst().subject.as(requestedType, reserve);
     }
 
     @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType, B reserve) {
-        return chain.getFirst().subject.asGiven(requestedType, reserve);
+    public <B> B as(Glass<? super B, B> requestedType, B reserve) {
+        return chain.getFirst().subject.as(requestedType, reserve);
     }
 
     @Override
@@ -114,7 +114,20 @@ class MultiSubject implements Subject {
 
     @Override
     public Subject set(Object element, Subject $set) {
-        return null;
+        chain.put(element, $set);
+        return this;
+    }
+
+    @Override
+    public Subject setBefore(Object sequent, Object element) {
+        chain.put(chain.get(sequent), element);
+        return this;
+    }
+
+    @Override
+    public Subject setBefore(Object sequent, Object element, Subject $set) {
+        chain.put(chain.get(sequent), element, $set);
+        return this;
     }
 
     @Override
@@ -127,15 +140,5 @@ class MultiSubject implements Subject {
     public Subject unset(Object element) {
         chain.remove(element);
         return this;
-    }
-
-    @Override
-    public Subject in() {
-        return chain.put(new Suite.AutoKey()).subject;
-    }
-
-    @Override
-    public Subject in(Object element) {
-        return chain.putIfAbsent(element).subject;
     }
 }

@@ -1,6 +1,5 @@
 package suite.suite.util;
 
-import suite.suite.Slot;
 import suite.suite.Subject;
 import suite.suite.Suite;
 
@@ -32,11 +31,11 @@ public class Cascade<T> implements Wave<T> {
 
     @Override
     public T next() {
-        return stored.notEmpty() ? stored.takeAt(Slot.PRIME).asExpected() : iterator.next();
+        return stored.notEmpty() ? stored.take(stored.atFirst().direct()).asExpected() : iterator.next();
     }
 
     public void store(T t) {
-        stored.add(t);
+        stored.in().set(t);
     }
 
     public int getFalls() {
@@ -72,7 +71,7 @@ public class Cascade<T> implements Wave<T> {
 
     public Slime<T> toEnd() {
         falls = 0;
-        return () -> new Wave<T>() {
+        return () -> new Wave<>() {
             @Override
             public boolean hasNext() {
                 return Cascade.this.hasNext();

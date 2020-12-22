@@ -116,23 +116,23 @@ class FuseSubject {}/* implements Subject {
     }
 
     @Override
-    public <B> B asGiven(Class<B> requestedType) {
-        return subject.asGiven(requestedType);
+    public <B> B as(Class<B> requestedType) {
+        return subject.as(requestedType);
     }
 
     @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType) {
-        return subject.asGiven(requestedType);
+    public <B> B as(Glass<? super B, B> requestedType) {
+        return subject.as(requestedType);
     }
 
     @Override
-    public <B> B asGiven(Class<B> requestedType, B reserve) {
-        return subject.asGiven(requestedType, reserve);
+    public <B> B as(Class<B> requestedType, B reserve) {
+        return subject.as(requestedType, reserve);
     }
 
     @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType, B reserve) {
-        return subject.asGiven(requestedType, reserve);
+    public <B> B as(Glass<? super B, B> requestedType, B reserve) {
+        return subject.as(requestedType, reserve);
     }
 
     @Override

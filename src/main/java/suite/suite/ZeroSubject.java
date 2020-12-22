@@ -52,22 +52,22 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public <B> B asGiven(Class<B> requestedType) {
+    public <B> B as(Class<B> requestedType) {
         throw new NoSuchElementException("ZeroSubject");
     }
 
     @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType) {
+    public <B> B as(Glass<? super B, B> requestedType) {
         throw new NoSuchElementException("ZeroSubject");
     }
 
     @Override
-    public <B> B asGiven(Class<B> requestedType, B reserve) {
+    public <B> B as(Class<B> requestedType, B reserve) {
         return reserve;
     }
 
     @Override
-    public <B> B asGiven(Glass<? super B, B> requestedType, B reserve) {
+    public <B> B as(Glass<? super B, B> requestedType, B reserve) {
         return reserve;
     }
 
@@ -108,12 +108,22 @@ class ZeroSubject implements Subject {
 
     @Override
     public Subject set(Object element) {
-        return new BubbleSubject(element);
+        return new MonoSubject(element);
     }
 
     @Override
     public Subject set(Object element, Subject $set) {
-        return new BubbleSubject(element, $set);
+        return new MonoSubject(element, $set);
+    }
+
+    @Override
+    public Subject setBefore(Object sequent, Object element) {
+        return new MonoSubject(element);
+    }
+
+    @Override
+    public Subject setBefore(Object sequent, Object element, Subject $set) {
+        return new MonoSubject(element, $set);
     }
 
     @Override
@@ -128,11 +138,11 @@ class ZeroSubject implements Subject {
 
     @Override
     public Subject in() {
-        return new BubbleSubject(new Suite.AutoKey());
+        return new MonoSubject(new Suite.AutoKey());
     }
 
     @Override
     public Subject in(Object element) {
-        return new BubbleSubject(element);
+        return new MonoSubject(element);
     }
 }
