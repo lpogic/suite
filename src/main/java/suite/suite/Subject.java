@@ -48,6 +48,10 @@ public interface Subject extends Fluid {
         return test.test(this) ? set(element) : this;
     }
 
+    default Subject add(Subject $sub) {
+        return set(new Suite.AutoKey(), $sub);
+    }
+
     default Fluid front() {
         throw new UnsupportedOperationException("Solid method");
     }
