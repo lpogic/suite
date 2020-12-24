@@ -2,8 +2,6 @@ package suite.suite;
 
 import suite.suite.util.*;
 
-import java.util.Objects;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -48,6 +46,10 @@ public interface Subject extends Fluid {
         return test.test(this) ? set(element) : this;
     }
 
+    default Subject setIfEmpty(Object element) {
+        return at(element).isEmpty() ? set(element) : this;
+    }
+
     default Subject add(Subject $sub) {
         return set(new Suite.AutoKey(), $sub);
     }
@@ -64,6 +66,10 @@ public interface Subject extends Fluid {
     }
 
     default Subject inset(Iterable<? extends Subject> iterable) {
+        throw new UnsupportedOperationException("Solid method");
+    }
+
+    default Subject insetBefore(Object sequent, Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
 

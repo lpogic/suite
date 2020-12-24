@@ -222,6 +222,14 @@ public class SolidSubject implements Subject {
     }
 
     @Override
+    public Subject insetBefore(Object sequent, Iterable<? extends Subject> iterable) {
+        for(var it : iterable) {
+            subject = subject.setBefore(sequent, it.direct(), it.get());
+        }
+        return this;
+    }
+
+    @Override
     public Subject setAll(Iterable<?> iterable) {
         for(Object it : iterable) {
             subject = subject.set(it);
