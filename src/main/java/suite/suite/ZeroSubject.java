@@ -88,12 +88,12 @@ class ZeroSubject implements Subject {
 
     @Override
     public boolean notEmpty() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return true;
     }
 
     @Override
