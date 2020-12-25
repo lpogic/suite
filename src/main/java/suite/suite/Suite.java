@@ -61,6 +61,60 @@ public class Suite {
 
     public static String describe(Fluid $sub) {
         StringBuilder sb = new StringBuilder();
+        Stack<Subject> stack = new Stack<>();
+        Subject printed = Suite.set();
+        stack.add(Suite.set($sub).set($sub.iterator()));
+        int goTo = 0;
+        boolean tabsBefore = false;
+        while(!stack.empty()) {
+            var $1 = stack.peek();
+            Subject $current = $1.asExpected();
+            Iterator<Subject> it = $1.atLast().asExpected();
+            for(Subject $s : (Iterable<Subject>) () -> it) {
+                if(tabsBefore)sb.append("\t".repeat(stack.size() - 1));
+                tabsBefore = false;
+                sb.append($s.direct()).append(" ");
+                Subject $ = $s.get();
+                if($.isEmpty()) {
+                    if($current.size() > 1) {
+                        sb.append("[]\n");
+                        tabsBefore = true;
+                    }
+                } else {
+                    if(printed.at($).notEmpty()) {
+                        sb.append("[ ... ]\n");
+                        tabsBefore = true;
+                    } else {
+                        if($.size() > 1) {
+                            sb.append("[\n");
+                            tabsBefore = true;
+                        } else {
+                            sb.append("[ ");
+                        }
+                        stack.add(Suite.set($).set($.iterator()));
+                        printed.set($);
+                        goTo = 1;
+                        break;
+                    }
+                }
+            }
+            if(goTo == 1) {
+                goTo = 0;
+                continue;
+            }
+            stack.pop();
+            if(stack.size() > 0) {
+                if(tabsBefore) sb.append("\t".repeat(stack.size() - 1));
+                sb.append("]\n");
+                tabsBefore = true;
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String describe(Fluid $sub, boolean compressed) {
+        if(!compressed)return describe($sub);
+        StringBuilder sb = new StringBuilder();
         Stack<Iterator<Subject>> stack = new Stack<>();
         Subject printed = Suite.set();
         stack.add($sub.iterator());
@@ -71,16 +125,14 @@ public class Suite {
                 sb.append($s.direct());
                 Subject $ = $s.get();
                 if($.isEmpty()) {
-                    if(it.hasNext())sb.append(" []\n").append("\t".repeat(stack.size()));
+                    if(it.hasNext()) {
+                        sb.append("[]");
+                    }
                 } else {
                     if(printed.at($).notEmpty()) {
-                        sb.append(" [ ... ]\n").append("\t".repeat(stack.size()));
+                        sb.append("[...]");
                     } else {
-                        if($.size() > 0) {
-                            sb.append(" [\n").append("\t".repeat(stack.size()));
-                        } else {
-                            sb.append(" [ ");
-                        }
+                        sb.append("[");
                         stack.add($.iterator());
                         printed.set($);
                         goTo = 1;
@@ -93,35 +145,9 @@ public class Suite {
                 continue;
             }
             stack.pop();
-            if(stack.size() > 0)sb.append("]\n").append("\t".repeat(stack.size()));
-        }
-        return sb.toString();
-    }
-
-    public static String describe(Fluid $sub, boolean compressed) {
-        if(!compressed)return describe($sub);
-        StringBuilder sb = new StringBuilder();
-        Stack<Iterator<Subject>> stack = new Stack<>();
-        stack.add($sub.iterator());
-        int goTo = 0;
-        while(!stack.empty()) {
-            for(Subject $s : (Iterable<Subject>) stack::peek) {
-                if($s.instanceOf(Fluid.class)) {
-                    Subject $ = $s.get();
-                    sb.append($s.direct()).append("[");
-                    stack.add($.iterator());
-                    goTo = 1;
-                    break;
-                } else {
-                    sb.append($s.direct()).append("[").append($s.direct()).append("]");
-                }
+            if(stack.size() > 0) {
+                sb.append("]");
             }
-            if(goTo == 1) {
-                goTo = 0;
-                continue;
-            }
-            stack.pop();
-            if(stack.size() > 0)sb.append("]");
         }
         return sb.toString();
     }
