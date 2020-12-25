@@ -68,16 +68,24 @@ public class Suite {
         while(!stack.empty()) {
             Iterator<Subject> it = stack.peek();
             for(Subject $s : (Iterable<Subject>) () -> it) {
-                sb.append("\t".repeat(stack.size() - 1)).append($s.direct());
+                sb.append($s.direct());
                 Subject $ = $s.get();
                 if($.isEmpty()) {
-                    if(it.hasNext())sb.append(" []\n");
+                    if(it.hasNext())sb.append(" []\n").append("\t".repeat(stack.size()));
                 } else {
-                    sb.append(" [\n");
-                    stack.add($.iterator());
-                    printed.set($);
-                    goTo = 1;
-                    break;
+                    if(printed.at($).notEmpty()) {
+                        sb.append(" [ ... ]\n").append("\t".repeat(stack.size()));
+                    } else {
+                        if($.size() > 0) {
+                            sb.append(" [\n").append("\t".repeat(stack.size()));
+                        } else {
+                            sb.append(" [ ");
+                        }
+                        stack.add($.iterator());
+                        printed.set($);
+                        goTo = 1;
+                        break;
+                    }
                 }
             }
             if(goTo == 1) {
@@ -85,7 +93,7 @@ public class Suite {
                 continue;
             }
             stack.pop();
-            if(stack.size() > 0)sb.append("\t".repeat(stack.size() - 1)).append("]\n");
+            if(stack.size() > 0)sb.append("]\n").append("\t".repeat(stack.size()));
         }
         return sb.toString();
     }
