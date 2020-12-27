@@ -2,6 +2,7 @@ package suite.suite;
 
 import suite.suite.util.Fluid;
 import suite.suite.util.Query;
+import suite.suite.util.Wave;
 
 import java.util.Iterator;
 import java.util.Stack;
@@ -150,6 +151,31 @@ public class Suite {
             }
         }
         return sb.toString();
+    }
+
+    public static Fluid dfs(Subject $sub, boolean includeRoot) {
+        return () -> new Wave<>() {
+            final Stack<Iterator<Subject>> stack = new Stack<>();
+            {
+                stack.add(includeRoot ? Suite.set(null, $sub).eachGet().iterator() :  $sub.eachGet().iterator());
+            }
+
+            @Override
+            public boolean hasNext() {
+                while(!stack.isEmpty()) {
+                    if(stack.peek().hasNext()) return true;
+                    stack.pop();
+                }
+                return false;
+            }
+
+            @Override
+            public Subject next() {
+                Subject $ = stack.peek().next();
+                stack.push($.eachGet().iterator());
+                return $;
+            }
+        };
     }
 
 }
