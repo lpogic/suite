@@ -6,6 +6,7 @@ import suite.suite.Suite;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -80,7 +81,7 @@ public interface Slime<T> extends Iterable<T>{
         return Wave::emptyWave;
     }
 
-    default<O> Slime<O> map(Function<T, O> function) {
+    default<O> Slime<O> each(Function<T, O> function) {
         return () -> new Wave<>() {
             final Iterator<T> origin = iterator();
 
@@ -92,6 +93,22 @@ public interface Slime<T> extends Iterable<T>{
             @Override
             public O next() {
                 return function.apply(origin.next());
+            }
+        };
+    }
+
+    default<P, O> Slime<O> each(P param, BiFunction<T, P, O> function) {
+        return () -> new Wave<>() {
+            final Iterator<T> origin = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return origin.hasNext();
+            }
+
+            @Override
+            public O next() {
+                return function.apply(origin.next(), param);
             }
         };
     }

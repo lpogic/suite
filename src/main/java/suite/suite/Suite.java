@@ -1,10 +1,13 @@
 package suite.suite;
 
 import suite.suite.util.Fluid;
+import suite.suite.util.Glass;
 import suite.suite.util.Query;
 import suite.suite.util.Wave;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 public class Suite {
@@ -176,6 +179,32 @@ public class Suite {
                 return $;
             }
         };
+    }
+
+    public static <B> List<B> asListOf(Subject $, Class<B> elementType) {
+        return asListOf($, Glass.of(elementType));
+    }
+    public static <B> List<B> asListOf(Subject $, Glass<B, B> elementType) {
+        return $.as(Glass.List(elementType));
+    }
+    public static <B> List<B> asListOf(Subject $, Class<B> elementType, List<B> reserve) {
+        return asListOf($, Glass.of(elementType), reserve);
+    }
+    public static <B> List<B> asListOf(Subject $, Glass<B, B> elementType, List<B> reserve) {
+        return $.as(Glass.List(elementType), reserve);
+    }
+
+    public static <A, B> Map<A, B> asMapOf(Subject $, Class<A> keyType, Class<B> valueType) {
+        return asMapOf($, Glass.of(keyType), Glass.of(valueType));
+    }
+    public static <A, B> Map<A, B> asMapOf(Subject $, Glass<A, A> keyType, Glass<B, B> valueType) {
+        return $.as(Glass.Map(keyType, valueType));
+    }
+    public static <A, B> Map<A, B> asMapOf(Subject $, Class<A> keyType, Class<B> valueType, Map<A, B> reserve) {
+        return asMapOf($, Glass.of(keyType), Glass.of(valueType), reserve);
+    }
+    public static <A, B> Map<A, B> asMapOf(Subject $, Glass<A, A> keyType, Glass<B, B> valueType, Map<A, B> reserve) {
+        return $.as(Glass.Map(keyType, valueType), reserve);
     }
 
 }

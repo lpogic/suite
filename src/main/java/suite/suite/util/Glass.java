@@ -2,13 +2,14 @@ package suite.suite.util;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class Glass<C, G extends C> implements Serializable {
 
     public abstract G cast(Object o);
-    public abstract Glass[] getGenerics();
+    public abstract Glass<?,?>[] getGenerics();
 
     private final Class<C> c;
 
@@ -30,8 +31,8 @@ public abstract class Glass<C, G extends C> implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Glass && ((Glass) obj).getMainClass().equals(getMainClass())
-                && Arrays.equals(((Glass) obj).getGenerics(), getGenerics());
+        return obj instanceof Glass && ((Glass<?, ?>) obj).getMainClass().equals(getMainClass())
+                && Arrays.equals(((Glass<?, ?>) obj).getGenerics(), getGenerics());
     }
 
     @Override
@@ -48,13 +49,28 @@ public abstract class Glass<C, G extends C> implements Serializable {
             }
 
             @Override
-            public Glass[] getGenerics() {
+            public Glass<?, ?>[] getGenerics() {
                 return new Glass[0];
             }
         };
     }
 
-    public static<A, B> Glass<Map, Map<A, B>> map(Class<A> a, Class<B> b) {
+    public static<A> Glass<List, List<A>> List(Glass<A, ? super A> a) {
+        return new Glass<>(List.class) {
+
+            @Override
+            public List<A> cast(Object o) {
+                return (List<A>)o;
+            }
+
+            @Override
+            public Glass<?, ?>[] getGenerics() {
+                return new Glass[]{a};
+            }
+        };
+    }
+
+    public static<A, B> Glass<Map, Map<A, B>> Map(Glass<A, ? super A> a, Glass<B, ? super B> b) {
         return new Glass<>(Map.class) {
 
             @Override
@@ -63,8 +79,8 @@ public abstract class Glass<C, G extends C> implements Serializable {
             }
 
             @Override
-            public Glass[] getGenerics() {
-                return new Glass[]{Glass.of(a), Glass.of(b)};
+            public Glass<?, ?>[] getGenerics() {
+                return new Glass[]{a, b};
             }
         };
     }
