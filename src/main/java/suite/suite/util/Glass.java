@@ -55,7 +55,7 @@ public abstract class Glass<C, G extends C> implements Serializable {
         };
     }
 
-    public static<A> Glass<List, List<A>> List(Glass<A, ? super A> a) {
+    public static<A> Glass<List, List<A>> List(Glass<? super A, A> a) {
         return new Glass<>(List.class) {
 
             @Override
@@ -70,7 +70,7 @@ public abstract class Glass<C, G extends C> implements Serializable {
         };
     }
 
-    public static<A, B> Glass<Map, Map<A, B>> Map(Glass<A, ? super A> a, Glass<B, ? super B> b) {
+    public static<A, B> Glass<Map, Map<A, B>> Map(Glass<? super A, A> a, Glass<? super B, B> b) {
         return new Glass<>(Map.class) {
 
             @Override
