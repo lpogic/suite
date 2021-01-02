@@ -28,9 +28,13 @@ public class Main {
         System.out.println(Suite.describe(sub));
         var $1 = Suite.set("d");
         var $ = Suite.set("a", Suite.set("b").set("c", $1).set("c1", Suite.set("d").set("h", Suite.set("i").set("j")).
-                set($1, $1)).set("e", Suite.set("f")).set("g").set("k", Suite.set("l", Suite.set("m").set("n"))));
+                set($1)).set("e", Suite.set("f")).set("g").set("k", Suite.set("l", Suite.set("m").set("n"))));
         System.out.println("\n\n");
         System.out.println(Suite.describe($));
         System.out.println(Suite.describe($, true));
+        for(var ss : Suite.dfs($)) {
+            System.out.println(">".repeat(20));
+            System.out.println(Suite.describe(ss));
+        }
     }
 }

@@ -23,10 +23,13 @@ public class Suite {
         return new SolidSubject();
     }
     public static Subject set(Object element) {
-        return new SolidSubject(new MonoSubject(element));
+        return new SolidSubject(new BasicSubject(element));
     }
     public static Subject set(Object element, Subject $) {
         return new SolidSubject(new MonoSubject(element, $));
+    }
+    public static Subject add(Subject $) {
+        return new SolidSubject(new MonoSubject(new AutoKey(), $));
     }
     public static Subject inset(Iterable<Subject> source) {
         return new SolidSubject().inset(source);
@@ -156,57 +159,39 @@ public class Suite {
         return sb.toString();
     }
 
-    public enum Dfs {
-        ITEM, DEPTH;
-
-        public static Fluid execute(Subject $sub, Subject $template) {
-            return () -> new Wave<>() {
-                final Stack<Iterator<Subject>> stack = new Stack<>();
-                {
-                    stack.add(Suite.set(null, $sub).eachGet().iterator());
-                }
-
-                @Override
-                public boolean hasNext() {
-                    while(!stack.isEmpty()) {
-                        if(stack.peek().hasNext()) return true;
-                        stack.pop();
-                    }
-                    return false;
-                }
-
-                @Override
-                public Subject next() {
-                    Subject $ = Suite.set();
-                    Subject $item = stack.peek().next();
-                    if($template.isEmpty()) {
-                        $.set($item);
-                    } else {
-                        for(var $it : $template) {
-                            var $itv = $it.get();
-                            switch ($it.as(Dfs.class, null)) {
-                                case ITEM -> $.in($itv.isEmpty() ? ITEM : $itv.direct()).set($item);
-                                case DEPTH -> {
-                                    int stackSize = stack.size();
-                                    $.in($itv.isEmpty() ? DEPTH : $itv.direct()).set(stackSize);
-                                }
-                                default -> System.err.println("Wrong template key");
-                            }
-                        }
-                    }
-                    stack.push($.eachGet().iterator());
-                    return $;
-                }
-            };
-        }
-    }
-
     public static Fluid dfs(Subject $sub) {
-        return Dfs.execute($sub, Suite.set());
-    }
+        return () -> new Wave<>() {
+            final Stack<Iterator<Subject>> stack = new Stack<>();
+            final Stack<Subject> subjectStack = new Stack<>();
+            {
+                stack.add(Suite.set(null, $sub).eachGet().iterator());
+                dig();
+            }
 
-    public static Fluid dfs(Subject $sub, Subject $template) {
-        return Dfs.execute($sub, $template);
+            @Override
+            public boolean hasNext() {
+                return subjectStack.size() > 0;
+            }
+
+            @Override
+            public Subject next() {
+                Subject $ = subjectStack.pop();
+                stack.pop();
+                dig();
+                return $;
+            }
+
+            private void dig() {
+                while (stack.size() > 0 && stack.peek().hasNext()) {
+                    while (stack.peek().hasNext()) {
+                        subjectStack.add(stack.peek().next());
+                        stack.add(subjectStack.peek().eachGet().iterator());
+                    }
+                    subjectStack.pop();
+                    stack.pop();
+                }
+            }
+        };
     }
 
     public static <B> List<B> asListOf(Subject $, Class<B> elementType) {
