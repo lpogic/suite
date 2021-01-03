@@ -394,9 +394,9 @@ class ThreadySubject {}/* implements Subject {
     }
 
     @Override
-    public Subject inset(Iterable<? extends Subject> iterable) {
+    public Subject join(Iterable<? extends Subject> iterable) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.inset(iterable);
+            subject = subject.join(iterable);
         }
         return this;
     }

@@ -268,7 +268,7 @@ public class WonkySubject {} //  extends SolidSubject {
     }
 
     @Override
-    public Subject inset(Iterable<? extends Subject> iterable) {
+    public Subject join(Iterable<? extends Subject> iterable) {
         for(Subject v : iterable) {
             subject = subject.set(v.key(), v.direct());
         }

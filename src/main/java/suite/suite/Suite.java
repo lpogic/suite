@@ -32,7 +32,7 @@ public class Suite {
         return new SolidSubject(new MonoSubject(new AutoKey(), $));
     }
     public static Subject inset(Iterable<Subject> source) {
-        return new SolidSubject().inset(source);
+        return new SolidSubject().join(source);
     }
     public static Subject setAll(Iterable<?> source) {
         return new SolidSubject().setAll(source);

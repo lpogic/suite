@@ -24,7 +24,7 @@ public class Main {
 
         System.out.println("end");
         System.out.println(Suite.describe(sub));
-        sub.inset(Suite.set("B", Suite.set("b")).set("A", Suite.set("a")).set("C", Suite.set("c")));
+        sub.join(Suite.set("B", Suite.set("b")).set("A", Suite.set("a")).set("C", Suite.set("c")));
         System.out.println(Suite.describe(sub));
         var $1 = Suite.set("d");
         var $ = Suite.set("a", Suite.set("b").set("c", $1).set("c1", Suite.set("d").set("h", Suite.set("i").set("j")).

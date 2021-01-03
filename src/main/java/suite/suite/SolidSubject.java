@@ -197,6 +197,15 @@ public class SolidSubject implements Subject {
     }
 
     @Override
+    public Subject inset(Object... elements) {
+        Subject $ = subject;
+        for(Object e : elements) {
+            $ = $.in(e);
+        }
+        return this;
+    }
+
+    @Override
     public Fluid front() {
         return this;
     }
@@ -214,7 +223,7 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Subject inset(Iterable<? extends Subject> iterable) {
+    public Subject join(Iterable<? extends Subject> iterable) {
         for(var it : iterable) {
             subject = subject.set(it.direct(), it.get());
         }
@@ -222,7 +231,7 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Subject insetBefore(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject joinBefore(Object sequent, Iterable<? extends Subject> iterable) {
         for(var it : iterable) {
             subject = subject.setBefore(sequent, it.direct(), it.get());
         }

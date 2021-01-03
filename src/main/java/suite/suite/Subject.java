@@ -54,6 +54,10 @@ public interface Subject extends Fluid {
         return set(new Suite.AutoKey(), $sub);
     }
 
+    default Subject inset(Object ... elements) {
+        throw new UnsupportedOperationException("Solid method");
+    }
+
     default Fluid front() {
         throw new UnsupportedOperationException("Solid method");
     }
@@ -65,11 +69,11 @@ public interface Subject extends Fluid {
         throw new UnsupportedOperationException("Solid method");
     }
 
-    default Subject inset(Iterable<? extends Subject> iterable) {
+    default Subject join(Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
 
-    default Subject insetBefore(Object sequent, Iterable<? extends Subject> iterable) {
+    default Subject joinBefore(Object sequent, Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
 
