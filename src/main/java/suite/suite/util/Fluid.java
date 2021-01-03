@@ -157,7 +157,7 @@ public interface Fluid extends Iterable<Subject> {
     }
 
     default Subject set() {
-        return Suite.inset(this);
+        return Suite.join(this);
     }
 
     static Fluid source(Iterable<Subject> iterable) {

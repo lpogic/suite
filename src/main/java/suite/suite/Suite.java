@@ -31,7 +31,10 @@ public class Suite {
     public static Subject add(Subject $) {
         return new SolidSubject(new MonoSubject(new AutoKey(), $));
     }
-    public static Subject inset(Iterable<Subject> source) {
+    public static Subject inset(Object ... elements) {
+        return new SolidSubject().inset(elements);
+    }
+    public static Subject join(Iterable<Subject> source) {
         return new SolidSubject().join(source);
     }
     public static Subject setAll(Iterable<?> source) {
@@ -63,7 +66,7 @@ public class Suite {
     }
 
     public static Subject zip(Iterable<Object> keys, Iterable<Object> values) {
-        return inset(Fluid.engage(keys, values));
+        return join(Fluid.engage(keys, values));
     }
 
     public static String describe(Fluid $sub) {
