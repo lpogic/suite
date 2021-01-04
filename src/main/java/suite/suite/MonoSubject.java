@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 class MonoSubject implements Subject {
 
     private final Object element;
-    private Subject subject;
+    private Vendor subject;
     private Link ward;
 
     public MonoSubject(Object element) {
@@ -18,7 +18,7 @@ class MonoSubject implements Subject {
         this.subject = Suite.set();
     }
 
-    public MonoSubject(Object element, Subject subject) {
+    public MonoSubject(Object element, Vendor subject) {
         this.element = element;
         this.subject = subject;
     }
@@ -33,27 +33,27 @@ class MonoSubject implements Subject {
     }
 
     @Override
-    public Subject atFirst() {
+    public Vendor atFirst() {
         return this;
     }
 
     @Override
-    public Subject atLast() {
+    public Vendor atLast() {
         return this;
     }
 
     @Override
-    public Subject at(Object element) {
+    public Vendor at(Object element) {
         return Objects.equals(this.element, element) ? this : ZeroSubject.getInstance();
     }
 
     @Override
-    public Subject get() {
+    public Vendor get() {
         return subject;
     }
 
     @Override
-    public Subject get(Object element) {
+    public Vendor get(Object element) {
         return Objects.equals(this.element, element) ? subject : ZeroSubject.getInstance();
     }
 
@@ -118,7 +118,7 @@ class MonoSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(boolean reverse) {
+    public Wave<Vendor> iterator(boolean reverse) {
         link();
         return new LinkIterator(reverse, ward, ward);
     }
@@ -134,7 +134,7 @@ class MonoSubject implements Subject {
     }
 
     @Override
-    public Subject set(Object element, Subject $set) {
+    public Subject set(Object element, Vendor $set) {
         if(Objects.equals(this.element, element)) {
             subject = $set;
             return this;
@@ -154,7 +154,7 @@ class MonoSubject implements Subject {
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element, Subject $set) {
+    public Subject setBefore(Object sequent, Object element, Vendor $set) {
         if(Objects.equals(this.element, element)) {
             subject = $set;
             return this;

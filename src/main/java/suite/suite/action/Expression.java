@@ -1,6 +1,6 @@
 package suite.suite.action;
 
-import suite.suite.Subject;
+import suite.suite.Vendor;
 import suite.suite.Suite;
 
 import java.util.function.Supplier;
@@ -12,17 +12,17 @@ public interface Expression extends Action {
         return () -> Suite.set(supplier.get());
     }
 
-    Subject play();
+    Vendor play();
 
-    default Subject play(Subject in) {
+    default Vendor play(Vendor in) {
         return play();
     }
 
-    default Subject gamble() throws Exception {
+    default Vendor gamble() throws Exception {
         return play();
     }
 
-    default Subject gamble(Subject in) throws Exception {
+    default Vendor gamble(Vendor in) throws Exception {
         return play();
     }
 }

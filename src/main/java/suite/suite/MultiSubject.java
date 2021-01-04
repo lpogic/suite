@@ -17,27 +17,27 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Subject atFirst() {
+    public Vendor atFirst() {
         return chain.getFirst().subject;
     }
 
     @Override
-    public Subject atLast() {
+    public Vendor atLast() {
         return chain.getLast().subject;
     }
 
     @Override
-    public Subject at(Object element) {
+    public Vendor at(Object element) {
         return chain.get(element).subject;
     }
 
     @Override
-    public Subject get() {
+    public Vendor get() {
         return atFirst().get();
     }
 
     @Override
-    public Subject get(Object element) {
+    public Vendor get(Object element) {
         return at(element).get();
     }
 
@@ -102,7 +102,7 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(boolean reverse) {
+    public Wave<Vendor> iterator(boolean reverse) {
         return chain.iterator(reverse);
     }
 
@@ -113,7 +113,7 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Subject set(Object element, Subject $set) {
+    public Subject set(Object element, Vendor $set) {
         chain.put(element, $set);
         return this;
     }
@@ -125,7 +125,7 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element, Subject $set) {
+    public Subject setBefore(Object sequent, Object element, Vendor $set) {
         chain.put(chain.get(sequent), element, $set);
         return this;
     }

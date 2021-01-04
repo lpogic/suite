@@ -10,13 +10,13 @@ import java.util.function.Supplier;
 
 public class SolidSubject implements Subject {
 
-    class HomogenizedSubjectIterator implements Wave<Subject> {
-        Subject sub;
+    class HomogenizedSubjectIterator implements Wave<Vendor> {
+        Vendor sub;
         boolean reverse;
-        Wave<Subject> it;
+        Wave<Vendor> it;
 
 
-        HomogenizedSubjectIterator(Subject sub, boolean reverse) {
+        HomogenizedSubjectIterator(Vendor sub, boolean reverse) {
             this.sub = sub;
             this.reverse = reverse;
             this.it = sub.iterator(reverse);
@@ -36,43 +36,43 @@ public class SolidSubject implements Subject {
         }
 
         @Override
-        public Subject next() {
-            return new SolidSubject(it.next().separate());
+        public Vendor next() {
+            return new SolidSubject(it.next().separate().set());
         }
     }
 
-    private Subject subject;
+    private Vendor subject;
 
     public SolidSubject() {
         subject = ZeroSubject.getInstance();
     }
 
-    public SolidSubject(Subject subject) {
+    public SolidSubject(Vendor subject) {
         this.subject = subject.separate();
     }
 
     @Override
-    public Subject atFirst() {
+    public Vendor atFirst() {
         return new SolidSubject(subject.atFirst().separate());
     }
 
     @Override
-    public Subject atLast() {
+    public Vendor atLast() {
         return new SolidSubject(subject.atLast().separate());
     }
 
     @Override
-    public Subject at(Object key) {
+    public Vendor at(Object key) {
         return new SolidSubject(subject.at(key).separate());
     }
 
     @Override
-    public Subject get() {
+    public Vendor get() {
         return subject.get();
     }
 
     @Override
-    public Subject get(Object key) {
+    public Vendor get(Object key) {
         return subject.get(key);
     }
 
@@ -137,71 +137,85 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(boolean reverse) {
+    public Wave<Vendor> iterator(boolean reverse) {
         return new HomogenizedSubjectIterator(subject, reverse);
     }
 
     @Override
     public Subject set(Object element) {
-        subject = subject.set(element);
+        subject = subject.set().set(element);
         return this;
     }
 
     @Override
-    public Subject set(Object element, Subject $set) {
-        subject = subject.set(element, $set);
+    public Subject set(Object element, Vendor $set) {
+        subject = subject.set().set(element, $set);
         return this;
     }
 
     @Override
     public Subject setBefore(Object sequent, Object element) {
-        subject = subject.setBefore(sequent, element);
+        subject = subject.set().setBefore(sequent, element);
         return this;
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element, Subject $set) {
-        subject = subject.setBefore(sequent, element, $set);
+    public Subject setBefore(Object sequent, Object element, Vendor $set) {
+        subject = subject.set().setBefore(sequent, element, $set);
         return this;
     }
 
     @Override
-    public Subject setIf(Object element, Predicate<Subject> test) {
-        subject = subject.setIf(element, test);
+    public Subject setIf(Object element, Predicate<Vendor> test) {
+        subject = subject.set().setIf(element, test);
         return this;
     }
 
     @Override
     public Subject unset() {
-        subject = subject.unset();
+        subject = subject.set().unset();
         return this;
     }
 
     @Override
     public Subject unset(Object element) {
-        subject = subject.unset(element);
+        subject = subject.set().unset(element);
         return this;
     }
 
     @Override
     public Subject in() {
-        var k = new Suite.AutoKey();
-        subject = subject.set(k);
-        return subject.get(k);
+        var $ = Suite.set();
+        subject = subject.set().set(new Suite.AutoKey(), $);
+        return $;
     }
 
     @Override
     public Subject in(Object key) {
-        subject = subject.setIf(key, new IsFree(key));
-        return subject.get(key);
+        var at = subject.at(key);
+        if(at.isEmpty()) {
+            var $ = Suite.set();
+            subject = subject.set().set(key, $);
+            return $;
+        } else {
+            var $ = at.get().set();
+            subject = subject.set().set(at.direct(), $);
+            return $;
+        }
     }
 
     @Override
     public Subject inset(Object... elements) {
-        Subject $ = subject;
+        Subject $ = this;
+        int i = 0;
+        Object o = null;
         for(Object e : elements) {
-            $ = $.in(e);
+            if(i > 0) $ = $.in(o);
+            o = e;
+            ++i;
         }
+        if(i > 0) $.set(o);
+
         return this;
     }
 
@@ -216,46 +230,54 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Subject take(Object key) {
-        Subject taken = at(key);
-        if(taken.notEmpty()) subject = subject.unset(key);
+    public Vendor take(Object key) {
+        Vendor taken = at(key);
+        if(taken.notEmpty()) subject = subject.set().unset(key);
         return taken;
     }
 
     @Override
-    public Subject join(Iterable<? extends Subject> iterable) {
+    public Subject join(Iterable<? extends Vendor> iterable) {
+        var $ = subject.set();
         for(var it : iterable) {
-            subject = subject.set(it.direct(), it.get());
+            $ = $.set(it.direct(), it.get());
         }
+        subject = $;
         return this;
     }
 
     @Override
-    public Subject joinBefore(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject joinBefore(Object sequent, Iterable<? extends Vendor> iterable) {
+        var $ = subject.set();
         for(var it : iterable) {
-            subject = subject.setBefore(sequent, it.direct(), it.get());
+            $ = $.setBefore(sequent, it.direct(), it.get());
         }
+        subject = $;
         return this;
     }
 
     @Override
     public Subject setAll(Iterable<?> iterable) {
+        var $ = subject.set();
         for(Object it : iterable) {
-            subject = subject.set(it);
+            $ = $.set(it);
         }
+        subject = $;
         return this;
     }
 
     @Override
     public Subject unsetAll(Iterable<?> iterable) {
-        for(var it : iterable) {
-            subject = subject.unset(it);
+        var $ = subject.set();
+        for(Object it : iterable) {
+            $ = $.unset(it);
         }
+        subject = $;
         return this;
     }
 
     @Override
-    public Subject separate() {
+    public Vendor separate() {
         return subject.separate();
     }
 }

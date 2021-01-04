@@ -1,34 +1,13 @@
 package suite.suite;
 
-import suite.suite.util.*;
-
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
-public interface Subject extends Fluid {
+public interface Subject extends Vendor {
 
-    Subject atFirst();
-    Subject atLast();
-    Subject at(Object element);
-    Subject get();
-    Subject get(Object element);
-    Object direct();
-    <B> B asExpected();
-    <B> B as(Class<B> requestedType);
-    <B> B as(Glass<? super B, B> requestedType);
-    <B> B as(Class<B> requestedType, B reserve);
-    <B> B as(Glass<? super B, B> requestedType, B reserve);
-    <B> B orGiven(B reserve);
-    <B> B orDo(Supplier<B> supplier);
-    boolean instanceOf(Class<?> type);
-    boolean notEmpty();
-    boolean isEmpty();
-    int size();
-    Wave<Subject> iterator(boolean reverse);
     Subject set(Object element);
-    Subject set(Object element, Subject $set);
+    Subject set(Object element, Vendor $set);
     Subject setBefore(Object sequent, Object element);
-    Subject setBefore(Object sequent, Object element, Subject $set);
+    Subject setBefore(Object sequent, Object element, Vendor $set);
     Subject unset();
     Subject unset(Object element);
     default Subject in() {
@@ -38,11 +17,7 @@ public interface Subject extends Fluid {
         throw new UnsupportedOperationException("Solid method");
     }
 
-    default Wave<Subject> iterator() {
-        return iterator(false);
-    }
-
-    default Subject setIf(Object element, Predicate<Subject> test) {
+    default Subject setIf(Object element, Predicate<Vendor> test) {
         return test.test(this) ? set(element) : this;
     }
 
@@ -58,22 +33,15 @@ public interface Subject extends Fluid {
         throw new UnsupportedOperationException("Solid method");
     }
 
-    default Fluid front() {
-        throw new UnsupportedOperationException("Solid method");
-    }
-    default Fluid reverse() {
+    default Vendor take(Object key) {
         throw new UnsupportedOperationException("Solid method");
     }
 
-    default Subject take(Object key) {
+    default Subject join(Iterable<? extends Vendor> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
 
-    default Subject join(Iterable<? extends Subject> iterable) {
-        throw new UnsupportedOperationException("Solid method");
-    }
-
-    default Subject joinBefore(Object sequent, Iterable<? extends Subject> iterable) {
+    default Subject joinBefore(Object sequent, Iterable<? extends Vendor> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
 
@@ -85,8 +53,8 @@ public interface Subject extends Fluid {
         throw new UnsupportedOperationException("Solid method");
     }
 
-    default Subject separate() {
+    @Override
+    default Subject set() {
         return this;
     }
-
 }

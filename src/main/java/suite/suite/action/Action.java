@@ -1,7 +1,7 @@
 package suite.suite.action;
 
 import suite.suite.Suite;
-import suite.suite.Subject;
+import suite.suite.Vendor;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -11,17 +11,17 @@ import java.util.function.Supplier;
 @FunctionalInterface
 public interface Action {
 
-    default Subject play() {
+    default Vendor play() {
         return play(Suite.set());
     }
 
-    Subject play(Subject in);
+    Vendor play(Vendor in);
 
-    default Subject gamble() throws Exception {
+    default Vendor gamble() throws Exception {
         return play(Suite.set());
     }
 
-    default Subject gamble(Subject in) throws Exception {
+    default Vendor gamble(Vendor in) throws Exception {
         return play(in);
     }
 

@@ -17,28 +17,28 @@ class BasicSubject implements Subject {
     }
 
     @Override
-    public Subject atFirst() {
+    public Vendor atFirst() {
         return this;
     }
 
     @Override
-    public Subject atLast() {
+    public Vendor atLast() {
         return this;
     }
 
     @Override
-    public Subject at(Object element) {
+    public Vendor at(Object element) {
         return Objects.equals(this.element, element) ? this : ZeroSubject.getInstance();
     }
 
     @Override
-    public Subject get() {
-        return ZeroSubject.getInstance();
+    public Vendor get() {
+        return Suite.set();
     }
 
     @Override
-    public Subject get(Object element) {
-        return ZeroSubject.getInstance();
+    public Vendor get(Object element) {
+        return Suite.set();
     }
 
     @Override
@@ -111,7 +111,7 @@ class BasicSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(boolean reverse) {
+    public Wave<Vendor> iterator(boolean reverse) {
         link();
         return new LinkIterator(reverse, ward, ward);
     }
@@ -126,7 +126,7 @@ class BasicSubject implements Subject {
     }
 
     @Override
-    public Subject set(Object element, Subject $set) {
+    public Subject set(Object element, Vendor $set) {
         if(Objects.equals(this.element, element)) {
             return new MonoSubject(element, $set);
         } else {
@@ -144,7 +144,7 @@ class BasicSubject implements Subject {
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element, Subject $set) {
+    public Subject setBefore(Object sequent, Object element, Vendor $set) {
         if(Objects.equals(this.element, element)) {
             return new MonoSubject(element, $set);
         } else {

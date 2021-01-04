@@ -17,28 +17,28 @@ class ZeroSubject implements Subject {
     private ZeroSubject() {}
 
     @Override
-    public Subject atFirst() {
+    public Vendor atFirst() {
         return this;
     }
 
     @Override
-    public Subject atLast() {
+    public Vendor atLast() {
         return this;
     }
 
     @Override
-    public Subject at(Object element) {
+    public Vendor at(Object element) {
         return this;
     }
 
     @Override
-    public Subject get() {
-        return this;
+    public Vendor get() {
+        return Suite.set();
     }
 
     @Override
-    public Subject get(Object element) {
-        return this;
+    public Vendor get(Object element) {
+        return Suite.set();
     }
 
     @Override
@@ -102,7 +102,7 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(boolean reverse) {
+    public Wave<Vendor> iterator(boolean reverse) {
         return Wave.emptyWave();
     }
 
@@ -112,7 +112,7 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public Subject set(Object element, Subject $set) {
+    public Subject set(Object element, Vendor $set) {
         return new MonoSubject(element, $set);
     }
 
@@ -122,7 +122,7 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element, Subject $set) {
+    public Subject setBefore(Object sequent, Object element, Vendor $set) {
         return new MonoSubject(element, $set);
     }
 
@@ -134,15 +134,5 @@ class ZeroSubject implements Subject {
     @Override
     public Subject unset(Object element) {
         return this;
-    }
-
-    @Override
-    public Subject in() {
-        return new MonoSubject(new Suite.AutoKey());
-    }
-
-    @Override
-    public Subject in(Object element) {
-        return new MonoSubject(element);
     }
 }

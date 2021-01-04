@@ -34,7 +34,7 @@ public class Suite {
     public static Subject inset(Object ... elements) {
         return new SolidSubject().inset(elements);
     }
-    public static Subject join(Iterable<Subject> source) {
+    public static Subject join(Iterable<Vendor> source) {
         return new SolidSubject().join(source);
     }
     public static Subject setAll(Iterable<?> source) {
@@ -84,7 +84,7 @@ public class Suite {
                 if(tabsBefore)sb.append("\t".repeat(stack.size() - 1));
                 tabsBefore = false;
                 sb.append($s.direct()).append(" ");
-                Subject $ = $s.get();
+                Vendor $ = $s.get();
                 if($.isEmpty()) {
                     if($current.size() > 1) {
                         sb.append("[]\n");
@@ -125,15 +125,15 @@ public class Suite {
     public static String describe(Fluid $sub, boolean compressed) {
         if(!compressed)return describe($sub);
         StringBuilder sb = new StringBuilder();
-        Stack<Iterator<Subject>> stack = new Stack<>();
+        Stack<Iterator<Vendor>> stack = new Stack<>();
         Subject printed = Suite.set();
         stack.add($sub.iterator());
         int goTo = 0;
         while(!stack.empty()) {
-            Iterator<Subject> it = stack.peek();
-            for(Subject $s : (Iterable<Subject>) () -> it) {
+            Iterator<Vendor> it = stack.peek();
+            for(var $s : (Iterable<Vendor>) () -> it) {
                 sb.append($s.direct());
-                Subject $ = $s.get();
+                var $ = $s.get();
                 if($.isEmpty()) {
                     if(it.hasNext()) {
                         sb.append("[]");
@@ -164,8 +164,8 @@ public class Suite {
 
     public static Fluid dfs(Subject $sub) {
         return () -> new Wave<>() {
-            final Stack<Iterator<Subject>> stack = new Stack<>();
-            final Stack<Subject> subjectStack = new Stack<>();
+            final Stack<Iterator<Vendor>> stack = new Stack<>();
+            final Stack<Vendor> subjectStack = new Stack<>();
             {
                 stack.add(Suite.set(null, $sub).eachGet().iterator());
                 dig();
@@ -177,8 +177,8 @@ public class Suite {
             }
 
             @Override
-            public Subject next() {
-                Subject $ = subjectStack.pop();
+            public Vendor next() {
+                var $ = subjectStack.pop();
                 stack.pop();
                 dig();
                 return $;

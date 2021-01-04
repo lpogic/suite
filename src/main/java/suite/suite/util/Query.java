@@ -2,6 +2,7 @@ package suite.suite.util;
 
 import suite.suite.Subject;
 import suite.suite.Suite;
+import suite.suite.Vendor;
 import suite.suite.action.Action;
 
 import java.util.function.Function;
@@ -9,8 +10,8 @@ import java.util.function.Supplier;
 
 public class Query {
 
-    private final Subject $source;
-    private Subject $result;
+    private final Vendor $source;
+    private Vendor $result;
 
     public Query(Subject $source) {
         this.$source = $source;
@@ -76,7 +77,7 @@ public class Query {
         return $result.orDo(supplier);
     }
 
-    public<B> B orDo(Function<Subject, B> function) {
+    public<B> B orDo(Function<Vendor, B> function) {
         return $result.isEmpty() ? function.apply($source) : $result.asExpected();
     }
 
