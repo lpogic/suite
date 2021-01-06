@@ -1,153 +1,166 @@
 package suite.suite;
 
-import suite.suite.util.Wave;
 import suite.suite.util.Glass;
+import suite.suite.util.Wave;
 
-import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
-class ZeroSubject implements Subject {
+public class ImaginarySubject implements Subject {
 
-    private static final ZeroSubject instance = new ZeroSubject();
+    private Subject subject;
+    private final Object frontier;
 
-    static ZeroSubject getInstance() {
-        return instance;
+    ImaginarySubject(Subject subject, Object frontier) {
+        this.subject = subject;
+        this.frontier = frontier;
     }
-
-    private ZeroSubject() {}
 
     @Override
     public Subject at(Object element) {
         return new ImaginarySubject(this, element);
     }
 
+    Subject burnAndJump() {
+        subject = subject.burn(frontier);
+        return jump();
+    }
+
+    Subject jump() {
+        return subject.jump(frontier);
+    }
+
     @Override
     public Subject burn(Object element) {
-        return new MonoSubject(element);
+        return burnAndJump().burn(element);
     }
 
     @Override
     public Subject jump(Object element) {
-        return this;
+        return jump().jump(element);
     }
 
     @Override
     public boolean burned(Object element) {
-        return false;
+        return jump().burned(element);
     }
 
     @Override
     public Subject getFirst() {
-        return this;
+        return jump().getFirst();
     }
 
     @Override
     public Subject getLast() {
-        return this;
+        return jump().getLast();
     }
 
     @Override
     public Subject get(Object element) {
-        return this;
+        return jump().get(element);
     }
 
     @Override
     public Object direct() {
-        return null;
+        return jump().direct();
     }
 
     @Override
     public <B> B asExpected() {
-        throw new NoSuchElementException("ZeroSubject");
+        return jump().asExpected();
     }
 
     @Override
     public <B> B as(Class<B> requestedType) {
-        throw new NoSuchElementException("ZeroSubject");
+        return jump().as(requestedType);
     }
 
     @Override
     public <B> B as(Glass<? super B, B> requestedType) {
-        throw new NoSuchElementException("ZeroSubject");
+        return jump().as(requestedType);
     }
 
     @Override
     public <B> B as(Class<B> requestedType, B reserve) {
-        return reserve;
+        return jump().as(requestedType, reserve);
     }
 
     @Override
     public <B> B as(Glass<? super B, B> requestedType, B reserve) {
-        return reserve;
+        return jump().as(requestedType, reserve);
     }
 
     @Override
     public <B> B orGiven(B reserve) {
-        return reserve;
+        return jump().orGiven(reserve);
     }
 
     @Override
     public <B> B orDo(Supplier<B> supplier) {
-        return supplier.get();
+        return jump().orDo(supplier);
     }
 
     @Override
     public boolean is(Class<?> type) {
-        return false;
+        return jump().is(type);
     }
 
     @Override
     public boolean present() {
-        return false;
+        return jump().present();
     }
 
     @Override
     public boolean absent() {
-        return true;
+        return jump().absent();
     }
 
     @Override
     public int size() {
-        return 0;
+        return jump().size();
     }
 
     @Override
     public Wave<Subject> iterator(boolean reverse) {
-        return Wave.emptyWave();
+        return jump().iterator(reverse);
     }
 
     @Override
     public Subject set(Object element) {
-        return new MonoSubject(element);
+        return burnAndJump().set(element);
     }
 
     @Override
     public Subject set(Object element, Subject $set) {
-        return new MonoSubject(element, $set);
+        return burnAndJump().set(element, $set);
     }
 
     @Override
     public Subject setBefore(Object sequent, Object element) {
-        return new MonoSubject(element);
+        return burnAndJump().setBefore(sequent, element);
     }
 
     @Override
     public Subject setBefore(Object sequent, Object element, Subject $set) {
-        return new MonoSubject(element, $set);
+        return burnAndJump().setBefore(sequent, element, $set);
     }
 
     @Override
     public Subject unset() {
-        return this;
+        return burnAndJump().unset();
     }
 
     @Override
     public Subject unset(Object element) {
-        return this;
+        return burnAndJump().unset(element);
     }
 
     @Override
     public Subject separate() {
         return this;
+    }
+
+    @Override
+    public Subject set() {
+        return burnAndJump();
     }
 }

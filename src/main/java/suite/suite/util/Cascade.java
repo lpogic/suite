@@ -19,7 +19,7 @@ public class Cascade<T> implements Wave<T> {
 
     @Override
     public boolean hasNext() {
-        return stored.notEmpty() || iterator.hasNext();
+        return stored.present() || iterator.hasNext();
     }
 
     public boolean hasNext(Predicate<T> predicate) {
@@ -31,11 +31,11 @@ public class Cascade<T> implements Wave<T> {
 
     @Override
     public T next() {
-        return stored.notEmpty() ? stored.take(stored.atFirst().direct()).asExpected() : iterator.next();
+        return stored.present() ? stored.take(stored.direct()).asExpected() : iterator.next();
     }
 
     public void store(T t) {
-        stored.in().set(t);
+        stored.at().set(t);
     }
 
     public int getFalls() {

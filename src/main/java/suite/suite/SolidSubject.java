@@ -1,6 +1,5 @@
 package suite.suite;
 
-import suite.suite.tester.IsFree;
 import suite.suite.util.Wave;
 import suite.suite.util.Fluid;
 import suite.suite.util.Glass;
@@ -10,13 +9,13 @@ import java.util.function.Supplier;
 
 public class SolidSubject implements Subject {
 
-    class HomogenizedSubjectIterator implements Wave<Vendor> {
-        Vendor sub;
+    class HomogenizedSubjectIterator implements Wave<Subject> {
+        Subject sub;
         boolean reverse;
-        Wave<Vendor> it;
+        Wave<Subject> it;
 
 
-        HomogenizedSubjectIterator(Vendor sub, boolean reverse) {
+        HomogenizedSubjectIterator(Subject sub, boolean reverse) {
             this.sub = sub;
             this.reverse = reverse;
             this.it = sub.iterator(reverse);
@@ -36,44 +35,55 @@ public class SolidSubject implements Subject {
         }
 
         @Override
-        public Vendor next() {
-            return new SolidSubject(it.next().separate().set());
+        public Subject next() {
+            return new SolidSubject(it.next());
         }
     }
 
-    private Vendor subject;
+    private Subject subject;
 
     public SolidSubject() {
         subject = ZeroSubject.getInstance();
     }
 
-    public SolidSubject(Vendor subject) {
+    public SolidSubject(Subject subject) {
         this.subject = subject.separate();
     }
 
     @Override
-    public Vendor atFirst() {
-        return new SolidSubject(subject.atFirst().separate());
+    public Subject at(Object element) {
+        return new SolidSubject(new ImaginarySubject(this, element));
     }
 
     @Override
-    public Vendor atLast() {
-        return new SolidSubject(subject.atLast().separate());
+    public Subject burn(Object element) {
+        subject = subject.burn(element);
+        return this;
     }
 
     @Override
-    public Vendor at(Object key) {
-        return new SolidSubject(subject.at(key).separate());
+    public Subject jump(Object element) {
+        return subject.jump(element);
     }
 
     @Override
-    public Vendor get() {
-        return subject.get();
+    public boolean burned(Object element) {
+        return subject.burned(element);
     }
 
     @Override
-    public Vendor get(Object key) {
-        return subject.get(key);
+    public Subject getFirst() {
+        return new SolidSubject(subject.getFirst());
+    }
+
+    @Override
+    public Subject getLast() {
+        return new SolidSubject(subject.getLast());
+    }
+
+    @Override
+    public Subject get(Object element) {
+        return new SolidSubject(subject.get(element));
     }
 
     @Override
@@ -117,18 +127,18 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public boolean instanceOf(Class<?> type) {
-        return subject.instanceOf(type);
+    public boolean is(Class<?> type) {
+        return subject.is(type);
     }
 
     @Override
-    public boolean notEmpty() {
-        return subject.notEmpty();
+    public boolean present() {
+        return subject.present();
     }
 
     @Override
-    public boolean isEmpty() {
-        return subject.isEmpty();
+    public boolean absent() {
+        return subject.absent();
     }
 
     @Override
@@ -137,71 +147,50 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Wave<Vendor> iterator(boolean reverse) {
+    public Wave<Subject> iterator(boolean reverse) {
         return new HomogenizedSubjectIterator(subject, reverse);
     }
 
     @Override
     public Subject set(Object element) {
-        subject = subject.set().set(element);
+        subject = subject.set(element);
         return this;
     }
 
     @Override
-    public Subject set(Object element, Vendor $set) {
-        subject = subject.set().set(element, $set);
+    public Subject set(Object element, Subject $set) {
+        subject = subject.set(element, $set);
         return this;
     }
 
     @Override
     public Subject setBefore(Object sequent, Object element) {
-        subject = subject.set().setBefore(sequent, element);
+        subject = subject.setBefore(sequent, element);
         return this;
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element, Vendor $set) {
-        subject = subject.set().setBefore(sequent, element, $set);
+    public Subject setBefore(Object sequent, Object element, Subject $set) {
+        subject = subject.setBefore(sequent, element, $set);
         return this;
     }
 
     @Override
-    public Subject setIf(Object element, Predicate<Vendor> test) {
-        subject = subject.set().setIf(element, test);
+    public Subject setIf(Object element, Predicate<Subject> test) {
+        subject = subject.setIf(element, test);
         return this;
     }
 
     @Override
     public Subject unset() {
-        subject = subject.set().unset();
+        subject = subject.unset();
         return this;
     }
 
     @Override
     public Subject unset(Object element) {
-        subject = subject.set().unset(element);
+        subject = subject.unset(element);
         return this;
-    }
-
-    @Override
-    public Subject in() {
-        var $ = Suite.set();
-        subject = subject.set().set(new Suite.AutoKey(), $);
-        return $;
-    }
-
-    @Override
-    public Subject in(Object key) {
-        var at = subject.at(key);
-        if(at.isEmpty()) {
-            var $ = Suite.set();
-            subject = subject.set().set(key, $);
-            return $;
-        } else {
-            var $ = at.get().set();
-            subject = subject.set().set(at.direct(), $);
-            return $;
-        }
     }
 
     @Override
@@ -210,7 +199,7 @@ public class SolidSubject implements Subject {
         int i = 0;
         Object o = null;
         for(Object e : elements) {
-            if(i > 0) $ = $.in(o);
+            if(i > 0) $ = $.at(o);
             o = e;
             ++i;
         }
@@ -230,35 +219,54 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Vendor take(Object key) {
-        Vendor taken = at(key);
-        if(taken.notEmpty()) subject = subject.set().unset(key);
+    public Subject take(Object key) {
+        Subject taken = get(key);
+        if(taken.present()) subject = subject.unset(key);
         return taken;
     }
 
     @Override
-    public Subject join(Iterable<? extends Vendor> iterable) {
-        var $ = subject.set();
+    public Subject join(Iterable<? extends Subject> iterable) {
+        var $ = subject;
         for(var it : iterable) {
-            $ = $.set(it.direct(), it.get());
+            Object o = it.direct();
+            if(it.burned(o)) {
+                $ = $.set(o, it.jump(o));
+            } else {
+                $ = $.set(o);
+            }
         }
         subject = $;
         return this;
     }
 
     @Override
-    public Subject joinBefore(Object sequent, Iterable<? extends Vendor> iterable) {
-        var $ = subject.set();
+    public Subject joinBefore(Object sequent, Iterable<? extends Subject> iterable) {
+        var $ = subject;
         for(var it : iterable) {
-            $ = $.setBefore(sequent, it.direct(), it.get());
+            Object o = it.direct();
+            if(it.burned(o)) {
+                $ = $.setBefore(sequent, o, it.jump(o));
+            } else {
+                $ = $.setBefore(sequent, o);
+            }
         }
         subject = $;
         return this;
+    }
+
+    @Override
+    public Subject getAll(Iterable<?> iterable) {
+        var $ = Suite.set();
+        for(Object it : iterable) {
+            $.join(get(it));
+        }
+        return $;
     }
 
     @Override
     public Subject setAll(Iterable<?> iterable) {
-        var $ = subject.set();
+        var $ = subject;
         for(Object it : iterable) {
             $ = $.set(it);
         }
@@ -268,7 +276,7 @@ public class SolidSubject implements Subject {
 
     @Override
     public Subject unsetAll(Iterable<?> iterable) {
-        var $ = subject.set();
+        var $ = subject;
         for(Object it : iterable) {
             $ = $.unset(it);
         }
@@ -277,7 +285,22 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Vendor separate() {
+    public Subject takeAll(Iterable<?> iterable) {
+        var $ = Suite.set();
+        for(Object it : iterable) {
+            $.join(take(it));
+        }
+        return $;
+    }
+
+    @Override
+    public Subject separate() {
         return subject.separate();
+    }
+
+    @Override
+    public Subject set() {
+        subject = subject.set();
+        return this;
     }
 }

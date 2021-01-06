@@ -17,28 +17,39 @@ class BasicSubject implements Subject {
     }
 
     @Override
-    public Vendor atFirst() {
+    public Subject at(Object element) {
+        return new ImaginarySubject(this, element);
+    }
+
+    @Override
+    public Subject burn(Object element) {
+        return Objects.equals(this.element, element) ?
+                new MonoSubject(this.element) : new MultiSubject(link()).burn(element);
+    }
+
+    @Override
+    public Subject jump(Object element) {
+        return ZeroSubject.getInstance();
+    }
+
+    @Override
+    public boolean burned(Object element) {
+        return false;
+    }
+
+    @Override
+    public Subject getFirst() {
         return this;
     }
 
     @Override
-    public Vendor atLast() {
+    public Subject getLast() {
         return this;
     }
 
     @Override
-    public Vendor at(Object element) {
+    public Subject get(Object element) {
         return Objects.equals(this.element, element) ? this : ZeroSubject.getInstance();
-    }
-
-    @Override
-    public Vendor get() {
-        return Suite.set();
-    }
-
-    @Override
-    public Vendor get(Object element) {
-        return Suite.set();
     }
 
     @Override
@@ -82,17 +93,17 @@ class BasicSubject implements Subject {
     }
 
     @Override
-    public boolean instanceOf(Class<?> type) {
+    public boolean is(Class<?> type) {
         return type.isInstance(element);
     }
 
     @Override
-    public boolean notEmpty() {
+    public boolean present() {
         return true;
     }
 
     @Override
-    public boolean isEmpty() {
+    public boolean absent() {
         return false;
     }
 
@@ -111,7 +122,7 @@ class BasicSubject implements Subject {
     }
 
     @Override
-    public Wave<Vendor> iterator(boolean reverse) {
+    public Wave<Subject> iterator(boolean reverse) {
         link();
         return new LinkIterator(reverse, ward, ward);
     }
@@ -126,7 +137,7 @@ class BasicSubject implements Subject {
     }
 
     @Override
-    public Subject set(Object element, Vendor $set) {
+    public Subject set(Object element, Subject $set) {
         if(Objects.equals(this.element, element)) {
             return new MonoSubject(element, $set);
         } else {
@@ -144,7 +155,7 @@ class BasicSubject implements Subject {
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element, Vendor $set) {
+    public Subject setBefore(Object sequent, Object element, Subject $set) {
         if(Objects.equals(this.element, element)) {
             return new MonoSubject(element, $set);
         } else {

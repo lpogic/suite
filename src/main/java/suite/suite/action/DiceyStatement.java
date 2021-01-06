@@ -1,6 +1,6 @@
 package suite.suite.action;
 
-import suite.suite.Vendor;
+import suite.suite.Subject;
 import suite.suite.Suite;
 
 @FunctionalInterface
@@ -9,11 +9,11 @@ public interface DiceyStatement extends DiceyImpression {
     void strive() throws Exception;
 
     @Override
-    default void strive(Vendor in) throws Exception {
+    default void strive(Subject in) throws Exception {
         strive();
     }
 
-    default Vendor play() {
+    default Subject play() {
         try {
             strive();
         } catch (Exception e) {
@@ -22,7 +22,7 @@ public interface DiceyStatement extends DiceyImpression {
         return Suite.set();
     }
 
-    default Vendor play(Vendor in) {
+    default Subject play(Subject in) {
         try {
             strive();
         } catch (Exception e) {
@@ -31,12 +31,12 @@ public interface DiceyStatement extends DiceyImpression {
         return Suite.set();
     }
 
-    default Vendor gamble() throws Exception {
+    default Subject gamble() throws Exception {
         strive();
         return Suite.set();
     }
 
-    default Vendor gamble(Vendor in) throws Exception {
+    default Subject gamble(Subject in) throws Exception {
         strive();
         return Suite.set();
     }

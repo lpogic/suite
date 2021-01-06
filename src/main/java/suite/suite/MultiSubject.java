@@ -17,82 +17,98 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Vendor atFirst() {
-        return chain.getFirst().subject;
+    public Subject at(Object element) {
+        return new ImaginarySubject(this, element);
     }
 
     @Override
-    public Vendor atLast() {
+    public Subject burn(Object element) {
+        var link = chain.get(element);
+        if(link == chain.ward) {
+            chain.put(element, Suite.set());
+        } else {
+            link.subject = link.subject.burn(element);
+        }
+        return this;
+    }
+
+    @Override
+    public Subject jump(Object element) {
+        return chain.get(element).subject.jump(element);
+    }
+
+    @Override
+    public boolean burned(Object element) {
+        return chain.get(element).subject.burned(element);
+    }
+
+    @Override
+    public Subject getFirst() {
+        return chain.first().subject;
+    }
+
+    @Override
+    public Subject getLast() {
         return chain.getLast().subject;
     }
 
     @Override
-    public Vendor at(Object element) {
+    public Subject get(Object element) {
         return chain.get(element).subject;
     }
 
     @Override
-    public Vendor get() {
-        return atFirst().get();
-    }
-
-    @Override
-    public Vendor get(Object element) {
-        return at(element).get();
-    }
-
-    @Override
     public Object direct() {
-        return chain.getFirst().subject.direct();
+        return chain.first().subject.direct();
     }
     
     @Override
     public <B> B asExpected() {
-        return chain.getFirst().subject.asExpected();
+        return chain.first().subject.asExpected();
     }
 
     @Override
     public <B> B as(Class<B> requestedType) {
-        return chain.getFirst().subject.as(requestedType);
+        return chain.first().subject.as(requestedType);
     }
 
     @Override
     public <B> B as(Glass<? super B, B> requestedType) {
-        return chain.getFirst().subject.as(requestedType);
+        return chain.first().subject.as(requestedType);
     }
 
     @Override
     public <B> B as(Class<B> requestedType, B reserve) {
-        return chain.getFirst().subject.as(requestedType, reserve);
+        return chain.first().subject.as(requestedType, reserve);
     }
 
     @Override
     public <B> B as(Glass<? super B, B> requestedType, B reserve) {
-        return chain.getFirst().subject.as(requestedType, reserve);
+        return chain.first().subject.as(requestedType, reserve);
     }
 
     @Override
     public <B> B orGiven(B reserve) {
-        return chain.getFirst().subject.orGiven(reserve);
+        return chain.first().subject.orGiven(reserve);
     }
 
     @Override
     public <B> B orDo(Supplier<B> supplier) {
-        return chain.getFirst().subject.orDo(supplier);
+        return chain.first().subject.orDo(supplier);
     }
 
     @Override
-    public boolean instanceOf(Class<?> type) {
-        return chain.getFirst().subject.instanceOf(type);
+    public boolean is(Class<?> type) {
+        return chain.first().subject.is(type);
     }
 
     @Override
-    public boolean notEmpty() {
+    public boolean present() {
         return chain.size() > 0;
     }
 
     @Override
-    public boolean isEmpty() {
+    public boolean absent() {
         return chain.size() == 0;
     }
 
@@ -102,7 +118,7 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Wave<Vendor> iterator(boolean reverse) {
+    public Wave<Subject> iterator(boolean reverse) {
         return chain.iterator(reverse);
     }
 
@@ -113,7 +129,7 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Subject set(Object element, Vendor $set) {
+    public Subject set(Object element, Subject $set) {
         chain.put(element, $set);
         return this;
     }
@@ -125,7 +141,7 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element, Vendor $set) {
+    public Subject setBefore(Object sequent, Object element, Subject $set) {
         chain.put(chain.get(sequent), element, $set);
         return this;
     }
@@ -139,6 +155,11 @@ class MultiSubject implements Subject {
     @Override
     public Subject unset(Object element) {
         chain.remove(element);
+        return this;
+    }
+
+    @Override
+    public Subject separate() {
         return this;
     }
 }

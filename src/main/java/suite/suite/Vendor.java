@@ -1,44 +1,67 @@
 package suite.suite;
 
-import suite.suite.util.Fluid;
-import suite.suite.util.Glass;
-import suite.suite.util.Wave;
-
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
-public interface Vendor extends Fluid {
+public interface Vendor extends Subject {
 
-    Vendor atFirst();
-    Vendor atLast();
-    Vendor at(Object element);
-    Vendor get();
-    Vendor get(Object element);
-    Object direct();
-    <B> B asExpected();
-    <B> B as(Class<B> requestedType);
-    <B> B as(Glass<? super B, B> requestedType);
-    <B> B as(Class<B> requestedType, B reserve);
-    <B> B as(Glass<? super B, B> requestedType, B reserve);
-    <B> B orGiven(B reserve);
-    <B> B orDo(Supplier<B> supplier);
-    boolean instanceOf(Class<?> type);
-    boolean notEmpty();
-    boolean isEmpty();
-    int size();
-    Wave<Vendor> iterator(boolean reverse);
-    default Wave<Vendor> iterator() {
-        return iterator(false);
+    default Subject set(Object element) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+    default Subject set(Object element, Subject $set) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+    default Subject setBefore(Object sequent, Object element)  {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+    default Subject setBefore(Object sequent, Object element, Subject $set) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+    default Subject unset() {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+    default Subject unset(Object element) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+    default Subject in() {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+    default Subject in(Object element) {
+        throw new UnsupportedOperationException("Vendor is immutable");
     }
 
-    default Fluid front() {
-        throw new UnsupportedOperationException("Solid method");
-    }
-    default Fluid reverse() {
-        throw new UnsupportedOperationException("Solid method");
+    default Subject setIf(Object element, Predicate<Subject> test) {
+        throw new UnsupportedOperationException("Vendor is immutable");
     }
 
-    default Vendor separate() {
-        return this;
+    default Subject setIfEmpty(Object element) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+
+    default Subject add(Subject $sub) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+
+    default Subject inset(Object ... elements) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+
+    default Subject take(Object key) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+
+    default Subject join(Iterable<? extends Subject> iterable) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+
+    default Subject joinBefore(Object sequent, Iterable<? extends Subject> iterable) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+
+    default Subject setAll(Iterable<?> iterable) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+
+    default Subject unsetAll(Iterable<?> iterable) {
+        throw new UnsupportedOperationException("Vendor is immutable");
     }
 }

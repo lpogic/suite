@@ -8,108 +8,42 @@ import java.util.function.Supplier;
 
 class FuseSubject {}/* implements Subject {
 
-    private Subject subject;
-    private boolean active = true;
+    Subject subject;
 
-    FuseSubject(Subject subject) {
+    public FuseSubject(Subject subject) {
         this.subject = subject;
     }
 
-    private void safe() {
-        if(active) {
-            subject = Suite.join(subject.front());
-            active = false;
-        }
+    @Override
+    public Subject atFirst() {
+        return subject.atFirst();
     }
 
     @Override
-    public Subject set(Object element) {
-        safe();
-        return subject.set(element);
+    public Subject atLast() {
+        return subject.atLast();
     }
 
     @Override
-    public Subject set(Object key, Object value) {
-        safe();
-        return subject.set(key, value);
+    public Subject at(Object element) {
+        return subject.at(element);
     }
 
     @Override
-    public Subject put(Object element) {
-        safe();
-        return subject.put(element);
+    public Subject get() {
+        return subject.get();
     }
 
     @Override
-    public Subject put(Object key, Object value) {
-        safe();
-        return subject.put(key, value);
-    }
-
-    @Override
-    public Subject add(Object element) {
-        safe();
-        return subject.add(element);
-    }
-
-    @Override
-    public Subject unset(Object key) {
-        safe();
-        return subject.unset(key);
-    }
-
-    @Override
-    public Subject unset(Object key, Object value) {
-        safe();
-        return subject.unset(key, value);
-    }
-
-    @Override
-    public Subject unsetAt(Slot slot) {
-        safe();
-        return subject.unsetAt(slot);
-    }
-
-    @Override
-    public Subject prime() {
-        return subject.prime();
-    }
-
-    @Override
-    public Subject recent() {
-        return subject.recent();
-    }
-
-    @Override
-    public Subject get(Object key) {
-        return subject.get(key);
-    }
-
-    @Override
-    public Subject get(Object ... keys) {
-        return subject.get(keys);
-    }
-
-    @Override
-    public Subject getAt(Slot slot) {
-        return subject.getAt(slot);
-    }
-
-    @Override
-    public Subject getAt(int slotIndex) {
-        return subject.getAt(slotIndex);
-    }
-
-    @Override
-    public Subject key() {
-        return subject.key();
+    public Subject get(Object element) {
+        return subject.get(element);
     }
 
     @Override
     public Object direct() {
         return subject.direct();
     }
-    
+
     @Override
     public <B> B asExpected() {
         return subject.asExpected();
@@ -146,18 +80,18 @@ class FuseSubject {}/* implements Subject {
     }
 
     @Override
-    public boolean instanceOf(Class<?> type) {
-        return subject.instanceOf(type);
+    public boolean is(Class<?> type) {
+        return subject.is(type);
     }
 
     @Override
-    public boolean notEmpty() {
-        return subject.notEmpty();
+    public boolean present() {
+        return subject.present();
     }
 
     @Override
-    public boolean isEmpty() {
-        return subject.isEmpty();
+    public boolean absent() {
+        return subject.absent();
     }
 
     @Override
@@ -166,58 +100,43 @@ class FuseSubject {}/* implements Subject {
     }
 
     @Override
-    public Fluid front() {
-        return subject.front();
-    }
-
-    @Override
-    public Fluid reverse() {
-        return subject.reverse();
-    }
-
-    @Override
-    public Wave<Subject> iterator() {
+    public Wave<Subject> iterator(boolean reverse) {
         return subject.iterator();
     }
 
     @Override
-    public boolean fused() {
-        return true;
+    public Subject fuse() {
+        return this;
     }
 
     @Override
-    public Subject setAt(Slot slot, Object element) {
-        safe();
-        return subject.setAt(slot, element);
+    public Subject set(Object element) {
+        return null;
     }
 
     @Override
-    public Subject setAt(Slot slot, Object key, Object value) {
-        safe();
-        return subject.setAt(slot, key, value);
+    public Subject set(Object element, Subject $set) {
+        return null;
     }
 
     @Override
-    public Subject putAt(Slot slot, Object element) {
-        safe();
-        return subject.putAt(slot, element);
+    public Subject setBefore(Object sequent, Object element) {
+        return null;
     }
 
     @Override
-    public Subject putAt(Slot slot, Object key, Object value) {
-        safe();
-        return subject.putAt(slot, key, value);
+    public Subject setBefore(Object sequent, Object element, Subject $set) {
+        return null;
     }
 
     @Override
-    public Subject addAt(Slot slot, Object element) {
-        safe();
-        return subject.addAt(slot, element);
+    public Subject unset() {
+        return null;
     }
 
     @Override
-    public Wave<Subject> iterator(Slot slot, boolean reverse) {
-        return subject.iterator(slot, reverse);
+    public Subject unset(Object element) {
+        return null;
     }
 }
 */

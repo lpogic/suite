@@ -1,15 +1,15 @@
 package suite.suite.action;
 
-import suite.suite.Vendor;
+import suite.suite.Subject;
 import suite.suite.Suite;
 
 @FunctionalInterface
 public interface DiceyImpression extends Action {
 
-    void strive(Vendor in) throws Exception;
+    void strive(Subject in) throws Exception;
 
     @Override
-    default Vendor play() {
+    default Subject play() {
         try {
             strive(Suite.set());
             return Suite.set();
@@ -19,7 +19,7 @@ public interface DiceyImpression extends Action {
     }
 
     @Override
-    default Vendor play(Vendor in) {
+    default Subject play(Subject in) {
         try {
             strive(in);
             return Suite.set();
@@ -29,13 +29,13 @@ public interface DiceyImpression extends Action {
     }
 
     @Override
-    default Vendor gamble() throws Exception {
+    default Subject gamble() throws Exception {
         strive(Suite.set());
         return Suite.set();
     }
 
     @Override
-    default Vendor gamble(Vendor in) throws Exception {
+    default Subject gamble(Subject in) throws Exception {
         strive(in);
         return Suite.set();
     }

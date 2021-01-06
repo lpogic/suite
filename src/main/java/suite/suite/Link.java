@@ -3,7 +3,7 @@ package suite.suite;
 public class Link {
     Link front;
     Link back;
-    Vendor subject;
+    Subject subject;
 
     Link() {
         this.subject = ZeroSubject.getInstance();
@@ -11,7 +11,7 @@ public class Link {
         back = this;
     }
 
-    Link(Link front, Link back, Vendor subject) {
+    Link(Link front, Link back, Subject subject) {
         this.subject = subject;
         this.front = front;
         this.back = back;

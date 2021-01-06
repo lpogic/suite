@@ -1,9 +1,6 @@
 package suite.suite;
 
-import suite.suite.util.Fluid;
-import suite.suite.util.Glass;
-import suite.suite.util.Query;
-import suite.suite.util.Wave;
+import suite.suite.util.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +31,7 @@ public class Suite {
     public static Subject inset(Object ... elements) {
         return new SolidSubject().inset(elements);
     }
-    public static Subject join(Iterable<Vendor> source) {
+    public static Subject join(Iterable<Subject> source) {
         return new SolidSubject().join(source);
     }
     public static Subject setAll(Iterable<?> source) {
@@ -73,35 +70,37 @@ public class Suite {
         StringBuilder sb = new StringBuilder();
         Stack<Subject> stack = new Stack<>();
         Subject printed = Suite.set();
-        stack.add(Suite.set($sub).set($sub.iterator()));
+        stack.add(Suite.set($sub).set($sub.cascade()));
         int goTo = 0;
         boolean tabsBefore = false;
         while(!stack.empty()) {
             var $1 = stack.peek();
             Subject $current = $1.asExpected();
-            Iterator<Subject> it = $1.atLast().asExpected();
-            for(Subject $s : (Iterable<Subject>) () -> it) {
+            Cascade<Subject> it = $1.getLast().asExpected();
+            for(Subject $s : it.toEnd()) {
                 if(tabsBefore)sb.append("\t".repeat(stack.size() - 1));
                 tabsBefore = false;
-                sb.append($s.direct()).append(" ");
-                Vendor $ = $s.get();
-                if($.isEmpty()) {
+                if(!$s.is(AutoKey.class)) {
+                    sb.append($s.direct()).append(" ");
+                }
+                Subject $ = $s.at($s.direct()).set();
+                if($.absent()) {
                     if($current.size() > 1) {
                         sb.append("[]\n");
                         tabsBefore = true;
                     }
                 } else {
-                    if(printed.at($).notEmpty()) {
+                    if(printed.get($).present()) {
                         sb.append("[ ... ]\n");
                         tabsBefore = true;
                     } else {
-                        if($.size() > 1) {
+                        if($.size() > 1 || $.at($.direct()).present()) {
                             sb.append("[\n");
                             tabsBefore = true;
                         } else {
                             sb.append("[ ");
                         }
-                        stack.add(Suite.set($).set($.iterator()));
+                        stack.add(Suite.set($).set($.cascade()));
                         printed.set($);
                         goTo = 1;
                         break;
@@ -122,24 +121,26 @@ public class Suite {
         return sb.toString();
     }
 
-    public static String describe(Fluid $sub, boolean compressed) {
-        if(!compressed)return describe($sub);
+    public static String describe(Fluid $sub, boolean compress) {
+        if(!compress)return describe($sub);
         StringBuilder sb = new StringBuilder();
-        Stack<Iterator<Vendor>> stack = new Stack<>();
+        Stack<Iterator<Subject>> stack = new Stack<>();
         Subject printed = Suite.set();
         stack.add($sub.iterator());
         int goTo = 0;
         while(!stack.empty()) {
-            Iterator<Vendor> it = stack.peek();
-            for(var $s : (Iterable<Vendor>) () -> it) {
-                sb.append($s.direct());
-                var $ = $s.get();
-                if($.isEmpty()) {
+            Iterator<Subject> it = stack.peek();
+            for(var $s : (Iterable<Subject>) () -> it) {
+                if(!$s.is(AutoKey.class)) {
+                    sb.append($s.direct());
+                }
+                var $ = $s.at($s.direct()).set();
+                if($.absent()) {
                     if(it.hasNext()) {
                         sb.append("[]");
                     }
                 } else {
-                    if(printed.at($).notEmpty()) {
+                    if(printed.at($).present()) {
                         sb.append("[...]");
                     } else {
                         sb.append("[");
@@ -164,10 +165,10 @@ public class Suite {
 
     public static Fluid dfs(Subject $sub) {
         return () -> new Wave<>() {
-            final Stack<Iterator<Vendor>> stack = new Stack<>();
-            final Stack<Vendor> subjectStack = new Stack<>();
+            final Stack<Iterator<Subject>> stack = new Stack<>();
+            final Stack<Subject> subjectStack = new Stack<>();
             {
-                stack.add(Suite.set(null, $sub).eachGet().iterator());
+                stack.add(Suite.set(null, $sub).each().iterator());
                 dig();
             }
 
@@ -177,7 +178,7 @@ public class Suite {
             }
 
             @Override
-            public Vendor next() {
+            public Subject next() {
                 var $ = subjectStack.pop();
                 stack.pop();
                 dig();
@@ -188,7 +189,7 @@ public class Suite {
                 while (stack.size() > 0 && stack.peek().hasNext()) {
                     while (stack.peek().hasNext()) {
                         subjectStack.add(stack.peek().next());
-                        stack.add(subjectStack.peek().eachGet().iterator());
+                        stack.add(subjectStack.peek().each().iterator());
                     }
                     subjectStack.pop();
                     stack.pop();

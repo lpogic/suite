@@ -29,7 +29,7 @@ class Chain implements Fluid {
         return data.getOrDefault(key, ward);
     }
 
-    Link getFirst() {
+    Link first() {
         return ward.back;
     }
 
@@ -52,7 +52,7 @@ class Chain implements Fluid {
         }
     }
 
-    void put(Object o, Vendor $) {
+    void put(Object o, Subject $) {
         Link link = data.get(o);
         if(link != null) {
             link.subject = new MonoSubject(o, $);
@@ -75,7 +75,7 @@ class Chain implements Fluid {
         }
     }
 
-    void put(Link sequent, Object o, Vendor $) {
+    void put(Link sequent, Object o, Subject $) {
         Link link = data.get(o);
         if(link != null) {
             link.subject = new MonoSubject(o, $);
@@ -119,15 +119,15 @@ class Chain implements Fluid {
     }
 
     @Override
-    public Wave<Vendor> iterator() {
+    public Wave<Subject> iterator() {
         return new LinkIterator(ward);
     }
 
-    public Wave<Vendor> iterator(boolean reverse) {
+    public Wave<Subject> iterator(boolean reverse) {
         return new LinkIterator(reverse, ward, ward);
     }
 
-    public Wave<Vendor> iterator(boolean reverse, Link link) {
+    public Wave<Subject> iterator(boolean reverse, Link link) {
         return new LinkIterator(reverse, link, ward);
     }
 

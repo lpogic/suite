@@ -1,7 +1,7 @@
 package suite.suite.action;
 
 import suite.suite.Suite;
-import suite.suite.Vendor;
+import suite.suite.Subject;
 
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -11,17 +11,17 @@ import java.util.function.Supplier;
 @FunctionalInterface
 public interface Action {
 
-    default Vendor play() {
+    default Subject play() {
         return play(Suite.set());
     }
 
-    Vendor play(Vendor in);
+    Subject play(Subject in);
 
-    default Vendor gamble() throws Exception {
+    default Subject gamble() throws Exception {
         return play(Suite.set());
     }
 
-    default Vendor gamble(Vendor in) throws Exception {
+    default Subject gamble(Subject in) throws Exception {
         return play(in);
     }
 
@@ -34,7 +34,7 @@ public interface Action {
     }
 
     static<T1, T2, U> Action biFunction(Class<T1> arg1Type, Class<T2> arg2Type, BiFunction<T1, T2, U> function) {
-        return s -> Suite.set(function.apply(s.asExpected(), s.atLast().asExpected()));
+        return s -> Suite.set(function.apply(s.asExpected(), s.getLast().asExpected()));
     }
 
     static<U> Action supplier(Supplier<U> supplier) {

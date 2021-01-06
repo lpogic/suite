@@ -1,13 +1,13 @@
 package suite.suite.action;
 
-import suite.suite.Vendor;
+import suite.suite.Subject;
 import suite.suite.Suite;
 
 @FunctionalInterface
 public interface DiceyAction extends Action {
 
     @Override
-    default Vendor play() {
+    default Subject play() {
         try {
             return gamble(Suite.set());
         } catch (Exception e) {
@@ -16,7 +16,7 @@ public interface DiceyAction extends Action {
     }
 
     @Override
-    default Vendor play(Vendor in) {
+    default Subject play(Subject in) {
         try {
             return gamble(in);
         } catch (Exception e) {
@@ -25,10 +25,10 @@ public interface DiceyAction extends Action {
     }
 
     @Override
-    default Vendor gamble() throws Exception {
+    default Subject gamble() throws Exception {
         return gamble(Suite.set());
     }
 
     @Override
-    Vendor gamble(Vendor in) throws Exception;
+    Subject gamble(Subject in) throws Exception;
 }

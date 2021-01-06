@@ -54,7 +54,7 @@ public class WonkySubject {} //  extends SolidSubject {
             if(hasNext) {
                 hasNext = false;
                 return new SolidSubject(next);
-            } else return new SolidSubject(next.separate());
+            } else return new SolidSubject(next.fuse());
         }
     }
 
@@ -143,18 +143,18 @@ public class WonkySubject {} //  extends SolidSubject {
     }
 
     @Override
-    public boolean instanceOf(Class<?> type) {
-        return get().instanceOf(type);
+    public boolean is(Class<?> type) {
+        return get().is(type);
     }
 
     @Override
-    public boolean notEmpty() {
+    public boolean present() {
         return iterator( false).hasNext();
     }
 
     @Override
-    public boolean isEmpty() {
-        return !notEmpty();
+    public boolean absent() {
+        return !present();
     }
 
     @Override
@@ -193,14 +193,14 @@ public class WonkySubject {} //  extends SolidSubject {
     @Override
     public Subject put(Object element) {
         System.err.println("Keys in WeakSubject are not weak wrapped");
-        if(unweak(subject.get(element)).isEmpty())
+        if(unweak(subject.get(element)).absent())
             subject = subject.set(element, weak(element));
         return this;
     }
 
     @Override
     public Subject put(Object key, Object value) {
-        if(unweak(subject.get(key)).isEmpty())
+        if(unweak(subject.get(key)).absent())
             subject = subject.set(key, weak(value));
         return this;
     }
@@ -232,7 +232,7 @@ public class WonkySubject {} //  extends SolidSubject {
     @Override
     public Subject getSaved(Object key, Object reserve) {
         Subject saved = unweak(subject.get(key));
-        if(saved.notEmpty())return new SolidSubject(saved);
+        if(saved.present())return new SolidSubject(saved);
         subject = subject.set(key, weak(reserve));
         return get(key);
     }
@@ -240,7 +240,7 @@ public class WonkySubject {} //  extends SolidSubject {
     @Override
     public Subject getDone(Object key, Supplier<?> supplier) {
         Subject done = unweak(subject.get(key));
-        if(done.notEmpty())return new SolidSubject(done);
+        if(done.present())return new SolidSubject(done);
         subject = subject.set(key, weak(supplier.get()));
         return get(key);
     }
@@ -248,7 +248,7 @@ public class WonkySubject {} //  extends SolidSubject {
     @Override
     public Subject getDone(Object key, Function<Subject, ?> function, Subject argument) {
         Subject done = unweak(subject.get(key));
-        if(done.notEmpty())return new SolidSubject(done);
+        if(done.present())return new SolidSubject(done);
         subject = subject.set(key, weak(function.apply(argument)));
         return get(key);
     }
@@ -256,14 +256,14 @@ public class WonkySubject {} //  extends SolidSubject {
     @Override
     public Subject take(Object key) {
         Subject taken = get(key);
-        if(taken.notEmpty()) subject = subject.unset(key);
+        if(taken.present()) subject = subject.unset(key);
         return unweak(taken);
     }
 
     @Override
     public Subject takeAt(Slot slot) {
         Subject taken = getAt(slot);
-        if(taken.notEmpty()) subject = subject.unset(taken.key());
+        if(taken.present()) subject = subject.unset(taken.key());
         return unweak(taken);
     }
 
@@ -299,14 +299,14 @@ public class WonkySubject {} //  extends SolidSubject {
     @Override
     public Subject putAt(Slot slot, Object element) {
         System.err.println("Keys in WeakSubject are not weak wrapped");
-        if(unweak(get(element)).isEmpty())
+        if(unweak(get(element)).absent())
             subject = subject.setAt(slot, element, weak(element));
         return this;
     }
 
     @Override
     public Subject putAt(Slot slot, Object key, Object value) {
-        if(unweak(get(key)).isEmpty())
+        if(unweak(get(key)).absent())
             subject = subject.setAt(slot, key, weak(value));
         return this;
     }

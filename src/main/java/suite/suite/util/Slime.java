@@ -160,14 +160,23 @@ public interface Slime<T> extends Iterable<T>{
         return stringBuilder.toString();
     }
 
-    static<I> Slime<I> source(Iterable<I> iterable) {
+    @SafeVarargs
+    static<I> Slime<I> of(I ... is) {
+        return entire(List.of(is));
+    }
+
+    static<I> Slime<I> entire(Iterable<I> iterable) {
         return iterable instanceof Slime ? (Slime<I>)iterable : () -> Wave.wave(iterable.iterator());
     }
 
-    default Slime<T> append(Iterable<T> iterable) {
+    default<I extends T> Slime<T> and(I i) {
+        return andEntire(List.of(i));
+    }
+
+    default<I extends T> Slime<T> andEntire(Iterable<I> iterable) {
         return () -> new Wave<>() {
             Wave<T> selfWave = Slime.this.iterator();
-            final Iterator<T> thatIterator = iterable.iterator();
+            final Iterator<I> thatIterator = iterable.iterator();
 
             @Override
             public boolean hasNext() {

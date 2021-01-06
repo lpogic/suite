@@ -1,11 +1,10 @@
 package suite.suite.tester;
 
 import suite.suite.Subject;
-import suite.suite.Vendor;
 
 import java.util.function.Predicate;
 
-public class IsFree implements Predicate<Vendor> {
+public class IsFree implements Predicate<Subject> {
     Object key;
 
     public IsFree(Object key) {
@@ -13,7 +12,7 @@ public class IsFree implements Predicate<Vendor> {
     }
 
     @Override
-    public boolean test(Vendor subject) {
-        return subject.at(key).isEmpty();
+    public boolean test(Subject subject) {
+        return subject.get(key).absent();
     }
 }
