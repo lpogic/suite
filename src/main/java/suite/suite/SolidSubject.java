@@ -1,18 +1,18 @@
 package suite.suite;
 
-import suite.suite.util.Wave;
-import suite.suite.util.Fluid;
+import suite.suite.util.Browser;
+import suite.suite.util.Series;
 import suite.suite.util.Glass;
 
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 public class SolidSubject implements Subject {
 
-    class HomogenizedSubjectIterator implements Wave<Subject> {
+    class HomogenizedSubjectIterator implements Browser<Subject> {
         Subject sub;
         boolean reverse;
-        Wave<Subject> it;
+        Browser<Subject> it;
 
 
         HomogenizedSubjectIterator(Subject sub, boolean reverse) {
@@ -27,7 +27,7 @@ public class SolidSubject implements Subject {
                 if(sub == ZeroSubject.getInstance()) {
                     it = subject.iterator(reverse);
                 } else if(subject == ZeroSubject.getInstance()) {
-                    it = Wave.emptyWave();
+                    it = Browser.empty();
                 }
                 sub = subject;
             }
@@ -137,8 +137,18 @@ public class SolidSubject implements Subject {
     }
 
     @Override
+    public boolean present(Object element) {
+        return subject.present(element);
+    }
+
+    @Override
     public boolean absent() {
         return subject.absent();
+    }
+
+    @Override
+    public boolean absent(Object element) {
+        return subject.absent(element);
     }
 
     @Override
@@ -147,7 +157,7 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(boolean reverse) {
+    public Browser<Subject> iterator(boolean reverse) {
         return new HomogenizedSubjectIterator(subject, reverse);
     }
 
@@ -176,7 +186,7 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Subject setIf(Object element, Predicate<Subject> test) {
+    public Subject setIf(Object element, BiPredicate<Subject, Object> test) {
         subject = subject.setIf(element, test);
         return this;
     }
@@ -194,7 +204,7 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Subject inset(Object... elements) {
+    public Subject insert(Object... elements) {
         Subject $ = this;
         int i = 0;
         Object o = null;
@@ -209,12 +219,12 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Fluid front() {
+    public Series front() {
         return this;
     }
 
     @Override
-    public Fluid reverse() {
+    public Series reverse() {
         return () -> iterator(true);
     }
 
@@ -226,7 +236,7 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Subject join(Iterable<? extends Subject> iterable) {
+    public Subject alter(Iterable<? extends Subject> iterable) {
         var $ = subject;
         for(var it : iterable) {
             Object o = it.direct();
@@ -241,7 +251,7 @@ public class SolidSubject implements Subject {
     }
 
     @Override
-    public Subject joinBefore(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject alterBefore(Object sequent, Iterable<? extends Subject> iterable) {
         var $ = subject;
         for(var it : iterable) {
             Object o = it.direct();
@@ -259,7 +269,7 @@ public class SolidSubject implements Subject {
     public Subject getAll(Iterable<?> iterable) {
         var $ = Suite.set();
         for(Object it : iterable) {
-            $.join(get(it));
+            $.alter(get(it));
         }
         return $;
     }
@@ -288,7 +298,7 @@ public class SolidSubject implements Subject {
     public Subject takeAll(Iterable<?> iterable) {
         var $ = Suite.set();
         for(Object it : iterable) {
-            $.join(take(it));
+            $.alter(take(it));
         }
         return $;
     }

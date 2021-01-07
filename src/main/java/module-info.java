@@ -3,5 +3,4 @@ open module suite.main {
     exports suite.suite.action;
     exports suite.suite.util;
     exports suite.suite.selector;
-    exports suite.suite.tester;
 }

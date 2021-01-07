@@ -1,13 +1,5 @@
 package suite.suite;
 
-import suite.suite.util.Fluid;
-import suite.suite.util.Wave;
-import suite.suite.util.Glass;
-
-import java.lang.ref.WeakReference;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 public class WonkySubject {} //  extends SolidSubject {
 
 
@@ -34,7 +26,7 @@ public class WonkySubject {} //  extends SolidSubject {
                 if(sub == ZeroSubject.getInstance()) {
                     it = subject.iterator(reverse);
                 } else if(subject == ZeroSubject.getInstance()) {
-                    it = Wave.emptyWave();
+                    it = Wave.empty();
                 }
                 sub = subject;
             }
@@ -268,7 +260,7 @@ public class WonkySubject {} //  extends SolidSubject {
     }
 
     @Override
-    public Subject join(Iterable<? extends Subject> iterable) {
+    public Subject alter(Iterable<? extends Subject> iterable) {
         for(Subject v : iterable) {
             subject = subject.set(v.key(), v.direct());
         }

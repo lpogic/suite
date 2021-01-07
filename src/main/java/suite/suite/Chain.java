@@ -1,12 +1,12 @@
 package suite.suite;
 
-import suite.suite.util.Wave;
-import suite.suite.util.Fluid;
+import suite.suite.util.Browser;
+import suite.suite.util.Series;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class Chain implements Fluid {
+class Chain implements Series {
 
     private final Map<Object, Link> data = new HashMap<>();
     final Link ward;
@@ -119,15 +119,15 @@ class Chain implements Fluid {
     }
 
     @Override
-    public Wave<Subject> iterator() {
+    public Browser<Subject> iterator() {
         return new LinkIterator(ward);
     }
 
-    public Wave<Subject> iterator(boolean reverse) {
+    public Browser<Subject> iterator(boolean reverse) {
         return new LinkIterator(reverse, ward, ward);
     }
 
-    public Wave<Subject> iterator(boolean reverse, Link link) {
+    public Browser<Subject> iterator(boolean reverse, Link link) {
         return new LinkIterator(reverse, link, ward);
     }
 

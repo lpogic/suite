@@ -108,8 +108,18 @@ class MultiSubject implements Subject {
     }
 
     @Override
+    public boolean present(Object element) {
+        return chain.get(element) != chain.ward;
+    }
+
+    @Override
     public boolean absent() {
         return chain.size() == 0;
+    }
+
+    @Override
+    public boolean absent(Object element) {
+        return chain.get(element) == chain.ward;
     }
 
     @Override
@@ -118,7 +128,7 @@ class MultiSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(boolean reverse) {
+    public Browser<Subject> iterator(boolean reverse) {
         return chain.iterator(reverse);
     }
 

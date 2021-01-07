@@ -41,7 +41,7 @@ public interface Vendor extends Subject {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
-    default Subject inset(Object ... elements) {
+    default Subject insert(Object ... elements) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
@@ -49,11 +49,11 @@ public interface Vendor extends Subject {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
-    default Subject join(Iterable<? extends Subject> iterable) {
+    default Subject alter(Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
-    default Subject joinBefore(Object sequent, Iterable<? extends Subject> iterable) {
+    default Subject alterBefore(Object sequent, Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 

@@ -1,13 +1,14 @@
 package suite.suite;
 
-import suite.suite.util.Fluid;
+import suite.suite.util.Series;
 import suite.suite.util.Glass;
-import suite.suite.util.Wave;
+import suite.suite.util.Browser;
 
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
-public interface Subject extends Fluid {
+@SuppressWarnings("UnusedReturnValue")
+public interface Subject extends Series {
 
     Subject at(Object element);
     default Subject at() {
@@ -30,16 +31,18 @@ public interface Subject extends Fluid {
     <B> B orDo(Supplier<B> supplier);
     boolean is(Class<?> type);
     boolean present();
+    boolean present(Object element);
     boolean absent();
+    boolean absent(Object element);
     int size();
-    Wave<Subject> iterator(boolean reverse);
-    default Wave<Subject> iterator() {
+    Browser<Subject> iterator(boolean reverse);
+    default Browser<Subject> iterator() {
         return iterator(false);
     }
-    default Fluid front() {
+    default Series front() {
         throw new UnsupportedOperationException("Solid method");
     }
-    default Fluid reverse() {
+    default Series reverse() {
         throw new UnsupportedOperationException("Solid method");
     }
 
@@ -49,11 +52,11 @@ public interface Subject extends Fluid {
     Subject setBefore(Object sequent, Object element, Subject $set);
     Subject unset();
     Subject unset(Object element);
-    default Subject setIf(Object element, Predicate<Subject> test) {
-        return test.test(this) ? set(element) : this;
+    default Subject setIf(Object element, BiPredicate<Subject, Object> tester) {
+        return tester.test(this, element) ? set(element) : this;
     }
-    default Subject setIfEmpty(Object element) {
-        return at(element).absent() ? set(element) : this;
+    default Subject setIf(Object element, Subject $sub, BiPredicate<Subject, Object> tester) {
+        return tester.test(this, element) ? set(element, $sub) : this;
     }
     default Subject add(Subject $sub) {
         return set(new Suite.AutoKey(), $sub);
@@ -61,16 +64,16 @@ public interface Subject extends Fluid {
     default Subject addBefore(Object sequent, Subject $sub) {
         return setBefore(sequent, new Suite.AutoKey(), $sub);
     }
-    default Subject inset(Object ... elements) {
+    default Subject insert(Object ... elements) {
         throw new UnsupportedOperationException("Solid method");
     }
     default Subject take(Object key) {
         throw new UnsupportedOperationException("Solid method");
     }
-    default Subject join(Iterable<? extends Subject> iterable) {
+    default Subject alter(Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
-    default Subject joinBefore(Object sequent, Iterable<? extends Subject> iterable) {
+    default Subject alterBefore(Object sequent, Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
 

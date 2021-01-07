@@ -1,11 +1,5 @@
 package suite.suite;
 
-import suite.suite.util.Wave;
-import suite.suite.util.Fluid;
-import suite.suite.util.Glass;
-
-import java.util.function.Supplier;
-
 class FuseSubject {}/* implements Subject {
 
     Subject subject;

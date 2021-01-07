@@ -1,6 +1,6 @@
 package suite.suite;
 
-import suite.suite.util.Wave;
+import suite.suite.util.Browser;
 import suite.suite.util.Glass;
 
 import java.util.Objects;
@@ -120,8 +120,18 @@ class MonoSubject implements Subject {
     }
 
     @Override
+    public boolean present(Object element) {
+        return Objects.equals(this.element, element);
+    }
+
+    @Override
     public boolean absent() {
         return false;
+    }
+
+    @Override
+    public boolean absent(Object element) {
+        return !Objects.equals(this.element, element);
     }
 
     @Override
@@ -130,7 +140,7 @@ class MonoSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(boolean reverse) {
+    public Browser<Subject> iterator(boolean reverse) {
         link();
         return new LinkIterator(reverse, ward, ward);
     }

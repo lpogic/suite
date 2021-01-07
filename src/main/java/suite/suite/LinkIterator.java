@@ -1,8 +1,8 @@
 package suite.suite;
 
-import suite.suite.util.Wave;
+import suite.suite.util.Browser;
 
-public class LinkIterator implements Wave<Subject> {
+public class LinkIterator implements Browser<Subject> {
 
     private final boolean reverse;
     private Link current;

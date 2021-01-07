@@ -1,13 +1,5 @@
 package suite.suite;
 
-import suite.suite.util.Wave;
-import suite.suite.util.Glass;
-
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 class ThreadySubject {}/* implements Subject {
 
     class HomogenizedSubjectIterator implements Wave<Subject> {
@@ -33,7 +25,7 @@ class ThreadySubject {}/* implements Subject {
                     if(sub == ZeroSubject.getInstance()) {
                         it = reverse ? subject.iterator(Slot.RECENT, true) : subject.iterator(Slot.PRIME, false);
                     } else if(subject == ZeroSubject.getInstance()) {
-                        it = Wave.emptyWave();
+                        it = Wave.empty();
                     }
                     sub = subject;
                 }
@@ -394,9 +386,9 @@ class ThreadySubject {}/* implements Subject {
     }
 
     @Override
-    public Subject join(Iterable<? extends Subject> iterable) {
+    public Subject alter(Iterable<? extends Subject> iterable) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.join(iterable);
+            subject = subject.alter(iterable);
         }
         return this;
     }

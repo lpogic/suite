@@ -4,17 +4,21 @@ import suite.suite.Subject;
 
 import java.util.function.Predicate;
 
-public class AtIndex implements Predicate<Subject> {
+public class Index implements Predicate<Subject> {
 
     int counter = 0;
-    int index;
+    final int index;
 
-    public AtIndex(int index) {
+    public Index(int index) {
         this.index = index;
     }
 
     @Override
     public boolean test(Subject subject) {
         return counter++ == index;
+    }
+
+    public static Index of(int i) {
+        return new Index(i);
     }
 }

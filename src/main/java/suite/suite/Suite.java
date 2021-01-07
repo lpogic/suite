@@ -28,17 +28,17 @@ public class Suite {
     public static Subject add(Subject $) {
         return new SolidSubject(new MonoSubject(new AutoKey(), $));
     }
-    public static Subject inset(Object ... elements) {
-        return new SolidSubject().inset(elements);
+    public static Subject insert(Object ... elements) {
+        return new SolidSubject().insert(elements);
     }
-    public static Subject join(Iterable<Subject> source) {
-        return new SolidSubject().join(source);
+    public static Subject alter(Iterable<Subject> source) {
+        return new SolidSubject().alter(source);
     }
     public static Subject setAll(Iterable<?> source) {
         return new SolidSubject().setAll(source);
     }
 
-
+//    public static boolean absent(Subject $, Object element)
 
 //    public static Subject fuse(Subject subject) {
 //        if(subject == null) {
@@ -63,10 +63,10 @@ public class Suite {
     }
 
     public static Subject zip(Iterable<Object> keys, Iterable<Object> values) {
-        return join(Fluid.engage(keys, values));
+        return alter(Series.engage(keys, values));
     }
 
-    public static String describe(Fluid $sub) {
+    public static String describe(Series $sub) {
         StringBuilder sb = new StringBuilder();
         Stack<Subject> stack = new Stack<>();
         Subject printed = Suite.set();
@@ -121,7 +121,7 @@ public class Suite {
         return sb.toString();
     }
 
-    public static String describe(Fluid $sub, boolean compress) {
+    public static String describe(Series $sub, boolean compress) {
         if(!compress)return describe($sub);
         StringBuilder sb = new StringBuilder();
         Stack<Iterator<Subject>> stack = new Stack<>();
@@ -163,12 +163,12 @@ public class Suite {
         return sb.toString();
     }
 
-    public static Fluid dfs(Subject $sub) {
-        return () -> new Wave<>() {
+    public static Series dfs(Subject $sub) {
+        return () -> new Browser<>() {
             final Stack<Iterator<Subject>> stack = new Stack<>();
             final Stack<Subject> subjectStack = new Stack<>();
             {
-                stack.add(Suite.set(null, $sub).each().iterator());
+                stack.add(Suite.set(null, $sub).atEach().iterator());
                 dig();
             }
 
@@ -189,7 +189,7 @@ public class Suite {
                 while (stack.size() > 0 && stack.peek().hasNext()) {
                     while (stack.peek().hasNext()) {
                         subjectStack.add(stack.peek().next());
-                        stack.add(subjectStack.peek().each().iterator());
+                        stack.add(subjectStack.peek().atEach().iterator());
                     }
                     subjectStack.pop();
                     stack.pop();

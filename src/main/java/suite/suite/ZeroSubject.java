@@ -1,6 +1,6 @@
 package suite.suite;
 
-import suite.suite.util.Wave;
+import suite.suite.util.Browser;
 import suite.suite.util.Glass;
 
 import java.util.NoSuchElementException;
@@ -102,7 +102,17 @@ class ZeroSubject implements Subject {
     }
 
     @Override
+    public boolean present(Object element) {
+        return false;
+    }
+
+    @Override
     public boolean absent() {
+        return true;
+    }
+
+    @Override
+    public boolean absent(Object element) {
         return true;
     }
 
@@ -112,8 +122,8 @@ class ZeroSubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(boolean reverse) {
-        return Wave.emptyWave();
+    public Browser<Subject> iterator(boolean reverse) {
+        return Browser.empty();
     }
 
     @Override

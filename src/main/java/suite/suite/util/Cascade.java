@@ -6,7 +6,7 @@ import suite.suite.Suite;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public class Cascade<T> implements Wave<T> {
+public class Cascade<T> implements Browser<T> {
 
     private final Iterator<T> iterator;
     private final Subject stored;
@@ -42,9 +42,9 @@ public class Cascade<T> implements Wave<T> {
         return falls;
     }
 
-    public Slime<T> until(Predicate<T> predicate) {
+    public Sequence<T> until(Predicate<T> predicate) {
         falls = 0;
-        return () -> new Wave<>() {
+        return () -> new Browser<>() {
 
             @Override
             public boolean hasNext() {
@@ -69,9 +69,9 @@ public class Cascade<T> implements Wave<T> {
         };
     }
 
-    public Slime<T> toEnd() {
+    public Sequence<T> toEnd() {
         falls = 0;
-        return () -> new Wave<>() {
+        return () -> new Browser<>() {
             @Override
             public boolean hasNext() {
                 return Cascade.this.hasNext();

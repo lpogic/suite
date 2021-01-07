@@ -1,7 +1,7 @@
 package suite.suite;
 
 import suite.suite.util.Glass;
-import suite.suite.util.Wave;
+import suite.suite.util.Browser;
 
 import java.util.function.Supplier;
 
@@ -110,8 +110,18 @@ public class ImaginarySubject implements Subject {
     }
 
     @Override
+    public boolean present(Object element) {
+        return jump().present(element);
+    }
+
+    @Override
     public boolean absent() {
         return jump().absent();
+    }
+
+    @Override
+    public boolean absent(Object element) {
+        return jump().absent(element);
     }
 
     @Override
@@ -120,7 +130,7 @@ public class ImaginarySubject implements Subject {
     }
 
     @Override
-    public Wave<Subject> iterator(boolean reverse) {
+    public Browser<Subject> iterator(boolean reverse) {
         return jump().iterator(reverse);
     }
 

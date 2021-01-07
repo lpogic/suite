@@ -1,22 +1,21 @@
 package suite.suite.util;
 
 import suite.suite.Subject;
-import suite.suite.Subject;
 import suite.suite.Suite;
 import suite.suite.action.Action;
 
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public interface Fluid extends Iterable<Subject> {
-    Wave<Subject> iterator();
+public interface Series extends Iterable<Subject> {
+    Browser<Subject> iterator();
 
     default Cascade<Subject> cascade() {
         return new Cascade<>(iterator());
     }
 
-    default Fluid select(Predicate<Subject> predicate) {
-        return () -> new Wave<>() {
+    default Series select(Predicate<Subject> predicate) {
+        return () -> new Browser<>() {
             final Iterator<Subject> origin = iterator();
             Subject next = null;
             boolean nextFound = false;
@@ -43,17 +42,17 @@ public interface Fluid extends Iterable<Subject> {
         };
     }
 
-    default Fluid exclude(Predicate<Subject> predicate) {
+    default Series exclude(Predicate<Subject> predicate) {
         return select(predicate.negate());
     }
 
     default Subject getFirst() {
-        Wave<Subject> wave = iterator();
+        Browser<Subject> wave = iterator();
         return wave.hasNext() ? wave.next() : Suite.set();
     }
 
-    default Fluid convert(Action action) {
-        return () -> new Wave<>() {
+    default Series convert(Action action) {
+        return () -> new Browser<>() {
             final Iterator<Subject> origin = iterator();
 
             @Override
@@ -68,9 +67,9 @@ public interface Fluid extends Iterable<Subject> {
         };
     }
 
-    default Fluid append(Iterable<Subject> iterable) {
-        return () -> new Wave<>() {
-            Wave<Subject> selfWave = Fluid.this.iterator();
+    default Series join(Iterable<Subject> iterable) {
+        return () -> new Browser<>() {
+            Browser<Subject> selfWave = Series.this.iterator();
             final Iterator<Subject> thatIterator = iterable.iterator();
 
             @Override
@@ -89,8 +88,8 @@ public interface Fluid extends Iterable<Subject> {
         };
     }
 
-    default Slime<?> eachDirect() {
-        return () -> new Wave<>() {
+    default Sequence<?> eachDirect() {
+        return () -> new Browser<>() {
             final Iterator<Subject> subIt = iterator();
 
             @Override
@@ -105,8 +104,8 @@ public interface Fluid extends Iterable<Subject> {
         };
     }
 
-    default<T> Slime<T> eachAs(Class<T> type) {
-        return () -> new Wave<>() {
+    default<T> Sequence<T> eachAs(Class<T> type) {
+        return () -> new Browser<>() {
             final Iterator<Subject> subIt = iterator();
 
             @Override
@@ -121,8 +120,8 @@ public interface Fluid extends Iterable<Subject> {
         };
     }
 
-    default<T> Slime<T> eachAs(Glass<? super T,T> type) {
-        return () -> new Wave<>() {
+    default<T> Sequence<T> eachAs(Glass<? super T,T> type) {
+        return () -> new Browser<>() {
             final Iterator<Subject> subIt = iterator();
 
             @Override
@@ -137,8 +136,8 @@ public interface Fluid extends Iterable<Subject> {
         };
     }
 
-    default Fluid each() {
-        return () -> new Wave<>() {
+    default Series atEach() {
+        return () -> new Browser<>() {
             final Iterator<Subject> subIt = iterator();
 
             @Override
@@ -159,19 +158,19 @@ public interface Fluid extends Iterable<Subject> {
     }
 
     default Subject set() {
-        return Suite.join(this);
+        return Suite.alter(this);
     }
 
-    static Fluid source(Iterable<Subject> iterable) {
-        return iterable instanceof Fluid ? (Fluid)iterable : () -> Wave.wave(iterable.iterator());
+    static Series of(Iterable<Subject> iterable) {
+        return iterable instanceof Series ? (Series)iterable : () -> Browser.of(iterable.iterator());
     }
 
-    static Fluid emptyFluid() {
-        return Wave::emptyWave;
+    static Series emptyFluid() {
+        return Browser::empty;
     }
 
-    static Fluid engage(Iterable<?> keys, Iterable<?> values) {
-        return () -> new Wave<>() {
+    static Series engage(Iterable<?> keys, Iterable<?> values) {
+        return () -> new Browser<>() {
             final Iterator<?> keyIt = keys.iterator();
             final Iterator<?> valIt = values.iterator();
 

@@ -2,7 +2,7 @@ package suite.suite.util;
 
 import java.util.Iterator;
 
-public interface Wave<T> extends Iterator<T> {
+public interface Browser<T> extends Iterator<T> {
 
     @Override
     boolean hasNext();
@@ -14,8 +14,8 @@ public interface Wave<T> extends Iterator<T> {
         return new Cascade<>(this);
     }
 
-    static<I> Wave<I> emptyWave() {
-        return new Wave<>() {
+    static<I> Browser<I> empty() {
+        return new Browser<>() {
 
             @Override
             public boolean hasNext() {
@@ -29,8 +29,8 @@ public interface Wave<T> extends Iterator<T> {
         };
     }
 
-    static<I> Wave<I> wave(Iterator<I> it) {
-        return it instanceof Wave ? (Wave<I>)it : new Wave<>() {
+    static<I> Browser<I> of(Iterator<I> it) {
+        return it instanceof Browser ? (Browser<I>)it : new Browser<>() {
             @Override
             public boolean hasNext() {
                 return it.hasNext();

@@ -10,19 +10,19 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public interface Slime<T> extends Iterable<T>{
-    Wave<T> iterator();
+public interface Sequence<T> extends Iterable<T>{
+    Browser<T> iterator();
 
     default Cascade<T> cascade() {
         return new Cascade<>(iterator());
     }
 
-    default <F> Slime<F> filter(Class<F> requestedType) {
+    default <F> Sequence<F> filter(Class<F> requestedType) {
         return filter(Glass.of(requestedType));
     }
 
-    default <F> Slime<F> filter(Glass<? super F, F> requestedType) {
-        return () -> new Wave<>() {
+    default <F> Sequence<F> filter(Glass<? super F, F> requestedType) {
+        return () -> new Browser<>() {
             final Iterator<T> origin = iterator();
             F next = null;
             boolean nextFound = false;
@@ -49,8 +49,8 @@ public interface Slime<T> extends Iterable<T>{
         };
     }
 
-    default Slime<T> filter(Predicate<T> predicate) {
-        return () -> new Wave<>() {
+    default Sequence<T> filter(Predicate<T> predicate) {
+        return () -> new Browser<>() {
             final Iterator<T> origin = iterator();
             T next = null;
             boolean nextFound = false;
@@ -77,12 +77,12 @@ public interface Slime<T> extends Iterable<T>{
         };
     }
 
-    static<I> Slime<I> empty() {
-        return Wave::emptyWave;
+    static<I> Sequence<I> empty() {
+        return Browser::empty;
     }
 
-    default<O> Slime<O> each(Function<T, O> function) {
-        return () -> new Wave<>() {
+    default<O> Sequence<O> each(Function<T, O> function) {
+        return () -> new Browser<>() {
             final Iterator<T> origin = iterator();
 
             @Override
@@ -97,8 +97,8 @@ public interface Slime<T> extends Iterable<T>{
         };
     }
 
-    default<P, O> Slime<O> each(P param, BiFunction<T, P, O> function) {
-        return () -> new Wave<>() {
+    default<P, O> Sequence<O> each(P param, BiFunction<T, P, O> function) {
+        return () -> new Browser<>() {
             final Iterator<T> origin = iterator();
 
             @Override
@@ -113,7 +113,7 @@ public interface Slime<T> extends Iterable<T>{
         };
     }
 
-    default Slime<T> skip(int from, int to) {
+    default Sequence<T> skip(int from, int to) {
         return filter(new Predicate<>() {
             int counter = 0;
 
@@ -146,8 +146,24 @@ public interface Slime<T> extends Iterable<T>{
         return list;
     }
 
-    default Subject toSubject() {
+    default Subject set() {
         return Suite.setAll(this);
+    }
+
+    default Series series() {
+        return () -> new Browser<>() {
+            final Browser<T> b = Sequence.this.iterator();
+
+            @Override
+            public boolean hasNext() {
+                return b.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                return Suite.set(b);
+            }
+        };
     }
 
     default String toString(String separator) {
@@ -161,21 +177,21 @@ public interface Slime<T> extends Iterable<T>{
     }
 
     @SafeVarargs
-    static<I> Slime<I> of(I ... is) {
-        return entire(List.of(is));
+    static<I> Sequence<I> of(I ... is) {
+        return ofEntire(List.of(is));
     }
 
-    static<I> Slime<I> entire(Iterable<I> iterable) {
-        return iterable instanceof Slime ? (Slime<I>)iterable : () -> Wave.wave(iterable.iterator());
+    static<I> Sequence<I> ofEntire(Iterable<I> iterable) {
+        return iterable instanceof Sequence ? (Sequence<I>)iterable : () -> Browser.of(iterable.iterator());
     }
 
-    default<I extends T> Slime<T> and(I i) {
+    default<I extends T> Sequence<T> and(I i) {
         return andEntire(List.of(i));
     }
 
-    default<I extends T> Slime<T> andEntire(Iterable<I> iterable) {
-        return () -> new Wave<>() {
-            Wave<T> selfWave = Slime.this.iterator();
+    default<I extends T> Sequence<T> andEntire(Iterable<I> iterable) {
+        return () -> new Browser<>() {
+            Browser<T> selfWave = Sequence.this.iterator();
             final Iterator<I> thatIterator = iterable.iterator();
 
             @Override
