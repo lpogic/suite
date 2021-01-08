@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unchecked")
-class BasicSubject implements Subject {
+class BasicSubject extends Subject {
 
     private final Object element;
     private Link ward;
@@ -35,6 +35,11 @@ class BasicSubject implements Subject {
     @Override
     public boolean burned(Object element) {
         return false;
+    }
+
+    @Override
+    public Subject go() {
+        return ZeroSubject.getInstance();
     }
 
     @Override

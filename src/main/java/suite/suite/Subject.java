@@ -8,90 +8,91 @@ import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 @SuppressWarnings("UnusedReturnValue")
-public interface Subject extends Series {
+public abstract class Subject implements Series {
 
-    Subject at(Object element);
-    default Subject at() {
+    public abstract Subject at(Object element);
+    public Subject at() {
         return at(new Suite.AutoKey());
     }
-    Subject burn(Object element);
-    Subject jump(Object element);
-    boolean burned(Object element);
+    abstract Subject burn(Object element);
+    abstract Subject jump(Object element);
+    abstract boolean burned(Object element);
 
-    Subject getFirst();
-    Subject getLast();
-    Subject get(Object element);
-    Object direct();
-    <B> B asExpected();
-    <B> B as(Class<B> requestedType);
-    <B> B as(Glass<? super B, B> requestedType);
-    <B> B as(Class<B> requestedType, B reserve);
-    <B> B as(Glass<? super B, B> requestedType, B reserve);
-    <B> B orGiven(B reserve);
-    <B> B orDo(Supplier<B> supplier);
-    boolean is(Class<?> type);
-    boolean present();
-    boolean present(Object element);
-    boolean absent();
-    boolean absent(Object element);
-    int size();
-    Browser<Subject> iterator(boolean reverse);
-    default Browser<Subject> iterator() {
+    public abstract Subject go();
+    public abstract Subject getFirst();
+    public abstract Subject getLast();
+    public abstract Subject get(Object element);
+    public abstract Object direct();
+    public abstract <B> B asExpected();
+    public abstract <B> B as(Class<B> requestedType);
+    public abstract <B> B as(Glass<? super B, B> requestedType);
+    public abstract <B> B as(Class<B> requestedType, B reserve);
+    public abstract <B> B as(Glass<? super B, B> requestedType, B reserve);
+    public abstract <B> B orGiven(B reserve);
+    public abstract <B> B orDo(Supplier<B> supplier);
+    public abstract boolean is(Class<?> type);
+    public abstract boolean present();
+    public abstract boolean present(Object element);
+    public abstract boolean absent();
+    public abstract boolean absent(Object element);
+    public abstract int size();
+    public abstract Browser<Subject> iterator(boolean reverse);
+    public Browser<Subject> iterator() {
         return iterator(false);
     }
-    default Series front() {
+    public Series front() {
         throw new UnsupportedOperationException("Solid method");
     }
-    default Series reverse() {
+    public Series reverse() {
         throw new UnsupportedOperationException("Solid method");
     }
 
-    Subject set(Object element);
-    Subject set(Object element, Subject $set);
-    Subject setBefore(Object sequent, Object element);
-    Subject setBefore(Object sequent, Object element, Subject $set);
-    Subject unset();
-    Subject unset(Object element);
-    default Subject setIf(Object element, BiPredicate<Subject, Object> tester) {
+    public abstract Subject set(Object element);
+    public abstract Subject set(Object element, Subject $set);
+    public abstract Subject setBefore(Object sequent, Object element);
+    public abstract Subject setBefore(Object sequent, Object element, Subject $set);
+    public abstract Subject unset();
+    public abstract Subject unset(Object element);
+    public Subject setIf(Object element, BiPredicate<Subject, Object> tester) {
         return tester.test(this, element) ? set(element) : this;
     }
-    default Subject setIf(Object element, Subject $sub, BiPredicate<Subject, Object> tester) {
+    public Subject setIf(Object element, Subject $sub, BiPredicate<Subject, Object> tester) {
         return tester.test(this, element) ? set(element, $sub) : this;
     }
-    default Subject add(Subject $sub) {
+    public Subject add(Subject $sub) {
         return set(new Suite.AutoKey(), $sub);
     }
-    default Subject addBefore(Object sequent, Subject $sub) {
+    public Subject addBefore(Object sequent, Subject $sub) {
         return setBefore(sequent, new Suite.AutoKey(), $sub);
     }
-    default Subject insert(Object ... elements) {
+    public Subject insert(Object ... elements) {
         throw new UnsupportedOperationException("Solid method");
     }
-    default Subject take(Object key) {
+    public Subject take(Object key) {
         throw new UnsupportedOperationException("Solid method");
     }
-    default Subject alter(Iterable<? extends Subject> iterable) {
+    public Subject alter(Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
-    default Subject alterBefore(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject alterBefore(Object sequent, Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
 
-    default Subject getAll(Iterable<?> iterable) {
+    public Subject getAll(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
-    default Subject setAll(Iterable<?> iterable) {
+    public Subject setAll(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
-    default Subject unsetAll(Iterable<?> iterable) {
+    public Subject unsetAll(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
-    default Subject takeAll(Iterable<?> iterable) {
+    public Subject takeAll(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
     @Override
-    default Subject set() {
+    public Subject set() {
         return this;
     }
-    Subject separate();
+    abstract Subject separate();
 }

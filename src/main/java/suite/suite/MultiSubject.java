@@ -4,7 +4,7 @@ import suite.suite.util.*;
 
 import java.util.function.Supplier;
 
-class MultiSubject implements Subject {
+class MultiSubject extends Subject {
 
     private final Chain chain;
 
@@ -40,6 +40,11 @@ class MultiSubject implements Subject {
     @Override
     public boolean burned(Object element) {
         return chain.get(element).subject.burned(element);
+    }
+
+    @Override
+    public Subject go() {
+        return chain.first().subject.go();
     }
 
     @Override

@@ -6,7 +6,7 @@ import suite.suite.util.Glass;
 import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
-class ZeroSubject implements Subject {
+class ZeroSubject extends Subject {
 
     private static final ZeroSubject instance = new ZeroSubject();
 
@@ -34,6 +34,11 @@ class ZeroSubject implements Subject {
     @Override
     public boolean burned(Object element) {
         return false;
+    }
+
+    @Override
+    public Subject go() {
+        return this;
     }
 
     @Override

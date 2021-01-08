@@ -5,7 +5,7 @@ import suite.suite.util.Browser;
 
 import java.util.function.Supplier;
 
-public class ImaginarySubject implements Subject {
+public class ImaginarySubject extends Subject {
 
     private Subject subject;
     private final Object frontier;
@@ -42,6 +42,11 @@ public class ImaginarySubject implements Subject {
     @Override
     public boolean burned(Object element) {
         return jump().burned(element);
+    }
+
+    @Override
+    public Subject go() {
+        return jump().go();
     }
 
     @Override

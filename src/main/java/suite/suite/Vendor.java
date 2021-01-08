@@ -1,67 +1,76 @@
 package suite.suite;
 
-import java.util.function.Predicate;
+public abstract class Vendor extends Subject {
 
-public interface Vendor extends Subject {
-
-    default Subject set(Object element) {
-        throw new UnsupportedOperationException("Vendor is immutable");
-    }
-    default Subject set(Object element, Subject $set) {
-        throw new UnsupportedOperationException("Vendor is immutable");
-    }
-    default Subject setBefore(Object sequent, Object element)  {
-        throw new UnsupportedOperationException("Vendor is immutable");
-    }
-    default Subject setBefore(Object sequent, Object element, Subject $set) {
-        throw new UnsupportedOperationException("Vendor is immutable");
-    }
-    default Subject unset() {
-        throw new UnsupportedOperationException("Vendor is immutable");
-    }
-    default Subject unset(Object element) {
-        throw new UnsupportedOperationException("Vendor is immutable");
-    }
-    default Subject in() {
-        throw new UnsupportedOperationException("Vendor is immutable");
-    }
-    default Subject in(Object element) {
+    @Override
+    public Subject set(Object element) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
-    default Subject setIf(Object element, Predicate<Subject> test) {
+    @Override
+    public Subject set(Object element, Subject $set) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
-    default Subject setIfEmpty(Object element) {
+    @Override
+    public Subject setBefore(Object sequent, Object element)  {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
-    default Subject add(Subject $sub) {
+    @Override
+    public Subject setBefore(Object sequent, Object element, Subject $set) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
-    default Subject insert(Object ... elements) {
+    @Override
+    public Subject unset() {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
-    default Subject take(Object key) {
+    @Override
+    public Subject unset(Object element) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
-    default Subject alter(Iterable<? extends Subject> iterable) {
+    @Override
+    public Subject add(Subject $sub) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
-    default Subject alterBefore(Object sequent, Iterable<? extends Subject> iterable) {
+    @Override
+    public Subject insert(Object ... elements) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
-    default Subject setAll(Iterable<?> iterable) {
+    @Override
+    public Subject take(Object key) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
-    default Subject unsetAll(Iterable<?> iterable) {
+    @Override
+    public Subject alter(Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
+
+    @Override
+    public Subject alterBefore(Object sequent, Iterable<? extends Subject> iterable) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+
+    @Override
+    public Subject setAll(Iterable<?> iterable) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+
+    @Override
+    public Subject unsetAll(Iterable<?> iterable) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+
+    @Override
+    public Subject takeAll(Iterable<?> iterable) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+
+
 }

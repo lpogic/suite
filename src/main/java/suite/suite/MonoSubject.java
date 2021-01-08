@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unchecked")
-class MonoSubject implements Subject {
+class MonoSubject extends Subject {
 
     private final Object element;
     private Subject subject;
@@ -52,6 +52,11 @@ class MonoSubject implements Subject {
     @Override
     public boolean burned(Object element) {
         return Objects.equals(this.element, element);
+    }
+
+    @Override
+    public Subject go() {
+        return subject;
     }
 
     @Override

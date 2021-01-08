@@ -7,7 +7,7 @@ import suite.suite.util.Glass;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
-public class SolidSubject implements Subject {
+public class SolidSubject extends Subject {
 
     class HomogenizedSubjectIterator implements Browser<Subject> {
         Subject sub;
@@ -69,6 +69,11 @@ public class SolidSubject implements Subject {
     @Override
     public boolean burned(Object element) {
         return subject.burned(element);
+    }
+
+    @Override
+    public Subject go() {
+        return new SolidSubject(subject.go());
     }
 
     @Override
