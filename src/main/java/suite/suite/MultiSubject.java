@@ -22,24 +22,24 @@ class MultiSubject extends Subject {
     }
 
     @Override
-    public Subject burn(Object element) {
+    public Subject materialize(Object element) {
         var link = chain.get(element);
         if(link == chain.ward) {
             chain.put(element, Suite.set());
         } else {
-            link.subject = link.subject.burn(element);
+            link.subject = link.subject.materialize(element);
         }
         return this;
     }
 
     @Override
-    public Subject jump(Object element) {
-        return chain.get(element).subject.jump(element);
+    public boolean real(Object element) {
+        return chain.get(element).subject.real(element);
     }
 
     @Override
-    public boolean burned(Object element) {
-        return chain.get(element).subject.burned(element);
+    public Subject sub(Object element) {
+        return chain.get(element).subject.sub(element);
     }
 
     @Override

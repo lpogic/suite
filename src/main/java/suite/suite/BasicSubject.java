@@ -22,19 +22,19 @@ class BasicSubject extends Subject {
     }
 
     @Override
-    public Subject burn(Object element) {
+    public Subject materialize(Object element) {
         return Objects.equals(this.element, element) ?
-                new MonoSubject(this.element) : new MultiSubject(link()).burn(element);
+                new MonoSubject(this.element) : new MultiSubject(link()).materialize(element);
     }
 
     @Override
-    public Subject jump(Object element) {
-        return ZeroSubject.getInstance();
-    }
-
-    @Override
-    public boolean burned(Object element) {
+    public boolean real(Object element) {
         return false;
+    }
+
+    @Override
+    public Subject sub(Object element) {
+        return ZeroSubject.getInstance();
     }
 
     @Override

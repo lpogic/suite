@@ -3,6 +3,16 @@ package suite.suite;
 public abstract class Vendor extends Subject {
 
     @Override
+    Subject materialize(Object element) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+
+    @Override
+    Subject separate() {
+        return this;
+    }
+
+    @Override
     public Subject set(Object element) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }

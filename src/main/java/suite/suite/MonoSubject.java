@@ -38,20 +38,20 @@ class MonoSubject extends Subject {
     }
 
     @Override
-    public Subject burn(Object element) {
+    public Subject materialize(Object element) {
         return Objects.equals(this.element, element) ?
-                this : new MultiSubject(link()).burn(element);
+                this : new MultiSubject(link()).materialize(element);
     }
 
     @Override
-    public Subject jump(Object element) {
+    public boolean real(Object element) {
+        return Objects.equals(this.element, element);
+    }
+
+    @Override
+    public Subject sub(Object element) {
         return Objects.equals(this.element, element) ?
                 subject : ZeroSubject.getInstance();
-    }
-
-    @Override
-    public boolean burned(Object element) {
-        return Objects.equals(this.element, element);
     }
 
     @Override

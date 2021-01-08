@@ -11,5 +11,6 @@ public class Main {
         System.out.println(Suite.describe($));
         $.setIf("b", Suite.set("d"), Subject::present);
         System.out.println(Suite.describe($));
+        System.out.println(Suite.describe($.sub("b")));
     }
 }

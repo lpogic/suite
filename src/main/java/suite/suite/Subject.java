@@ -14,10 +14,10 @@ public abstract class Subject implements Series {
     public Subject at() {
         return at(new Suite.AutoKey());
     }
-    abstract Subject burn(Object element);
-    abstract Subject jump(Object element);
-    abstract boolean burned(Object element);
+    abstract Subject materialize(Object element);
+    abstract boolean real(Object element);
 
+    public abstract Subject sub(Object element);
     public abstract Subject sub();
     public abstract Subject getFirst();
     public abstract Subject getLast();

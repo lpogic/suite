@@ -22,17 +22,17 @@ class ZeroSubject extends Subject {
     }
 
     @Override
-    public Subject burn(Object element) {
+    public Subject materialize(Object element) {
         return new MonoSubject(element);
     }
 
     @Override
-    public Subject jump(Object element) {
+    public Subject sub(Object element) {
         return this;
     }
 
     @Override
-    public boolean burned(Object element) {
+    public boolean real(Object element) {
         return false;
     }
 

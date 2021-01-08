@@ -56,19 +56,19 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject burn(Object element) {
-        subject = subject.burn(element);
+    public Subject materialize(Object element) {
+        subject = subject.materialize(element);
         return this;
     }
 
     @Override
-    public Subject jump(Object element) {
-        return subject.jump(element);
+    public boolean real(Object element) {
+        return subject.real(element);
     }
 
     @Override
-    public boolean burned(Object element) {
-        return subject.burned(element);
+    public Subject sub(Object element) {
+        return new SolidSubject(subject.sub(element));
     }
 
     @Override
@@ -245,8 +245,8 @@ public class SolidSubject extends Subject {
         var $ = subject;
         for(var it : iterable) {
             Object o = it.direct();
-            if(it.burned(o)) {
-                $ = $.set(o, it.jump(o));
+            if(it.real(o)) {
+                $ = $.set(o, it.sub(o));
             } else {
                 $ = $.set(o);
             }
@@ -260,8 +260,8 @@ public class SolidSubject extends Subject {
         var $ = subject;
         for(var it : iterable) {
             Object o = it.direct();
-            if(it.burned(o)) {
-                $ = $.setBefore(sequent, o, it.jump(o));
+            if(it.real(o)) {
+                $ = $.setBefore(sequent, o, it.sub(o));
             } else {
                 $ = $.setBefore(sequent, o);
             }

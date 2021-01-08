@@ -21,27 +21,27 @@ public class ImaginarySubject extends Subject {
     }
 
     Subject burnAndJump() {
-        subject = subject.burn(frontier);
+        subject = subject.materialize(frontier);
         return jump();
     }
 
     Subject jump() {
-        return subject.jump(frontier);
+        return subject.sub(frontier);
     }
 
     @Override
-    public Subject burn(Object element) {
-        return burnAndJump().burn(element);
+    public Subject materialize(Object element) {
+        return burnAndJump().materialize(element);
     }
 
     @Override
-    public Subject jump(Object element) {
-        return jump().jump(element);
+    public boolean real(Object element) {
+        return jump().real(element);
     }
 
     @Override
-    public boolean burned(Object element) {
-        return jump().burned(element);
+    public Subject sub(Object element) {
+        return jump().sub(element);
     }
 
     @Override
