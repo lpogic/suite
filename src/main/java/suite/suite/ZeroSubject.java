@@ -37,7 +37,7 @@ class ZeroSubject extends Subject {
     }
 
     @Override
-    public Subject go() {
+    public Subject sub() {
         return this;
     }
 

@@ -38,7 +38,7 @@ class BasicSubject extends Subject {
     }
 
     @Override
-    public Subject go() {
+    public Subject sub() {
         return ZeroSubject.getInstance();
     }
 

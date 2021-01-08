@@ -45,8 +45,8 @@ public class ImaginarySubject extends Subject {
     }
 
     @Override
-    public Subject go() {
-        return jump().go();
+    public Subject sub() {
+        return jump().sub();
     }
 
     @Override

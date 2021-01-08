@@ -55,7 +55,7 @@ class MonoSubject extends Subject {
     }
 
     @Override
-    public Subject go() {
+    public Subject sub() {
         return subject;
     }
 

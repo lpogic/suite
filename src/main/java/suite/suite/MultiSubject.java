@@ -43,8 +43,8 @@ class MultiSubject extends Subject {
     }
 
     @Override
-    public Subject go() {
-        return chain.first().subject.go();
+    public Subject sub() {
+        return chain.first().subject.sub();
     }
 
     @Override

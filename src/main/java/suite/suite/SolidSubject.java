@@ -72,8 +72,8 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject go() {
-        return new SolidSubject(subject.go());
+    public Subject sub() {
+        return new SolidSubject(subject.sub());
     }
 
     @Override

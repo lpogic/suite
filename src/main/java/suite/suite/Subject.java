@@ -18,7 +18,7 @@ public abstract class Subject implements Series {
     abstract Subject jump(Object element);
     abstract boolean burned(Object element);
 
-    public abstract Subject go();
+    public abstract Subject sub();
     public abstract Subject getFirst();
     public abstract Subject getLast();
     public abstract Subject get(Object element);
