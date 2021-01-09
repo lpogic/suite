@@ -16,11 +16,11 @@ public abstract class Subject implements Series {
     public Sub in(Object element) {
         throw new UnsupportedOperationException("Solid method");
     }
-    abstract Subject materialize();
-    abstract Subject materialize(Object element);
-    abstract Subject jump();
-    abstract Subject jump(Object element);
-    abstract boolean real(Object element);
+    protected abstract Subject materialize();
+    protected abstract Subject materialize(Object element);
+    protected abstract Subject jump();
+    protected abstract Subject jump(Object element);
+    protected abstract boolean real(Object element);
 
     public abstract Subject getFirst();
     public abstract Subject getLast();
