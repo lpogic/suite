@@ -136,7 +136,7 @@ public interface Series extends Iterable<Subject> {
         };
     }
 
-    default Series atEach() {
+    default Series eachIn() {
         return () -> new Browser<>() {
             final Iterator<Subject> subIt = iterator();
 
@@ -147,8 +147,7 @@ public interface Series extends Iterable<Subject> {
 
             @Override
             public Subject next() {
-                var $ = subIt.next();
-                return $.at($.direct());
+                return subIt.next().in().get();
             }
         };
     }

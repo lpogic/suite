@@ -2,14 +2,12 @@ package suite.suite;
 
 import suite.suite.util.*;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
+import java.util.function.Function;
 
 public class Suite {
 
-    public static class AutoKey {
+    public static class Auto {
         @Override
         public String toString() {
             return "$A";
@@ -26,7 +24,7 @@ public class Suite {
         return new SolidSubject(new MonoSubject(element, $));
     }
     public static Subject add(Subject $) {
-        return new SolidSubject(new MonoSubject(new AutoKey(), $));
+        return new SolidSubject(new MonoSubject(new Auto(), $));
     }
     public static Subject insert(Object ... elements) {
         return new SolidSubject().insert(elements);
@@ -40,13 +38,13 @@ public class Suite {
 
 //    public static boolean absent(Subject $, Object element)
 
-//    public static Subject fuse(Subject subject) {
-//        if(subject == null) {
+//    public static Subject fuse(Subject sub) {
+//        if(sub == null) {
 //            return Suite.set();
-//        } else if(subject.fused()) {
-//            return subject;
+//        } else if(sub.fused()) {
+//            return sub;
 //        } else {
-//            return new SolidSubject(new FuseSubject(subject));
+//            return new SolidSubject(new FuseSubject(sub));
 //        }
 //    }
 
@@ -67,6 +65,15 @@ public class Suite {
     }
 
     public static String describe(Series $sub) {
+        return describe($sub, true, o -> o instanceof Auto ? "" : o + " ");
+    }
+
+    public static String describe(Series $sub, boolean pack, Function<Object, String> encoder) {
+        if($sub == null) $sub = Suite.set();
+        if(pack) {
+            var $ = $sub.set();
+            $sub = Suite.add($.absent() ? Suite.set(new Auto()) : $);
+        }
         StringBuilder sb = new StringBuilder();
         Stack<Subject> stack = new Stack<>();
         Subject printed = Suite.set();
@@ -80,10 +87,8 @@ public class Suite {
             for(Subject $s : it.toEnd()) {
                 if(tabsBefore)sb.append("\t".repeat(stack.size() - 1));
                 tabsBefore = false;
-                if(!$s.is(AutoKey.class)) {
-                    sb.append($s.direct()).append(" ");
-                }
-                Subject $ = $s.at($s.direct()).set();
+                sb.append(encoder.apply($s.direct()));
+                Subject $ = $s.in().get();
                 if($.absent()) {
                     if($current.size() > 1) {
                         sb.append("[]\n");
@@ -94,7 +99,7 @@ public class Suite {
                         sb.append("[ ... ]\n");
                         tabsBefore = true;
                     } else {
-                        if($.size() > 1 || $.at($.direct()).present()) {
+                        if($.size() > 1 || $.in().present()) {
                             sb.append("[\n");
                             tabsBefore = true;
                         } else {
@@ -121,8 +126,10 @@ public class Suite {
         return sb.toString();
     }
 
-    public static String describe(Series $sub, boolean compress) {
-        if(!compress)return describe($sub);
+    public static String describe(Series $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
+        if(!compress)return describe($sub, pack, encoder);
+        if($sub == null) $sub = Suite.set();
+        if(pack) $sub = Suite.add($sub.set());
         StringBuilder sb = new StringBuilder();
         Stack<Iterator<Subject>> stack = new Stack<>();
         Subject printed = Suite.set();
@@ -131,16 +138,16 @@ public class Suite {
         while(!stack.empty()) {
             Iterator<Subject> it = stack.peek();
             for(var $s : (Iterable<Subject>) () -> it) {
-                if(!$s.is(AutoKey.class)) {
+                if(!$s.is(Auto.class)) {
                     sb.append($s.direct());
                 }
-                var $ = $s.at($s.direct()).set();
+                var $ = $s.in().get();
                 if($.absent()) {
                     if(it.hasNext()) {
                         sb.append("[]");
                     }
                 } else {
-                    if(printed.at($).present()) {
+                    if(printed.in($).present()) {
                         sb.append("[...]");
                     } else {
                         sb.append("[");
@@ -168,7 +175,7 @@ public class Suite {
             final Stack<Iterator<Subject>> stack = new Stack<>();
             final Stack<Subject> subjectStack = new Stack<>();
             {
-                stack.add(Suite.set(null, $sub).atEach().iterator());
+                stack.add(Suite.set(null, $sub).eachIn().iterator());
                 dig();
             }
 
@@ -189,7 +196,7 @@ public class Suite {
                 while (stack.size() > 0 && stack.peek().hasNext()) {
                     while (stack.peek().hasNext()) {
                         subjectStack.add(stack.peek().next());
-                        stack.add(subjectStack.peek().atEach().iterator());
+                        stack.add(subjectStack.peek().eachIn().iterator());
                     }
                     subjectStack.pop();
                     stack.pop();

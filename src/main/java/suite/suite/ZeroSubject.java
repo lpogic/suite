@@ -17,28 +17,28 @@ class ZeroSubject extends Subject {
     private ZeroSubject() {}
 
     @Override
-    public Subject at(Object element) {
-        return new ImaginarySubject(this, element);
+    protected Subject materialize() {
+        return new MonoSubject(new Suite.Auto());
     }
 
     @Override
-    public Subject materialize(Object element) {
+    protected Subject materialize(Object element) {
         return new MonoSubject(element);
     }
 
     @Override
-    public Subject sub(Object element) {
-        return this;
+    protected Subject jump() {
+        return Suite.set();
     }
 
     @Override
-    public boolean real(Object element) {
+    protected Subject jump(Object element) {
+        return Suite.set();
+    }
+
+    @Override
+    protected boolean real(Object element) {
         return false;
-    }
-
-    @Override
-    public Subject sub() {
-        return this;
     }
 
     @Override

@@ -2,100 +2,100 @@ package suite.suite;
 
 class FuseSubject {}/* implements Subject {
 
-    Subject subject;
+    Subject sub;
 
-    public FuseSubject(Subject subject) {
-        this.subject = subject;
+    public FuseSubject(Subject sub) {
+        this.sub = sub;
     }
 
     @Override
     public Subject atFirst() {
-        return subject.atFirst();
+        return sub.atFirst();
     }
 
     @Override
     public Subject atLast() {
-        return subject.atLast();
+        return sub.atLast();
     }
 
     @Override
-    public Subject at(Object element) {
-        return subject.at(element);
+    public Subject in(Object element) {
+        return sub.in(element);
     }
 
     @Override
     public Subject get() {
-        return subject.get();
+        return sub.get();
     }
 
     @Override
     public Subject get(Object element) {
-        return subject.get(element);
+        return sub.get(element);
     }
 
     @Override
     public Object direct() {
-        return subject.direct();
+        return sub.direct();
     }
 
     @Override
     public <B> B asExpected() {
-        return subject.asExpected();
+        return sub.asExpected();
     }
 
     @Override
     public <B> B as(Class<B> requestedType) {
-        return subject.as(requestedType);
+        return sub.as(requestedType);
     }
 
     @Override
     public <B> B as(Glass<? super B, B> requestedType) {
-        return subject.as(requestedType);
+        return sub.as(requestedType);
     }
 
     @Override
     public <B> B as(Class<B> requestedType, B reserve) {
-        return subject.as(requestedType, reserve);
+        return sub.as(requestedType, reserve);
     }
 
     @Override
     public <B> B as(Glass<? super B, B> requestedType, B reserve) {
-        return subject.as(requestedType, reserve);
+        return sub.as(requestedType, reserve);
     }
 
     @Override
     public <B> B orGiven(B reserve) {
-        return subject.orGiven(reserve);
+        return sub.orGiven(reserve);
     }
 
     @Override
     public <B> B orDo(Supplier<B> supplier) {
-        return subject.orDo(supplier);
+        return sub.orDo(supplier);
     }
 
     @Override
     public boolean is(Class<?> type) {
-        return subject.is(type);
+        return sub.is(type);
     }
 
     @Override
     public boolean present() {
-        return subject.present();
+        return sub.present();
     }
 
     @Override
     public boolean absent() {
-        return subject.absent();
+        return sub.absent();
     }
 
     @Override
     public int size() {
-        return subject.size();
+        return sub.size();
     }
 
     @Override
     public Wave<Subject> iterator(boolean reverse) {
-        return subject.iterator();
+        return sub.iterator();
     }
 
     @Override

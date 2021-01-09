@@ -3,17 +3,17 @@ package suite.suite;
 class ThreadySubject {}/* implements Subject {
 
     class HomogenizedSubjectIterator implements Wave<Subject> {
-        Subject sub;
+        Subject jump;
         boolean reverse;
         Wave<Subject> it;
 
         boolean hasNext;
         Subject next;
 
-        HomogenizedSubjectIterator(Subject sub, boolean reverse, Slot slot) {
-            this.sub = sub;
+        HomogenizedSubjectIterator(Subject jump, boolean reverse, Slot slot) {
+            this.jump = jump;
             this.reverse = reverse;
-            this.it = sub.iterator(slot, reverse);
+            this.it = jump.iterator(slot, reverse);
         }
 
 
@@ -21,13 +21,13 @@ class ThreadySubject {}/* implements Subject {
         public boolean hasNext() {
             if(hasNext) return true;
             try(var ignored = readLock.lock()) {
-                if(sub != subject) {
-                    if(sub == ZeroSubject.getInstance()) {
-                        it = reverse ? subject.iterator(Slot.RECENT, true) : subject.iterator(Slot.PRIME, false);
-                    } else if(subject == ZeroSubject.getInstance()) {
+                if(jump != sub) {
+                    if(jump == ZeroSubject.getInstance()) {
+                        it = reverse ? sub.iterator(Slot.RECENT, true) : sub.iterator(Slot.PRIME, false);
+                    } else if(sub == ZeroSubject.getInstance()) {
                         it = Wave.empty();
                     }
-                    sub = subject;
+                    jump = sub;
                 }
                 hasNext = it.hasNext();
                 if(hasNext) next = it.next();
@@ -60,24 +60,24 @@ class ThreadySubject {}/* implements Subject {
         }
     }
 
-    private Subject subject;
+    private Subject sub;
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private final ThreadyLock writeLock = new ThreadyLock(lock.writeLock());
     private final ThreadyLock readLock = new ThreadyLock(lock.readLock());
 
 
     ThreadySubject() {
-        subject = ZeroSubject.getInstance();
+        sub = ZeroSubject.getInstance();
     }
 
-    ThreadySubject(Subject subject) {
-        this.subject = subject;
+    ThreadySubject(Subject sub) {
+        this.sub = sub;
     }
 
     @Override
     public Subject set(Object element) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.set(element);
+            sub = sub.set(element);
         }
         return this;
     }
@@ -85,7 +85,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject set(Object key, Object value) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.set(key, value);
+            sub = sub.set(key, value);
         }
         return this;
     }
@@ -93,7 +93,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject put(Object value) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.put(value);
+            sub = sub.put(value);
         }
         return this;
     }
@@ -101,7 +101,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject put(Object key, Object value) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.put(key, value);
+            sub = sub.put(key, value);
         }
         return this;
     }
@@ -109,7 +109,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject add(Object element) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.add(element);
+            sub = sub.add(element);
         }
         return this;
     }
@@ -117,7 +117,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject unset() {
         try(var ignored = writeLock.lock()) {
-            subject = subject.unset();
+            sub = sub.unset();
         }
         return this;
     }
@@ -125,7 +125,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject unset(Object key) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.unset(key);
+            sub = sub.unset(key);
         }
         return this;
     }
@@ -133,7 +133,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject unset(Object key, Object value) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.unset(key, value);
+            sub = sub.unset(key, value);
         }
         return this;
     }
@@ -141,7 +141,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject unsetAt(Slot slot) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.unsetAt(slot);
+            sub = sub.unsetAt(slot);
         }
         return this;
     }
@@ -150,7 +150,7 @@ class ThreadySubject {}/* implements Subject {
     public Subject prime() {
         Subject prime;
         try(var ignored = readLock.lock()) {
-            prime = new SolidSubject(subject.prime().fuse());
+            prime = new SolidSubject(sub.prime().fuse());
         }
         return prime;
     }
@@ -159,7 +159,7 @@ class ThreadySubject {}/* implements Subject {
     public Subject recent() {
         Subject recent;
         try(var ignored = readLock.lock()) {
-            recent = new SolidSubject(subject.recent().fuse());
+            recent = new SolidSubject(sub.recent().fuse());
         }
         return recent;
     }
@@ -168,7 +168,7 @@ class ThreadySubject {}/* implements Subject {
     public Subject get(Object key) {
         Subject get;
         try(var ignored = readLock.lock()) {
-            get = new SolidSubject(subject.get(key).fuse());
+            get = new SolidSubject(sub.get(key).fuse());
         }
         return get;
     }
@@ -177,34 +177,34 @@ class ThreadySubject {}/* implements Subject {
     public Subject get(Object ... keys) {
         Subject get;
         try(var ignored = readLock.lock()) {
-            get = new SolidSubject(subject.get(keys).fuse());
+            get = new SolidSubject(sub.get(keys).fuse());
         }
         return get;
     }
 
     @Override
     public Subject getAt(Slot slot) {
-        Subject at;
+        Subject in;
         try(var ignored = readLock.lock()) {
-            at = new SolidSubject(subject.getAt(slot).fuse());
+            in = new SolidSubject(sub.getAt(slot).fuse());
         }
-        return at;
+        return in;
     }
 
     @Override
     public Subject getAt(int slotIndex) {
-        Subject at;
+        Subject in;
         try(var ignored = readLock.lock()) {
-            at = new SolidSubject(subject.getAt(slotIndex).fuse());
+            in = new SolidSubject(sub.getAt(slotIndex).fuse());
         }
-        return at;
+        return in;
     }
 
     @Override
     public Subject key() {
         Subject key;
         try(var ignored = readLock.lock()) {
-            key = new SolidSubject(subject.key().fuse());
+            key = new SolidSubject(sub.key().fuse());
         }
         return key;
     }
@@ -213,7 +213,7 @@ class ThreadySubject {}/* implements Subject {
     public Object direct() {
         Object direct;
         try(var ignored = readLock.lock()) {
-            direct = subject.direct();
+            direct = sub.direct();
         }
         return direct;
     }
@@ -222,7 +222,7 @@ class ThreadySubject {}/* implements Subject {
     public <B> B asExpected() {
         B b;
         try(var ignored = readLock.lock()) {
-            b = subject.asExpected();
+            b = sub.asExpected();
         }
         return b;
     }
@@ -231,7 +231,7 @@ class ThreadySubject {}/* implements Subject {
     public <B> B as(Class<B> requestedType) {
         B b;
         try(var ignored = readLock.lock()) {
-            b = subject.as(requestedType);
+            b = sub.as(requestedType);
         }
         return b;
     }
@@ -240,7 +240,7 @@ class ThreadySubject {}/* implements Subject {
     public <B> B as(Glass<? super B, B> requestedType) {
         B b;
         try(var ignored = readLock.lock()) {
-            b = subject.as(requestedType);
+            b = sub.as(requestedType);
         }
         return b;
     }
@@ -249,7 +249,7 @@ class ThreadySubject {}/* implements Subject {
     public <B> B as(Class<B> requestedType, B reserve) {
         B b;
         try(var ignored = readLock.lock()) {
-            b = subject.as(requestedType, reserve);
+            b = sub.as(requestedType, reserve);
         }
         return b;
     }
@@ -258,7 +258,7 @@ class ThreadySubject {}/* implements Subject {
     public <B> B as(Glass<? super B, B> requestedType, B reserve) {
         B b;
         try(var ignored = readLock.lock()) {
-            b = subject.as(requestedType, reserve);
+            b = sub.as(requestedType, reserve);
         }
         return b;
     }
@@ -267,7 +267,7 @@ class ThreadySubject {}/* implements Subject {
     public <B> B orGiven(B reserve) {
         B b;
         try(var ignored = readLock.lock()) {
-            b = subject.orGiven(reserve);
+            b = sub.orGiven(reserve);
         }
         return b;
     }
@@ -276,7 +276,7 @@ class ThreadySubject {}/* implements Subject {
     public <B> B orDo(Supplier<B> supplier) {
         B b;
         try(var ignored = readLock.lock()) {
-            b = subject.orDo(supplier);
+            b = sub.orDo(supplier);
         }
         return b;
     }
@@ -285,7 +285,7 @@ class ThreadySubject {}/* implements Subject {
     public boolean is(Class<?> type) {
         boolean is;
         try(var ignored = readLock.lock()) {
-            is = subject.is(type);
+            is = sub.is(type);
         }
         return is;
     }
@@ -294,10 +294,10 @@ class ThreadySubject {}/* implements Subject {
     public Subject getSaved(Object key, Object reserve) {
         Subject spared;
         try(var ignored = writeLock.lock()) {
-            spared = subject.get(key);
+            spared = sub.get(key);
             if(!spared.present()) {
-                subject = subject.set(key, reserve);
-                spared = subject.get(key);
+                sub = sub.set(key, reserve);
+                spared = sub.get(key);
             }
         }
         return new SolidSubject(spared);
@@ -307,10 +307,10 @@ class ThreadySubject {}/* implements Subject {
     public Subject getDone(Object key, Supplier<?> supplier) {
         Subject spared;
         try(var ignored = writeLock.lock()) {
-            spared = subject.get(key);
+            spared = sub.get(key);
             if(!spared.present()) {
-                subject = subject.set(key, supplier.get());
-                spared = subject.get(key);
+                sub = sub.set(key, supplier.get());
+                spared = sub.get(key);
             }
         }
         return new SolidSubject(spared);
@@ -320,10 +320,10 @@ class ThreadySubject {}/* implements Subject {
     public Subject getDone(Object key, Function<Subject, ?> function, Subject argument) {
         Subject spared;
         try(var ignored = writeLock.lock()) {
-            spared = subject.get(key);
+            spared = sub.get(key);
             if(!spared.present()) {
-                subject = subject.set(key, function.apply(argument));
-                spared = subject.get(key);
+                sub = sub.set(key, function.apply(argument));
+                spared = sub.get(key);
             }
         }
         return new SolidSubject(spared);
@@ -333,8 +333,8 @@ class ThreadySubject {}/* implements Subject {
     public Subject take(Object key) {
         Subject taken;
         try(var ignored = writeLock.lock()) {
-            taken = subject.get(key);
-            subject = subject.unset(key);
+            taken = sub.get(key);
+            sub = sub.unset(key);
         }
         return new SolidSubject(taken);
     }
@@ -343,8 +343,8 @@ class ThreadySubject {}/* implements Subject {
     public Subject takeAt(Slot slot) {
         Subject taken;
         try(var ignored = writeLock.lock()) {
-            taken = subject.getAt(slot);
-            if(taken.present()) subject = subject.unset(taken.key().direct());
+            taken = sub.getAt(slot);
+            if(taken.present()) sub = sub.unset(taken.key().direct());
         }
         return new SolidSubject(taken);
     }
@@ -353,7 +353,7 @@ class ThreadySubject {}/* implements Subject {
     public boolean present() {
         boolean settled;
         try(var ignored = readLock.lock()) {
-            settled = subject.present();
+            settled = sub.present();
         }
         return settled;
     }
@@ -362,7 +362,7 @@ class ThreadySubject {}/* implements Subject {
     public boolean absent() {
         boolean desolated;
         try(var ignored = readLock.lock()) {
-            desolated = subject.absent();
+            desolated = sub.absent();
         }
         return desolated;
     }
@@ -371,7 +371,7 @@ class ThreadySubject {}/* implements Subject {
     public int size() {
         int size;
         try(var ignored = readLock.lock()) {
-            size = subject.size();
+            size = sub.size();
         }
         return size;
     }
@@ -380,7 +380,7 @@ class ThreadySubject {}/* implements Subject {
     public Wave<Subject> iterator(Slot slot, boolean reverse) {
         Wave<Subject> it;
         try(var ignored = writeLock.lock()) {
-            it = new HomogenizedSubjectIterator(subject, reverse, slot);
+            it = new HomogenizedSubjectIterator(sub, reverse, slot);
         }
         return it;
     }
@@ -388,7 +388,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject alter(Iterable<? extends Subject> iterable) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.alter(iterable);
+            sub = sub.alter(iterable);
         }
         return this;
     }
@@ -396,7 +396,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject input(Iterable<? extends Subject> iterable) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.input(iterable);
+            sub = sub.input(iterable);
         }
         return this;
     }
@@ -405,7 +405,7 @@ class ThreadySubject {}/* implements Subject {
     public boolean fused() {
         boolean fused;
         try(var ignored = readLock.lock()) {
-            fused = subject.fused();
+            fused = sub.fused();
         }
         return fused;
     }
@@ -414,7 +414,7 @@ class ThreadySubject {}/* implements Subject {
     public String toString() {
         String string;
         try(var ignored = readLock.lock()) {
-            string = subject.toString();
+            string = sub.toString();
         }
         return string;
     }
@@ -422,7 +422,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject setAt(Slot slot, Object element) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.setAt(slot, element);
+            sub = sub.setAt(slot, element);
         }
         return this;
     }
@@ -430,7 +430,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject setAt(Slot slot, Object key, Object value) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.setAt(slot, key, value);
+            sub = sub.setAt(slot, key, value);
         }
         return this;
     }
@@ -438,7 +438,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject putAt(Slot slot, Object element) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.putAt(slot, element);
+            sub = sub.putAt(slot, element);
         }
         return this;
     }
@@ -446,7 +446,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject putAt(Slot slot, Object key, Object value) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.putAt(slot, key, value);
+            sub = sub.putAt(slot, key, value);
         }
         return this;
     }
@@ -454,7 +454,7 @@ class ThreadySubject {}/* implements Subject {
     @Override
     public Subject addAt(Slot slot, Object element) {
         try(var ignored = writeLock.lock()) {
-            subject = subject.addAt(slot, element);
+            sub = sub.addAt(slot, element);
         }
         return this;
     }

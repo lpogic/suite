@@ -10,15 +10,18 @@ import java.util.function.Supplier;
 @SuppressWarnings("UnusedReturnValue")
 public abstract class Subject implements Series {
 
-    public abstract Subject at(Object element);
-    public Subject at() {
-        return at(new Suite.AutoKey());
+    public Sub in() {
+        throw new UnsupportedOperationException("Solid method");
     }
+    public Sub in(Object element) {
+        throw new UnsupportedOperationException("Solid method");
+    }
+    abstract Subject materialize();
     abstract Subject materialize(Object element);
+    abstract Subject jump();
+    abstract Subject jump(Object element);
     abstract boolean real(Object element);
 
-    public abstract Subject sub(Object element);
-    public abstract Subject sub();
     public abstract Subject getFirst();
     public abstract Subject getLast();
     public abstract Subject get(Object element);
@@ -60,10 +63,10 @@ public abstract class Subject implements Series {
         return tester.test(this, element) ? set(element, $sub) : this;
     }
     public Subject add(Subject $sub) {
-        return set(new Suite.AutoKey(), $sub);
+        return set(new Suite.Auto(), $sub);
     }
     public Subject addBefore(Object sequent, Subject $sub) {
-        return setBefore(sequent, new Suite.AutoKey(), $sub);
+        return setBefore(sequent, new Suite.Auto(), $sub);
     }
     public Subject insert(Object ... elements) {
         throw new UnsupportedOperationException("Solid method");

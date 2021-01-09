@@ -35,7 +35,7 @@ public class Cascade<T> implements Browser<T> {
     }
 
     public void store(T t) {
-        stored.at().set(t);
+        stored.in().set(t);
     }
 
     public int getFalls() {

@@ -17,29 +17,29 @@ class BasicSubject extends Subject {
     }
 
     @Override
-    public Subject at(Object element) {
-        return new ImaginarySubject(this, element);
+    protected Subject materialize() {
+        return new MonoSubject(this.element);
     }
 
     @Override
-    public Subject materialize(Object element) {
+    protected Subject materialize(Object element) {
         return Objects.equals(this.element, element) ?
                 new MonoSubject(this.element) : new MultiSubject(link()).materialize(element);
     }
 
     @Override
+    protected Subject jump() {
+        return Suite.set();
+    }
+
+    @Override
+    protected Subject jump(Object element) {
+        return Suite.set();
+    }
+
+    @Override
     public boolean real(Object element) {
         return false;
-    }
-
-    @Override
-    public Subject sub(Object element) {
-        return ZeroSubject.getInstance();
-    }
-
-    @Override
-    public Subject sub() {
-        return ZeroSubject.getInstance();
     }
 
     @Override

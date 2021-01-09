@@ -17,12 +17,18 @@ class MultiSubject extends Subject {
     }
 
     @Override
-    public Subject at(Object element) {
-        return new ImaginarySubject(this, element);
+    protected Subject materialize() {
+        var link = chain.first();
+        if(link == chain.ward) {
+            chain.put(new Suite.Auto(), Suite.set());
+        } else {
+            link.subject = link.subject.materialize();
+        }
+        return this;
     }
 
     @Override
-    public Subject materialize(Object element) {
+    protected Subject materialize(Object element) {
         var link = chain.get(element);
         if(link == chain.ward) {
             chain.put(element, Suite.set());
@@ -33,18 +39,18 @@ class MultiSubject extends Subject {
     }
 
     @Override
-    public boolean real(Object element) {
+    protected Subject jump() {
+        return chain.first().subject.jump();
+    }
+
+    @Override
+    protected Subject jump(Object element) {
+        return chain.get(element).subject.jump(element);
+    }
+
+    @Override
+    protected boolean real(Object element) {
         return chain.get(element).subject.real(element);
-    }
-
-    @Override
-    public Subject sub(Object element) {
-        return chain.get(element).subject.sub(element);
-    }
-
-    @Override
-    public Subject sub() {
-        return chain.first().subject.sub();
     }
 
     @Override

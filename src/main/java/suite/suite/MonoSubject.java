@@ -33,30 +33,30 @@ class MonoSubject extends Subject {
     }
 
     @Override
-    public Subject at(Object element) {
-        return new ImaginarySubject(this, element);
+    protected Subject materialize() {
+        return this;
     }
 
     @Override
-    public Subject materialize(Object element) {
+    protected Subject materialize(Object element) {
         return Objects.equals(this.element, element) ?
                 this : new MultiSubject(link()).materialize(element);
     }
 
     @Override
-    public boolean real(Object element) {
-        return Objects.equals(this.element, element);
-    }
-
-    @Override
-    public Subject sub(Object element) {
-        return Objects.equals(this.element, element) ?
-                subject : ZeroSubject.getInstance();
-    }
-
-    @Override
-    public Subject sub() {
+    protected Subject jump() {
         return subject;
+    }
+
+    @Override
+    protected Subject jump(Object element) {
+        return Objects.equals(this.element, element) ?
+                subject : Suite.set();
+    }
+
+    @Override
+    protected boolean real(Object element) {
+        return Objects.equals(this.element, element);
     }
 
     @Override

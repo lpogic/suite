@@ -51,29 +51,40 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject at(Object element) {
-        return new SolidSubject(new ImaginarySubject(this, element));
+    public Sub in() {
+        return new SubSubject(this).in();
     }
 
     @Override
-    public Subject materialize(Object element) {
+    public Sub in(Object element) {
+        return new SubSubject(this).in(element);
+    }
+
+    @Override
+    protected Subject materialize(Object element) {
         subject = subject.materialize(element);
         return this;
     }
 
     @Override
-    public boolean real(Object element) {
+    protected Subject materialize() {
+        subject = subject.materialize();
+        return this;
+    }
+
+    @Override
+    protected Subject jump() {
+        return subject.jump();
+    }
+
+    @Override
+    protected Subject jump(Object element) {
+        return subject.jump(element);
+    }
+
+    @Override
+    protected boolean real(Object element) {
         return subject.real(element);
-    }
-
-    @Override
-    public Subject sub(Object element) {
-        return new SolidSubject(subject.sub(element));
-    }
-
-    @Override
-    public Subject sub() {
-        return new SolidSubject(subject.sub());
     }
 
     @Override
@@ -210,11 +221,11 @@ public class SolidSubject extends Subject {
 
     @Override
     public Subject insert(Object... elements) {
-        Subject $ = this;
+        Sub $ = new SubSubject(this);
         int i = 0;
         Object o = null;
         for(Object e : elements) {
-            if(i > 0) $ = $.at(o);
+            if(i > 0) $ = $.in(o);
             o = e;
             ++i;
         }
@@ -246,7 +257,7 @@ public class SolidSubject extends Subject {
         for(var it : iterable) {
             Object o = it.direct();
             if(it.real(o)) {
-                $ = $.set(o, it.sub(o));
+                $ = $.set(o, it.jump(o));
             } else {
                 $ = $.set(o);
             }
@@ -261,7 +272,7 @@ public class SolidSubject extends Subject {
         for(var it : iterable) {
             Object o = it.direct();
             if(it.real(o)) {
-                $ = $.setBefore(sequent, o, it.sub(o));
+                $ = $.setBefore(sequent, o, it.jump(o));
             } else {
                 $ = $.setBefore(sequent, o);
             }
