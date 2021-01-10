@@ -1,5 +1,6 @@
 package suite.suite.util;
 
+import suite.suite.Sub;
 import suite.suite.Subject;
 import suite.suite.Suite;
 import suite.suite.action.Action;
@@ -172,6 +173,10 @@ public interface Series extends Iterable<Subject> {
                 return subIt.next().in().get();
             }
         };
+    }
+
+    default Sub in() {
+        return getFirst().in();
     }
 
     default Object direct() {
