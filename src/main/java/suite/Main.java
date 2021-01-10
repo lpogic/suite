@@ -1,13 +1,14 @@
 package suite;
 
 import suite.suite.Suite;
+import suite.suite.util.Sequence;
 
 public class Main {
 
     public static void main(String[] args) {
-        var $ = Suite.set();
+        var $ = Suite.setAll(Sequence.of(1, 2, 3));
         System.out.println(Suite.describe($));
-        $.in("A").in().in("B").set("C");
+        System.out.println(Suite.describe($.take(1, 3)));
         System.out.println(Suite.describe($));
     }
 }

@@ -64,15 +64,22 @@ public class Suite {
         return alter(Series.engage(keys, values));
     }
 
-    public static String describe(Series $sub) {
+    public static String describe(Series $ser) {
+        StringBuilder sb = new StringBuilder();
+        for(var $ : $ser) {
+            sb.append(describe($, true, o -> o instanceof Auto ? "" : o + " "));
+        }
+        return sb.toString();
+    }
+
+    public static String describe(Subject $sub) {
         return describe($sub, true, o -> o instanceof Auto ? "" : o + " ");
     }
 
-    public static String describe(Series $sub, boolean pack, Function<Object, String> encoder) {
+    public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder) {
         if($sub == null) $sub = Suite.set();
         if(pack) {
-            var $ = $sub.set();
-            $sub = Suite.add($.absent() ? Suite.set(new Auto()) : $);
+            $sub = Suite.add($sub.absent() ? Suite.set(new Auto()) : $sub);
         }
         StringBuilder sb = new StringBuilder();
         Stack<Subject> stack = new Stack<>();
@@ -126,7 +133,7 @@ public class Suite {
         return sb.toString();
     }
 
-    public static String describe(Series $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
+    public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
         if(!compress)return describe($sub, pack, encoder);
         if($sub == null) $sub = Suite.set();
         if(pack) $sub = Suite.add($sub.set());

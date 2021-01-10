@@ -4,6 +4,7 @@ import suite.suite.util.Browser;
 import suite.suite.util.Series;
 import suite.suite.util.Glass;
 
+import java.util.Iterator;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
@@ -245,11 +246,13 @@ public class SolidSubject extends Subject {
     public Subject alter(Iterable<? extends Subject> iterable) {
         var $ = subject;
         for(var it : iterable) {
-            Object o = it.direct();
-            if(it.real(o)) {
-                $ = $.set(o, it.jump(o));
-            } else {
-                $ = $.set(o);
+            if(it.present()) {
+                Object o = it.direct();
+                if (it.real(o)) {
+                    $ = $.set(o, it.jump(o));
+                } else {
+                    $ = $.set(o);
+                }
             }
         }
         subject = $;
@@ -260,11 +263,13 @@ public class SolidSubject extends Subject {
     public Subject alterBefore(Object sequent, Iterable<? extends Subject> iterable) {
         var $ = subject;
         for(var it : iterable) {
-            Object o = it.direct();
-            if(it.real(o)) {
-                $ = $.setBefore(sequent, o, it.jump(o));
-            } else {
-                $ = $.setBefore(sequent, o);
+            if(it.present()) {
+                Object o = it.direct();
+                if (it.real(o)) {
+                    $ = $.setBefore(sequent, o, it.jump(o));
+                } else {
+                    $ = $.setBefore(sequent, o);
+                }
             }
         }
         subject = $;
@@ -272,12 +277,20 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject getAll(Iterable<?> iterable) {
-        var $ = Suite.set();
-        for(Object it : iterable) {
-            $.alter(get(it));
-        }
-        return $;
+    public Series getAll(Iterable<?> iterable) {
+        return () -> new Browser<>() {
+            final Iterator<?> it = iterable.iterator();
+
+            @Override
+            public boolean hasNext() {
+                return it.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                return get(it.next());
+            }
+        };
     }
 
     @Override
@@ -301,12 +314,20 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject takeAll(Iterable<?> iterable) {
-        var $ = Suite.set();
-        for(Object it : iterable) {
-            $.alter(take(it));
-        }
-        return $;
+    public Series takeAll(Iterable<?> iterable) {
+        return () -> new Browser<>() {
+            final Iterator<?> it = iterable.iterator();
+
+            @Override
+            public boolean hasNext() {
+                return it.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                return take(it.next());
+            }
+        };
     }
 
     @Override

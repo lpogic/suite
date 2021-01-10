@@ -1,5 +1,6 @@
 package suite.suite;
 
+import suite.suite.util.Sequence;
 import suite.suite.util.Series;
 import suite.suite.util.Glass;
 import suite.suite.util.Browser;
@@ -19,6 +20,9 @@ public abstract class Subject implements Sub {
     public abstract Subject getFirst();
     public abstract Subject getLast();
     public abstract Subject get(Object element);
+    public Subject get(Object... elements) {
+        return getAll(Sequence.of(elements)).set();
+    }
     public abstract Object direct();
     public abstract <B> B asExpected();
     public abstract <B> B as(Class<B> requestedType);
@@ -65,8 +69,11 @@ public abstract class Subject implements Sub {
     public Subject insert(Object ... elements) {
         throw new UnsupportedOperationException("Solid method");
     }
-    public Subject take(Object key) {
+    public Subject take(Object element) {
         throw new UnsupportedOperationException("Solid method");
+    }
+    public Subject take(Object... elements) {
+        return takeAll(Sequence.of(elements)).set();
     }
     public Subject alter(Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Solid method");
@@ -75,7 +82,7 @@ public abstract class Subject implements Sub {
         throw new UnsupportedOperationException("Solid method");
     }
 
-    public Subject getAll(Iterable<?> iterable) {
+    public Series getAll(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
     public Subject setAll(Iterable<?> iterable) {
@@ -84,7 +91,7 @@ public abstract class Subject implements Sub {
     public Subject unsetAll(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
-    public Subject takeAll(Iterable<?> iterable) {
+    public Series takeAll(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
     @Override
