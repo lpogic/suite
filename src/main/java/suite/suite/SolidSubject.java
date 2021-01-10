@@ -51,16 +51,6 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Sub in() {
-        return new SubSubject(this).in();
-    }
-
-    @Override
-    public Sub in(Object element) {
-        return new SubSubject(this).in(element);
-    }
-
-    @Override
     protected Subject materialize(Object element) {
         subject = subject.materialize(element);
         return this;
@@ -221,7 +211,7 @@ public class SolidSubject extends Subject {
 
     @Override
     public Subject insert(Object... elements) {
-        Sub $ = new SubSubject(this);
+        Sub $ = this;
         int i = 0;
         Object o = null;
         for(Object e : elements) {

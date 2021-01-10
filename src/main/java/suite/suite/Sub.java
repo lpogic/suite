@@ -8,10 +8,6 @@ import java.util.function.Supplier;
 
 public interface Sub extends Series {
 
-    static Sub of(Subject $sub) {
-        return new SubSubject($sub);
-    }
-
     Subject get();
     Subject set();
 

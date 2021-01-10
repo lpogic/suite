@@ -8,14 +8,8 @@ import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 @SuppressWarnings("UnusedReturnValue")
-public abstract class Subject implements Series {
+public abstract class Subject implements Sub {
 
-    public Sub in() {
-        throw new UnsupportedOperationException("Solid method");
-    }
-    public Sub in(Object element) {
-        throw new UnsupportedOperationException("Solid method");
-    }
     protected abstract Subject materialize();
     protected abstract Subject materialize(Object element);
     protected abstract Subject jump();
@@ -95,6 +89,10 @@ public abstract class Subject implements Series {
     }
     @Override
     public Subject set() {
+        return this;
+    }
+    @Override
+    public Subject get() {
         return this;
     }
     abstract Subject separate();

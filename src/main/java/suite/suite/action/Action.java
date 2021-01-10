@@ -9,7 +9,22 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 @FunctionalInterface
-public interface Action {
+public interface Action extends Function<Subject, Subject>, Supplier<Subject>, Consumer<Subject> {
+
+    @Override
+    default Subject apply(Subject subject) {
+        return play(subject);
+    }
+
+    @Override
+    default Subject get() {
+        return play(Suite.set());
+    }
+
+    @Override
+    default void accept(Subject subject) {
+        play(subject);
+    }
 
     default Subject play() {
         return play(Suite.set());

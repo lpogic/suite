@@ -45,16 +45,6 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Sub in() {
-        return Sub.of(this).in();
-    }
-
-    @Override
-    public Sub in(Object o) {
-        return Sub.of(this).in(o);
-    }
-
-    @Override
     public Subject getFirst() {
         return wrap($sub.getFirst());
     }
