@@ -15,6 +15,11 @@ public abstract class Vendor extends Subject {
         this.$sub = $sub;
     }
 
+    protected Subject monoWrap(Subject $) {
+        if($.absent()) return $;
+        return Suite.set($.direct(), wrap($.in().get()));
+    }
+
     @Override
     protected Subject materialize() {
         throw new UnsupportedOperationException("Vendor is immutable");
@@ -47,17 +52,17 @@ public abstract class Vendor extends Subject {
 
     @Override
     public Subject getFirst() {
-        return wrap($sub.getFirst());
+        return monoWrap($sub.getFirst());
     }
 
     @Override
     public Subject getLast() {
-        return wrap($sub.getLast());
+        return monoWrap($sub.getLast());
     }
 
     @Override
     public Subject get(Object o) {
-        return wrap($sub.get(o));
+        return monoWrap($sub.get(o));
     }
 
     @Override
@@ -142,7 +147,7 @@ public abstract class Vendor extends Subject {
 
             @Override
             public Subject next() {
-                return wrap(source.next());
+                return monoWrap(source.next());
             }
         };
     }
