@@ -5,6 +5,7 @@ import suite.suite.util.Series;
 import suite.suite.util.Glass;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
@@ -189,6 +190,12 @@ public class SolidSubject extends Subject {
     @Override
     public Subject setBefore(Object sequent, Object element, Subject $set) {
         subject = subject.setBefore(sequent, element, $set);
+        return this;
+    }
+
+    @Override
+    public Subject shift(Object out, Object in) {
+        subject = subject.shift(out, in);
         return this;
     }
 

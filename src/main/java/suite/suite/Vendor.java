@@ -4,6 +4,7 @@ import suite.suite.util.Browser;
 import suite.suite.util.Glass;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public abstract class Vendor extends Subject {
@@ -178,6 +179,11 @@ public abstract class Vendor extends Subject {
 
     @Override
     public Subject unset(Object element) {
+        throw new UnsupportedOperationException("Vendor is immutable");
+    }
+
+    @Override
+    public Subject shift(Object out, Object in) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 

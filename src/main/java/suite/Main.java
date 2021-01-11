@@ -10,5 +10,6 @@ public class Main {
         System.out.println(Suite.describe($));
         System.out.println(Suite.describe($.take(1, 3)));
         System.out.println(Suite.describe($));
+        System.out.println(String.class.isInstance(null));
     }
 }

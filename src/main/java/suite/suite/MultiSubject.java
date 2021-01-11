@@ -168,6 +168,12 @@ class MultiSubject extends Subject {
     }
 
     @Override
+    public Subject shift(Object out, Object in) {
+        chain.push(out, in);
+        return this;
+    }
+
+    @Override
     public Subject unset() {
         chain.clear();
         return this;

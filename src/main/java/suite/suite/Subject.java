@@ -52,6 +52,7 @@ public abstract class Subject implements Sub {
     public abstract Subject set(Object element, Subject $set);
     public abstract Subject setBefore(Object sequent, Object element);
     public abstract Subject setBefore(Object sequent, Object element, Subject $set);
+    public abstract Subject shift(Object out, Object in);
     public abstract Subject unset();
     public abstract Subject unset(Object element);
     public Subject setIf(Object element, BiPredicate<Subject, Object> tester) {

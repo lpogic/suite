@@ -179,6 +179,15 @@ class BasicSubject extends Subject {
     }
 
     @Override
+    public Subject shift(Object out, Object in) {
+        if(Objects.equals(this.element, out)) {
+            return new BasicSubject(in);
+        } else {
+            return new MultiSubject(link()).set(in);
+        }
+    }
+
+    @Override
     public Subject unset() {
         return ZeroSubject.getInstance();
     }

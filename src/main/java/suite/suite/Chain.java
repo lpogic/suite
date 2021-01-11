@@ -87,6 +87,17 @@ class Chain implements Series {
         }
     }
 
+    void push(Object pushed, Object pushing) {
+        Link link = data.get(pushed);
+        if(link != null) {
+            link.subject = link.subject.shift(pushed, pushing);
+        } else {
+            link = new Link(ward.front, ward, new BasicSubject(pushing));
+            ward.front = ward.front.back = link;
+            data.put(pushing, link);
+        }
+    }
+
     void moveBefore(Link link, Link sequent) {
         link.front.back = link.back;
         link.back.front = link.front;

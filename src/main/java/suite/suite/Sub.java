@@ -4,6 +4,7 @@ import suite.suite.util.Browser;
 import suite.suite.util.Glass;
 import suite.suite.util.Series;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public interface Sub extends Series {
@@ -129,6 +130,10 @@ public interface Sub extends Series {
 
     default Subject setBefore(Object sequent, Object element, Subject $set) {
         return set().setBefore(sequent, element, $set);
+    }
+
+    default Subject shift(Object out, Object in) {
+        return set().shift(out, in);
     }
 
 

@@ -4,6 +4,7 @@ import suite.suite.util.Browser;
 import suite.suite.util.Glass;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 class ZeroSubject extends Subject {
@@ -149,6 +150,11 @@ class ZeroSubject extends Subject {
     @Override
     public Subject setBefore(Object sequent, Object element, Subject $set) {
         return new MonoSubject(element, $set);
+    }
+
+    @Override
+    public Subject shift(Object out, Object in) {
+        return new BasicSubject(in);
     }
 
     @Override
