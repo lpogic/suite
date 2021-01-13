@@ -276,4 +276,8 @@ public interface Series extends Iterable<Subject> {
         };
     }
 
+    default Series print() {
+        System.out.println(Suite.describe(this));
+        return this;
+    }
 }

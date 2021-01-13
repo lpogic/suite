@@ -104,4 +104,8 @@ public abstract class Subject implements Sub {
         return this;
     }
     abstract Subject separate();
+    public Subject print() {
+        System.out.println(Suite.describe(this));
+        return this;
+    }
 }
