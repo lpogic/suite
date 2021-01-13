@@ -108,7 +108,7 @@ class ZeroSubject extends Subject {
     }
 
     @Override
-    public boolean present(Object element) {
+    public boolean present1(Object element) {
         return false;
     }
 
@@ -118,7 +118,7 @@ class ZeroSubject extends Subject {
     }
 
     @Override
-    public boolean absent(Object element) {
+    public boolean absent1(Object element) {
         return true;
     }
 

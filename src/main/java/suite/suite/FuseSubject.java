@@ -79,13 +79,13 @@ class FuseSubject {}/* implements Subject {
     }
 
     @Override
-    public boolean present() {
-        return sub.present();
+    public boolean present1() {
+        return sub.present1();
     }
 
     @Override
-    public boolean absent() {
-        return sub.absent();
+    public boolean absent1() {
+        return sub.absent1();
     }
 
     @Override

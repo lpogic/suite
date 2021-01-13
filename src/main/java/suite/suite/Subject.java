@@ -33,9 +33,9 @@ public abstract class Subject implements Sub {
     public abstract <B> B orDo(Supplier<B> supplier);
     public abstract boolean is(Class<?> type);
     public abstract boolean present();
-    public abstract boolean present(Object element);
+    public abstract boolean present1(Object element);
     public abstract boolean absent();
-    public abstract boolean absent(Object element);
+    public abstract boolean absent1(Object element);
     public abstract int size();
     public abstract Browser<Subject> iterator(boolean reverse);
     public Browser<Subject> iterator() {

@@ -48,6 +48,14 @@ public interface Series extends Iterable<Subject> {
         return select(new Index(i));
     }
 
+    default Series at(Predicate<Subject> predicate) {
+        return select(predicate).in().get();
+    }
+
+    default Subject at(int i) {
+        return select(new Index(i)).in().get();
+    }
+
     default Series order() {
         return () -> new Browser<>() {
             final Iterator<Subject> origin = iterator();
@@ -225,30 +233,6 @@ public interface Series extends Iterable<Subject> {
 
     default Subject set() {
         return Suite.alter(this);
-    }
-
-    default Subject set(Object element) {
-        return set().set(element);
-    }
-
-    default Subject set(Object element, Subject $set) {
-        return set().set(element, $set);
-    }
-
-    default Subject setBefore(Object sequent, Object element) {
-        return set().setBefore(sequent, element);
-    }
-
-    default Subject setBefore(Object sequent, Object element, Subject $set) {
-        return set().setBefore(sequent, element, $set);
-    }
-
-    default Subject unset() {
-        return Suite.set();
-    }
-
-    default Subject unset(Object element) {
-        return set().unset(element);
     }
 
     static Series of(Iterable<Subject> iterable) {

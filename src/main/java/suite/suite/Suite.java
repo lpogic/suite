@@ -36,7 +36,7 @@ public class Suite {
         return new SolidSubject().setAll(source);
     }
 
-//    public static boolean absent(Subject $, Object element)
+//    public static boolean absent1(Subject $, Object element)
 
 //    public static Subject fuse(Subject sub) {
 //        if(sub == null) {

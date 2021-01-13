@@ -4,7 +4,6 @@ import suite.suite.util.Browser;
 import suite.suite.util.Glass;
 import suite.suite.util.Series;
 
-import java.util.Objects;
 import java.util.function.Supplier;
 
 public interface Sub extends Series {
@@ -85,8 +84,8 @@ public interface Sub extends Series {
     }
 
 
-    default boolean present(Object element) {
-        return get().present(element);
+    default boolean present1(Object element) {
+        return get().present1(element);
     }
 
 
@@ -95,8 +94,8 @@ public interface Sub extends Series {
     }
 
 
-    default boolean absent(Object element) {
-        return get().absent(element);
+    default boolean absent1(Object element) {
+        return get().absent1(element);
     }
 
 

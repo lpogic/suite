@@ -125,7 +125,7 @@ class MonoSubject extends Subject {
     }
 
     @Override
-    public boolean present(Object element) {
+    public boolean present1(Object element) {
         return Objects.equals(this.element, element);
     }
 
@@ -135,7 +135,7 @@ class MonoSubject extends Subject {
     }
 
     @Override
-    public boolean absent(Object element) {
+    public boolean absent1(Object element) {
         return !Objects.equals(this.element, element);
     }
 
