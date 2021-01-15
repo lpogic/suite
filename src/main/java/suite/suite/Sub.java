@@ -85,7 +85,7 @@ public interface Sub extends Series {
 
 
     default boolean present1(Object element) {
-        return get().present1(element);
+        return get().present(element);
     }
 
 
@@ -95,7 +95,7 @@ public interface Sub extends Series {
 
 
     default boolean absent1(Object element) {
-        return get().absent1(element);
+        return get().absent(element);
     }
 
 

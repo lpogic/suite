@@ -5,7 +5,7 @@ import suite.suite.util.Series;
 import suite.suite.util.Glass;
 import suite.suite.util.Browser;
 
-import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @SuppressWarnings("UnusedReturnValue")
@@ -33,9 +33,9 @@ public abstract class Subject implements Sub {
     public abstract <B> B orDo(Supplier<B> supplier);
     public abstract boolean is(Class<?> type);
     public abstract boolean present();
-    public abstract boolean present1(Object element);
+    public abstract boolean present(Object element);
     public abstract boolean absent();
-    public abstract boolean absent1(Object element);
+    public abstract boolean absent(Object element);
     public abstract int size();
     public abstract Browser<Subject> iterator(boolean reverse);
     public Browser<Subject> iterator() {
@@ -55,11 +55,11 @@ public abstract class Subject implements Sub {
     public abstract Subject shift(Object out, Object in);
     public abstract Subject unset();
     public abstract Subject unset(Object element);
-    public Subject setIf(Object element, BiPredicate<Subject, Object> tester) {
-        return tester.test(this, element) ? set(element) : this;
+    public Subject setIf(Object element, Predicate<Object> tester) {
+        return tester.test(element) ? set(element) : this;
     }
-    public Subject setIf(Object element, Subject $sub, BiPredicate<Subject, Object> tester) {
-        return tester.test(this, element) ? set(element, $sub) : this;
+    public Subject setIf(Object element, Subject $sub, Predicate<Object> tester) {
+        return tester.test(element) ? set(element, $sub) : this;
     }
     public Subject add(Subject $sub) {
         return set(new Suite.Auto(), $sub);

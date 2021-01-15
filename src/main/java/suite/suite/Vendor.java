@@ -116,7 +116,7 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public boolean present1(Object o) {
+    public boolean present(Object o) {
         return get(o).present();
     }
 
@@ -126,7 +126,7 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public boolean absent1(Object o) {
+    public boolean absent(Object o) {
         return get(o).absent();
     }
 

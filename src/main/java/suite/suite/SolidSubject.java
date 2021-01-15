@@ -5,7 +5,7 @@ import suite.suite.util.Series;
 import suite.suite.util.Glass;
 
 import java.util.Iterator;
-import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class SolidSubject extends Subject {
@@ -144,8 +144,8 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public boolean present1(Object element) {
-        return subject.present1(element);
+    public boolean present(Object element) {
+        return subject.present(element);
     }
 
     @Override
@@ -154,8 +154,8 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public boolean absent1(Object element) {
-        return subject.absent1(element);
+    public boolean absent(Object element) {
+        return subject.absent(element);
     }
 
     @Override
@@ -199,7 +199,7 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject setIf(Object element, BiPredicate<Subject, Object> test) {
+    public Subject setIf(Object element, Predicate<Object> test) {
         subject = subject.setIf(element, test);
         return this;
     }

@@ -295,7 +295,7 @@ class ThreadySubject {}/* implements Subject {
         Subject spared;
         try(var ignored = writeLock.lock()) {
             spared = sub.get(key);
-            if(!spared.present1()) {
+            if(!spared.present()) {
                 sub = sub.set(key, reserve);
                 spared = sub.get(key);
             }
@@ -308,7 +308,7 @@ class ThreadySubject {}/* implements Subject {
         Subject spared;
         try(var ignored = writeLock.lock()) {
             spared = sub.get(key);
-            if(!spared.present1()) {
+            if(!spared.present()) {
                 sub = sub.set(key, supplier.get());
                 spared = sub.get(key);
             }
@@ -321,7 +321,7 @@ class ThreadySubject {}/* implements Subject {
         Subject spared;
         try(var ignored = writeLock.lock()) {
             spared = sub.get(key);
-            if(!spared.present1()) {
+            if(!spared.present()) {
                 sub = sub.set(key, function.apply(argument));
                 spared = sub.get(key);
             }
@@ -344,25 +344,25 @@ class ThreadySubject {}/* implements Subject {
         Subject taken;
         try(var ignored = writeLock.lock()) {
             taken = sub.getAt(slot);
-            if(taken.present1()) sub = sub.unset(taken.key().direct());
+            if(taken.present()) sub = sub.unset(taken.key().direct());
         }
         return new SolidSubject(taken);
     }
 
     @Override
-    public boolean present1() {
+    public boolean present() {
         boolean settled;
         try(var ignored = readLock.lock()) {
-            settled = sub.present1();
+            settled = sub.present();
         }
         return settled;
     }
 
     @Override
-    public boolean absent1() {
+    public boolean absent() {
         boolean desolated;
         try(var ignored = readLock.lock()) {
-            desolated = sub.absent1();
+            desolated = sub.absent();
         }
         return desolated;
     }

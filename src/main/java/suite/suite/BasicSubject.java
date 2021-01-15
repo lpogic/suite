@@ -108,7 +108,7 @@ class BasicSubject extends Subject {
     }
 
     @Override
-    public boolean present1(Object element) {
+    public boolean present(Object element) {
         return Objects.equals(this.element, element);
     }
 
@@ -118,7 +118,7 @@ class BasicSubject extends Subject {
     }
 
     @Override
-    public boolean absent1(Object element) {
+    public boolean absent(Object element) {
         return !Objects.equals(this.element, element);
     }
 
