@@ -70,6 +70,12 @@ public abstract class Subject implements Sub {
     public Subject insert(Object ... elements) {
         throw new UnsupportedOperationException("Solid method");
     }
+    public Subject getFilled(Object element) {
+        throw new UnsupportedOperationException("Solid method");
+    }
+    public Subject getFilled(Object element, Subject $set) {
+        throw new UnsupportedOperationException("Solid method");
+    }
     public Subject take(Object element) {
         throw new UnsupportedOperationException("Solid method");
     }

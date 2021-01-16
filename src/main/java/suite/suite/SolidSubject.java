@@ -242,6 +242,18 @@ public class SolidSubject extends Subject {
     }
 
     @Override
+    public Subject getFilled(Object element) {
+        subject = subject.setIf(element, subject::absent);
+        return subject.get(element);
+    }
+
+    @Override
+    public Subject getFilled(Object element, Subject $set) {
+        subject = subject.setIf(element, $set, subject::absent);
+        return subject.get(element);
+    }
+
+    @Override
     public Subject take(Object key) {
         Subject taken = get(key);
         if(taken.present()) subject = subject.unset(key);
