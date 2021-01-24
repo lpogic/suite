@@ -103,7 +103,7 @@ public class Suite {
                     }
                 } else {
                     if(printed.get($).present()) {
-                        sb.append("[ ... ]\n");
+                        sb.append("[ ").append($).append(" ]\n");
                         tabsBefore = true;
                     } else {
                         if($.size() > 1 || $.in().present()) {
@@ -155,7 +155,7 @@ public class Suite {
                     }
                 } else {
                     if(printed.in($).present()) {
-                        sb.append("[...]");
+                        sb.append("[").append($).append("]");
                     } else {
                         sb.append("[");
                         stack.add($.iterator());
@@ -204,6 +204,41 @@ public class Suite {
                     while (stack.peek().hasNext()) {
                         subjectStack.add(stack.peek().next());
                         stack.add(subjectStack.peek().eachIn().iterator());
+                    }
+                    subjectStack.pop();
+                    stack.pop();
+                }
+            }
+        };
+    }
+
+    public static Series dfs(Subject $sub, Function<Subject, Series> serializer) {
+        return () -> new Browser<>() {
+            final Stack<Iterator<Subject>> stack = new Stack<>();
+            final Stack<Subject> subjectStack = new Stack<>();
+            {
+                stack.add(serializer.apply(Suite.set(null, $sub)).eachIn().iterator());
+                dig();
+            }
+
+            @Override
+            public boolean hasNext() {
+                return subjectStack.size() > 0;
+            }
+
+            @Override
+            public Subject next() {
+                var $ = subjectStack.pop();
+                stack.pop();
+                dig();
+                return $;
+            }
+
+            private void dig() {
+                while (stack.size() > 0 && stack.peek().hasNext()) {
+                    while (stack.peek().hasNext()) {
+                        subjectStack.add(stack.peek().next());
+                        stack.add(serializer.apply(subjectStack.peek()).eachIn().iterator());
                     }
                     subjectStack.pop();
                     stack.pop();

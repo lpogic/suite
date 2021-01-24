@@ -26,6 +26,10 @@ public interface Action extends Function<Subject, Subject>, Supplier<Subject>, C
         play(subject);
     }
 
+    static Action identity() {
+        return $ -> $;
+    }
+
     default Subject play() {
         return play(Suite.set());
     }
@@ -41,24 +45,24 @@ public interface Action extends Function<Subject, Subject>, Supplier<Subject>, C
     }
 
     static<T, U> Action function(Function<T, U> function) {
-        return s -> Suite.set(function.apply(s.asExpected()));
+        return $ -> Suite.set(function.apply($.asExpected()));
     }
 
     static<T, U> Action function(Class<T> argType, Function<T, U> function) {
-        return s -> Suite.set(function.apply(s.asExpected()));
+        return $ -> Suite.set(function.apply($.asExpected()));
     }
 
     static<T1, T2, U> Action biFunction(Class<T1> arg1Type, Class<T2> arg2Type, BiFunction<T1, T2, U> function) {
-        return s -> Suite.set(function.apply(s.asExpected(), s.getLast().asExpected()));
+        return $ -> Suite.set(function.apply($.asExpected(), $.getLast().asExpected()));
     }
 
     static<U> Action supplier(Supplier<U> supplier) {
-        return s -> Suite.set(supplier.get());
+        return $ -> Suite.set(supplier.get());
     }
 
     static<T> Action consumer(Consumer<T> consumer) {
-        return s -> {
-            consumer.accept(s.asExpected());
+        return $ -> {
+            consumer.accept($.asExpected());
             return Suite.set();
         };
     }

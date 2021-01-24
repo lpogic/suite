@@ -114,4 +114,9 @@ public abstract class Subject implements Sub {
         System.out.println(Suite.describe(this));
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "$" + Integer.toHexString(hashCode());
+    }
 }
