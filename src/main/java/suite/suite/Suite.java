@@ -178,38 +178,7 @@ public class Suite {
     }
 
     public static Series dfs(Subject $sub) {
-        return () -> new Browser<>() {
-            final Stack<Iterator<Subject>> stack = new Stack<>();
-            final Stack<Subject> subjectStack = new Stack<>();
-            {
-                stack.add(Suite.set(null, $sub).eachIn().iterator());
-                dig();
-            }
-
-            @Override
-            public boolean hasNext() {
-                return subjectStack.size() > 0;
-            }
-
-            @Override
-            public Subject next() {
-                var $ = subjectStack.pop();
-                stack.pop();
-                dig();
-                return $;
-            }
-
-            private void dig() {
-                while (stack.size() > 0 && stack.peek().hasNext()) {
-                    while (stack.peek().hasNext()) {
-                        subjectStack.add(stack.peek().next());
-                        stack.add(subjectStack.peek().eachIn().iterator());
-                    }
-                    subjectStack.pop();
-                    stack.pop();
-                }
-            }
-        };
+        return dfs($sub, Subject::front);
     }
 
     public static Series dfs(Subject $sub, Function<Subject, Series> serializer) {
@@ -243,6 +212,31 @@ public class Suite {
                     subjectStack.pop();
                     stack.pop();
                 }
+            }
+        };
+    }
+
+    public static Series bfs(Subject $sub) {
+        return bfs($sub, Subject::front);
+    }
+
+    public static Series bfs(Subject $sub, Function<Subject, Series> serializer) {
+        return () -> new Browser<>() {
+            final Queue<Subject> subjects = new ArrayDeque<>();
+            {
+                subjects.add($sub);
+            }
+
+            @Override
+            public boolean hasNext() {
+                return !subjects.isEmpty();
+            }
+
+            @Override
+            public Subject next() {
+                var $ = subjects.remove();
+                serializer.apply($).eachIn().forEach(subjects::add);
+                return $;
             }
         };
     }
