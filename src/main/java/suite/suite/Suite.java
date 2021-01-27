@@ -82,7 +82,7 @@ public class Suite {
             $sub = Suite.add($sub.absent() ? Suite.set(new Auto()) : $sub);
         }
         StringBuilder sb = new StringBuilder();
-        Stack<Subject> stack = new Stack<>();
+        java.util.Stack<Subject> stack = new java.util.Stack<>();
         Subject printed = Suite.set();
         stack.add(Suite.set($sub).set($sub.cascade()));
         int goTo = 0;
@@ -138,7 +138,7 @@ public class Suite {
         if($sub == null) $sub = Suite.set();
         if(pack) $sub = Suite.add($sub.set());
         StringBuilder sb = new StringBuilder();
-        Stack<Iterator<Subject>> stack = new Stack<>();
+        java.util.Stack<Iterator<Subject>> stack = new java.util.Stack<>();
         Subject printed = Suite.set();
         stack.add($sub.iterator());
         int goTo = 0;
@@ -177,40 +177,92 @@ public class Suite {
         return sb.toString();
     }
 
-    public static Series dfs(Subject $sub) {
-        return dfs($sub, Subject::front);
+    public static class Stack {
+
+        public static void push(Subject $stack, Subject $extension) {
+            $stack.alterBefore(new Auto(), $extension);
+        }
+
+        public static Subject pop(Subject $stack) {
+            return $stack.take($stack.getLast().direct());
+        }
+
     }
 
-    public static Series dfs(Subject $sub, Function<Subject, Series> serializer) {
+    public static Series postDfs(Subject $sub) {
+        return postDfs($sub, Subject::front);
+    }
+
+    public static Series postDfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser<>() {
-            final Stack<Iterator<Subject>> stack = new Stack<>();
-            final Stack<Subject> subjectStack = new Stack<>();
-            {
-                stack.add(serializer.apply(Suite.set(null, $sub)).eachIn().iterator());
-                dig();
-            }
+            final Subject $stack = insert($sub, serializer.apply($sub).iterator());
+            final Subject $subjectStack = set();
+            final Subject $hasNext = Suite.set();
 
             @Override
             public boolean hasNext() {
-                return subjectStack.size() > 0;
+                if($hasNext.present()) return $hasNext.asExpected();
+                dig();
+                $hasNext.set($subjectStack.present());
+                return $hasNext.asExpected();
             }
 
             @Override
             public Subject next() {
-                var $ = subjectStack.pop();
-                stack.pop();
-                dig();
-                return $;
+                if($hasNext.absent()) dig();
+                Subject $next = $subjectStack.take($subjectStack.getLast().direct()).in().get();
+                $hasNext.unset();
+                return $next;
             }
 
             private void dig() {
-                while (stack.size() > 0 && stack.peek().hasNext()) {
-                    while (stack.peek().hasNext()) {
-                        subjectStack.add(stack.peek().next());
-                        stack.add(serializer.apply(subjectStack.peek()).eachIn().iterator());
-                    }
-                    subjectStack.pop();
-                    stack.pop();
+                if ($stack.absent()) return;
+                Subject $i = $stack.getLast().asExpected();
+                Iterator<Subject> it = $stack.getLast().in().asExpected();
+                while (it.hasNext()) {
+                    var $ = it.next();
+                    $subjectStack.add($);
+                    $i = $.in().get();
+                    if ($i.present() && $stack.absent($i)) {
+                        it = serializer.apply($i).iterator();
+                        $stack.in($i).set(it);
+                    } else return;
+                }
+                $stack.unset($i);
+            }
+        };
+    }
+
+    public static Series preDfs(Subject $sub) {
+        return preDfs($sub, Subject::front);
+    }
+
+    public static Series preDfs(Subject $sub, Function<Subject, Series> serializer) {
+        return () -> new Browser<>() {
+            final Subject $stack = set();
+            {
+                dig($sub);
+            }
+
+            @Override
+            public boolean hasNext() {
+                return $stack.present();
+            }
+
+            @Override
+            public Subject next() {
+                Iterator<Subject> it = $stack.getLast().in().asExpected();
+                Subject $next = it.next();
+                dig($next.in().get());
+                return $next;
+            }
+
+            private void dig(Subject $) {
+                if($.present() && $stack.absent($)) $stack.insert($, serializer.apply($).iterator());
+                while($stack.present()) {
+                    Iterator<Subject> it = $stack.getLast().in().asExpected();
+                    if(it.hasNext()) return;
+                    Stack.pop($stack);
                 }
             }
         };
@@ -222,20 +274,26 @@ public class Suite {
 
     public static Series bfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser<>() {
-            final Queue<Subject> subjects = new ArrayDeque<>();
-            {
-                subjects.add($sub);
-            }
+            final Subject $all = Suite.set($sub);
+            Browser<Subject> current = serializer.apply($sub).iterator();
+            Series $nextFront = Series.empty();
 
             @Override
             public boolean hasNext() {
-                return !subjects.isEmpty();
+                if(current.hasNext()) return true;
+                current = $nextFront.iterator();
+                $nextFront = Series.empty();
+                return current.hasNext();
             }
 
             @Override
             public Subject next() {
-                var $ = subjects.remove();
-                serializer.apply($).eachIn().forEach(subjects::add);
+                var $ = current.next();
+                var $i = $.in().get();
+                if($i.present() && $all.absent($i)) {
+                    $all.set($i);
+                    $nextFront = $nextFront.join(serializer.apply($i));
+                }
                 return $;
             }
         };

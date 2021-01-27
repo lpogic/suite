@@ -6,7 +6,7 @@ import suite.suite.Suite;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public class Cascade<T> implements Browser<T> {
+public class Cascade<T> implements Browser<T>, Sequence<T> {
 
     private final Iterator<T> iterator;
     private final Subject stored;
@@ -15,6 +15,16 @@ public class Cascade<T> implements Browser<T> {
     public Cascade(Iterator<T> iterator) {
         this.iterator = iterator;
         stored = Suite.set();
+    }
+
+    @Override
+    public Browser<T> iterator() {
+        return this;
+    }
+
+    @Override
+    public Cascade<T> cascade() {
+        return this;
     }
 
     @Override

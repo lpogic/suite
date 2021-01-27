@@ -239,7 +239,7 @@ public interface Series extends Iterable<Subject> {
         return iterable instanceof Series ? (Series)iterable : () -> Browser.of(iterable.iterator());
     }
 
-    static Series emptyFluid() {
+    static Series empty() {
         return Browser::empty;
     }
 
