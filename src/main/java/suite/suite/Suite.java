@@ -125,8 +125,8 @@ public class Suite {
             }
             stack.pop();
             if(stack.size() > 0) {
-                if(tabsBefore) sb.append("\t".repeat(stack.size() - 1));
-                sb.append("]\n");
+                if(tabsBefore) sb.append("\t".repeat(stack.size() - 1)).append("]\n");
+                else sb.append(" ]\n");
                 tabsBefore = true;
             }
         }
@@ -146,7 +146,7 @@ public class Suite {
             Iterator<Subject> it = stack.peek();
             for(var $s : (Iterable<Subject>) () -> it) {
                 if(!$s.is(Auto.class)) {
-                    sb.append($s.direct());
+                    sb.append(encoder.apply($s.direct()));
                 }
                 var $ = $s.in().get();
                 if($.absent()) {
