@@ -43,6 +43,11 @@ class BasicSubject extends Subject {
     }
 
     @Override
+    protected int origin() {
+        return hashCode();
+    }
+
+    @Override
     public Subject getFirst() {
         return this;
     }

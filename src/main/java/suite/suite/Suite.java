@@ -67,13 +67,13 @@ public class Suite {
     public static String describe(Series $ser) {
         StringBuilder sb = new StringBuilder();
         for(var $ : $ser) {
-            sb.append(describe($, true, o -> o instanceof Auto ? "" : o + " "));
+            sb.append(describe($, true, o -> o instanceof Auto ? "" : Objects.toString(o)));
         }
         return sb.toString();
     }
 
     public static String describe(Subject $sub) {
-        return describe($sub, true, o -> o instanceof Auto ? "" : o + " ");
+        return describe($sub, true, o -> o instanceof Auto ? "" : Objects.toString(o));
     }
 
     public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder) {

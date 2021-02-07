@@ -16,6 +16,7 @@ public abstract class Subject implements Sub {
     protected abstract Subject jump();
     protected abstract Subject jump(Object element);
     protected abstract boolean real(Object element);
+    protected abstract int origin();
 
     public abstract Subject getFirst();
     public abstract Subject getLast();

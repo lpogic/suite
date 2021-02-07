@@ -24,12 +24,8 @@ public class SolidSubject extends Subject {
 
         @Override
         public boolean hasNext() {
-            if(sub != subject) {
-                if(sub == ZeroSubject.getInstance()) {
-                    it = subject.iterator(reverse);
-                } else if(subject == ZeroSubject.getInstance()) {
-                    it = Browser.empty();
-                }
+            if(sub.origin() != subject.origin()) {
+                it = subject.iterator(reverse);
                 sub = subject;
             }
             return it.hasNext();
@@ -76,6 +72,11 @@ public class SolidSubject extends Subject {
     @Override
     protected boolean real(Object element) {
         return subject.real(element);
+    }
+
+    @Override
+    protected int origin() {
+        return subject.origin();
     }
 
     @Override
