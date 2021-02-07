@@ -7,16 +7,14 @@ import java.util.function.Supplier;
 class MultiSubject extends Subject {
 
     private final Chain chain;
-    private final int origin;
 
     MultiSubject() {
         this.chain = new Chain();
-        this.origin = hashCode();
     }
 
     MultiSubject(Link ward) {
+        super(ward.front.subject.origin);
         this.chain = new Chain(ward);
-        this.origin = ward.front.subject.origin();
     }
 
     @Override
@@ -54,11 +52,6 @@ class MultiSubject extends Subject {
     @Override
     protected boolean real(Object element) {
         return chain.get(element).subject.real(element);
-    }
-
-    @Override
-    protected int origin() {
-        return origin;
     }
 
     @Override

@@ -11,12 +11,21 @@ import java.util.function.Supplier;
 @SuppressWarnings("UnusedReturnValue")
 public abstract class Subject implements Sub {
 
+    protected final int origin;
+
+    public Subject(int origin) {
+        this.origin = origin;
+    }
+
+    public Subject() {
+        this.origin = hashCode();
+    }
+
     protected abstract Subject materialize();
     protected abstract Subject materialize(Object element);
     protected abstract Subject jump();
     protected abstract Subject jump(Object element);
     protected abstract boolean real(Object element);
-    protected abstract int origin();
 
     public abstract Subject getFirst();
     public abstract Subject getLast();

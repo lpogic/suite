@@ -43,11 +43,6 @@ class ZeroSubject extends Subject {
     }
 
     @Override
-    protected int origin() {
-        return 0;
-    }
-
-    @Override
     public Subject getFirst() {
         return this;
     }

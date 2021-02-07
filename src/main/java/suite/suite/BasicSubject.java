@@ -16,6 +16,11 @@ class BasicSubject extends Subject {
         this.element = element;
     }
 
+    public BasicSubject(Object element, int origin) {
+        super(origin);
+        this.element = element;
+    }
+
     @Override
     protected Subject materialize() {
         return new MonoSubject(this.element);
@@ -40,11 +45,6 @@ class BasicSubject extends Subject {
     @Override
     public boolean real(Object element) {
         return false;
-    }
-
-    @Override
-    protected int origin() {
-        return hashCode();
     }
 
     @Override
@@ -186,7 +186,7 @@ class BasicSubject extends Subject {
     @Override
     public Subject shift(Object out, Object in) {
         if(Objects.equals(this.element, out)) {
-            return new BasicSubject(in);
+            return new BasicSubject(in, origin);
         } else {
             return new MultiSubject(link()).set(in);
         }

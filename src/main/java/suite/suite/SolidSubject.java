@@ -24,7 +24,7 @@ public class SolidSubject extends Subject {
 
         @Override
         public boolean hasNext() {
-            if(sub.origin() != subject.origin()) {
+            if(sub.origin != subject.origin) {
                 it = subject.iterator(reverse);
                 sub = subject;
             }
@@ -72,11 +72,6 @@ public class SolidSubject extends Subject {
     @Override
     protected boolean real(Object element) {
         return subject.real(element);
-    }
-
-    @Override
-    protected int origin() {
-        return subject.origin();
     }
 
     @Override

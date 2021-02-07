@@ -51,11 +51,6 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    protected int origin() {
-        return $sub.origin();
-    }
-
-    @Override
     public Subject getFirst() {
         return monoWrap($sub.getFirst());
     }

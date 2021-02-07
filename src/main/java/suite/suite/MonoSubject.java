@@ -23,6 +23,18 @@ class MonoSubject extends Subject {
         this.subject = subject;
     }
 
+    public MonoSubject(Object element, int origin) {
+        super(origin);
+        this.element = element;
+        this.subject = Suite.set();
+    }
+
+    public MonoSubject(Object element, Subject subject, int origin) {
+        super(origin);
+        this.element = element;
+        this.subject = subject;
+    }
+
     private Link link() {
         if(ward == null) {
             ward = new Link();
@@ -57,11 +69,6 @@ class MonoSubject extends Subject {
     @Override
     protected boolean real(Object element) {
         return Objects.equals(this.element, element);
-    }
-
-    @Override
-    protected int origin() {
-        return hashCode();
     }
 
     @Override
@@ -198,7 +205,7 @@ class MonoSubject extends Subject {
     @Override
     public Subject shift(Object out, Object in) {
         if(Objects.equals(this.element, out)) {
-            return new MonoSubject(in, subject);
+            return new MonoSubject(in, subject, origin);
         } else {
             return new MultiSubject(link()).set(in);
         }
