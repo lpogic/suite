@@ -177,14 +177,14 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element) {
-        subject = subject.setBefore(sequent, element);
+    public Subject strictSet(Object sequent, Object element) {
+        subject = subject.strictSet(sequent, element);
         return this;
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element, Subject $set) {
-        subject = subject.setBefore(sequent, element, $set);
+    public Subject strictSet(Object sequent, Object element, Subject $set) {
+        subject = subject.strictSet(sequent, element, $set);
         return this;
     }
 
@@ -213,16 +213,32 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject insert(Object... elements) {
+    public Subject setUp(Object... elements) {
         Sub $ = this;
         int i = 0;
         Object o = null;
         for(Object e : elements) {
-            if(i > 0) $ = $.in(o);
+            if(i > 0) $ = $.up(o);
             o = e;
             ++i;
         }
         if(i > 0) $.set(o);
+
+        return this;
+    }
+
+    @Override
+    public Subject addUp(Object... elements) {
+        Sub $ = up(new Suite.Auto());
+        int i = 0;
+        Object o = null;
+        for(Object e : elements) {
+            if(i > 0) $ = $.up(o);
+            o = e;
+            ++i;
+        }
+        if(i > 0) $.set(o);
+        else $.set();
 
         return this;
     }
@@ -274,15 +290,15 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject alterBefore(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject strictAlter(Object sequent, Iterable<? extends Subject> iterable) {
         var $ = subject;
         for(var it : iterable) {
             if(it.present()) {
                 Object o = it.direct();
                 if (it.real(o)) {
-                    $ = $.setBefore(sequent, o, it.jump(o));
+                    $ = $.strictSet(sequent, o, it.jump(o));
                 } else {
-                    $ = $.setBefore(sequent, o);
+                    $ = $.strictSet(sequent, o);
                 }
             }
         }

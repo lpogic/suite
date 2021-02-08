@@ -184,20 +184,20 @@ class ThreadySubject {}/* implements Subject {
 
     @Override
     public Subject getAt(Slot slot) {
-        Subject in;
+        Subject up;
         try(var ignored = readLock.lock()) {
-            in = new SolidSubject(sub.getAt(slot).fuse());
+            up = new SolidSubject(sub.getAt(slot).fuse());
         }
-        return in;
+        return up;
     }
 
     @Override
     public Subject getAt(int slotIndex) {
-        Subject in;
+        Subject up;
         try(var ignored = readLock.lock()) {
-            in = new SolidSubject(sub.getAt(slotIndex).fuse());
+            up = new SolidSubject(sub.getAt(slotIndex).fuse());
         }
-        return in;
+        return up;
     }
 
     @Override

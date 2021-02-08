@@ -4,7 +4,6 @@ import suite.suite.util.Browser;
 import suite.suite.util.Glass;
 
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 public abstract class Vendor extends Subject {
@@ -17,7 +16,7 @@ public abstract class Vendor extends Subject {
 
     protected Subject monoWrap(Subject $) {
         if($.absent()) return $;
-        return Suite.set($.direct(), wrap($.in().get()));
+        return Suite.set($.direct(), wrap($.up().get()));
     }
 
     @Override
@@ -168,12 +167,12 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element)  {
+    public Subject strictSet(Object sequent, Object element)  {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element, Subject $set) {
+    public Subject strictSet(Object sequent, Object element, Subject $set) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
@@ -198,7 +197,7 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Subject insert(Object ... elements) {
+    public Subject setUp(Object ... elements) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
@@ -213,7 +212,7 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Subject alterBefore(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject strictAlter(Object sequent, Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 

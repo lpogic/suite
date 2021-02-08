@@ -49,11 +49,11 @@ public interface Series extends Iterable<Subject> {
     }
 
     default Series at(Predicate<Subject> predicate) {
-        return select(predicate).in().get();
+        return select(predicate).up().get();
     }
 
     default Subject at(int i) {
-        return select(new Index(i)).in().get();
+        return select(new Index(i)).up().get();
     }
 
     default Series order() {
@@ -178,13 +178,13 @@ public interface Series extends Iterable<Subject> {
 
             @Override
             public Subject next() {
-                return subIt.next().in().get();
+                return subIt.next().up().get();
             }
         };
     }
 
-    default Sub in() {
-        return getFirst().in();
+    default Sub up() {
+        return getFirst().up();
     }
 
     default Object direct() {

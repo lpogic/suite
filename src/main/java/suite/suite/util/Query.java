@@ -89,7 +89,7 @@ public class Query {
     }
 
     public Query map(Subject $map) {
-        $result = $result.convert($ -> $map.in().get()).set();
+        $result = $result.convert($ -> $map.up().get()).set();
         return this;
     }
 
@@ -100,7 +100,7 @@ public class Query {
 
     public<T> Query map(Class<T> mappedType, Function<T, Object> function) {
         $result = $result.convert($ -> $.is(mappedType) ?
-                Suite.set($.direct(), Suite.set(function.apply($.in($.direct()).asExpected()))) : $).set();
+                Suite.set($.direct(), Suite.set(function.apply($.up($.direct()).asExpected()))) : $).set();
         return this;
     }
 }

@@ -11,12 +11,12 @@ public interface Sub extends Series {
     Subject get();
     Subject set();
 
-    default Sub in() {
+    default Sub up() {
         return new FirstSub(this);
     }
 
-    default Sub in(Object element) {
-        return new ParamSub(this, element);
+    default Sub up(Object element) {
+        return new FrontierSub(this, element);
     }
 
     default Subject getFirst() {
@@ -84,7 +84,7 @@ public interface Sub extends Series {
     }
 
 
-    default boolean present1(Object element) {
+    default boolean present(Object element) {
         return get().present(element);
     }
 
@@ -94,7 +94,7 @@ public interface Sub extends Series {
     }
 
 
-    default boolean absent1(Object element) {
+    default boolean absent(Object element) {
         return get().absent(element);
     }
 
@@ -122,13 +122,13 @@ public interface Sub extends Series {
     }
 
 
-    default Subject setBefore(Object sequent, Object element) {
-        return set().setBefore(sequent, element);
+    default Subject strictSet(Object sequent, Object element) {
+        return set().strictSet(sequent, element);
     }
 
 
-    default Subject setBefore(Object sequent, Object element, Subject $set) {
-        return set().setBefore(sequent, element, $set);
+    default Subject strictSet(Object sequent, Object element, Subject $set) {
+        return set().strictSet(sequent, element, $set);
     }
 
     default Subject shift(Object out, Object in) {

@@ -183,22 +183,22 @@ class MonoSubject extends Subject {
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element) {
+    public Subject strictSet(Object sequent, Object element) {
         if(Objects.equals(this.element, element)) {
             subject = Suite.set();
             return this;
         } else {
-            return new MultiSubject(link()).setBefore(sequent, element);
+            return new MultiSubject(link()).strictSet(sequent, element);
         }
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element, Subject $set) {
+    public Subject strictSet(Object sequent, Object element, Subject $set) {
         if(Objects.equals(this.element, element)) {
             subject = $set;
             return this;
         } else {
-            return new MultiSubject(link()).setBefore(sequent, element, $set);
+            return new MultiSubject(link()).strictSet(sequent, element, $set);
         }
     }
 

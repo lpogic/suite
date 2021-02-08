@@ -27,7 +27,7 @@ public class Suite {
         return new SolidSubject(new MonoSubject(new Auto(), $));
     }
     public static Subject insert(Object ... elements) {
-        return new SolidSubject().insert(elements);
+        return new SolidSubject().setUp(elements);
     }
     public static Subject alter(Iterable<Subject> source) {
         return new SolidSubject().alter(source);
@@ -95,7 +95,7 @@ public class Suite {
                 if(tabsBefore)sb.append("\t".repeat(stack.size() - 1));
                 tabsBefore = false;
                 sb.append(encoder.apply($s.direct()));
-                Subject $ = $s.in().get();
+                Subject $ = $s.up().get();
                 if($.absent()) {
                     if($current.size() > 1) {
                         sb.append("[]\n");
@@ -106,7 +106,7 @@ public class Suite {
                         sb.append("[ ").append($).append(" ]\n");
                         tabsBefore = true;
                     } else {
-                        if($.size() > 1 || $.in().present()) {
+                        if($.size() > 1 || $.up().present()) {
                             sb.append("[\n");
                             tabsBefore = true;
                         } else {
@@ -148,13 +148,13 @@ public class Suite {
                 if(!$s.is(Auto.class)) {
                     sb.append(encoder.apply($s.direct()));
                 }
-                var $ = $s.in().get();
+                var $ = $s.up().get();
                 if($.absent()) {
                     if(it.hasNext()) {
                         sb.append("[]");
                     }
                 } else {
-                    if(printed.in($).present()) {
+                    if(printed.up($).present()) {
                         sb.append("[").append($).append("]");
                     } else {
                         sb.append("[");
@@ -180,7 +180,7 @@ public class Suite {
     public static class Stack {
 
         public static void push(Subject $stack, Subject $extension) {
-            $stack.alterBefore(new Auto(), $extension);
+            $stack.strictAlter(new Auto(), $extension);
         }
 
         public static Subject pop(Subject $stack) {
@@ -210,7 +210,7 @@ public class Suite {
             @Override
             public Subject next() {
                 if($hasNext.absent()) dig();
-                Subject $next = $subjectStack.take($subjectStack.getLast().direct()).in().get();
+                Subject $next = $subjectStack.take($subjectStack.getLast().direct()).up().get();
                 $hasNext.unset();
                 return $next;
             }
@@ -218,14 +218,14 @@ public class Suite {
             private void dig() {
                 if ($stack.absent()) return;
                 Subject $i = $stack.getLast().asExpected();
-                Iterator<Subject> it = $stack.getLast().in().asExpected();
+                Iterator<Subject> it = $stack.getLast().up().asExpected();
                 while (it.hasNext()) {
                     var $ = it.next();
                     $subjectStack.add($);
-                    $i = $.in().get();
+                    $i = $.up().get();
                     if ($i.present() && $stack.absent($i)) {
                         it = serializer.apply($i).iterator();
-                        $stack.in($i).set(it);
+                        $stack.up($i).set(it);
                     } else return;
                 }
                 $stack.unset($i);
@@ -251,16 +251,16 @@ public class Suite {
 
             @Override
             public Subject next() {
-                Iterator<Subject> it = $stack.getLast().in().asExpected();
+                Iterator<Subject> it = $stack.getLast().up().asExpected();
                 Subject $next = it.next();
-                dig($next.in().get());
+                dig($next.up().get());
                 return $next;
             }
 
             private void dig(Subject $) {
-                if($.present() && $stack.absent($)) $stack.insert($, serializer.apply($).iterator());
+                if($.present() && $stack.absent($)) $stack.setUp($, serializer.apply($).iterator());
                 while($stack.present()) {
-                    Iterator<Subject> it = $stack.getLast().in().asExpected();
+                    Iterator<Subject> it = $stack.getLast().up().asExpected();
                     if(it.hasNext()) return;
                     Stack.pop($stack);
                 }
@@ -289,7 +289,7 @@ public class Suite {
             @Override
             public Subject next() {
                 var $ = current.next();
-                var $i = $.in().get();
+                var $i = $.up().get();
                 if($i.present() && $all.absent($i)) {
                     $all.set($i);
                     $nextFront = $nextFront.join(serializer.apply($i));

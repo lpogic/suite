@@ -45,7 +45,7 @@ public class Cascade<T> implements Browser<T>, Sequence<T> {
     }
 
     public void store(T t) {
-        stored.in().set(t);
+        stored.up().set(t);
     }
 
     public int getFalls() {

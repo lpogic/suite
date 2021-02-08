@@ -171,7 +171,7 @@ public class WonkySubject {} //  extends SolidSubject {
 
     @Override
     public Subject set(Object element) {
-        System.err.println("Keys in WeakSubject are not weak wrapped");
+        System.err.println("Keys up WeakSubject are not weak wrapped");
         sub = sub.set(element, weak(element));
         return this;
     }
@@ -184,7 +184,7 @@ public class WonkySubject {} //  extends SolidSubject {
 
     @Override
     public Subject put(Object element) {
-        System.err.println("Keys in WeakSubject are not weak wrapped");
+        System.err.println("Keys up WeakSubject are not weak wrapped");
         if(unweak(sub.get(element)).absent())
             sub = sub.set(element, weak(element));
         return this;
@@ -277,7 +277,7 @@ public class WonkySubject {} //  extends SolidSubject {
 
     @Override
     public Subject setAt(Slot slot, Object element) {
-        System.err.println("Keys in WeakSubject are not weak wrapped");
+        System.err.println("Keys up WeakSubject are not weak wrapped");
         sub = sub.setAt(slot, element, weak(element));
         return this;
     }
@@ -290,7 +290,7 @@ public class WonkySubject {} //  extends SolidSubject {
 
     @Override
     public Subject putAt(Slot slot, Object element) {
-        System.err.println("Keys in WeakSubject are not weak wrapped");
+        System.err.println("Keys up WeakSubject are not weak wrapped");
         if(unweak(get(element)).absent())
             sub = sub.setAt(slot, element, weak(element));
         return this;

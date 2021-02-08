@@ -143,12 +143,12 @@ class ZeroSubject extends Subject {
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element) {
+    public Subject strictSet(Object sequent, Object element) {
         return new MonoSubject(element);
     }
 
     @Override
-    public Subject setBefore(Object sequent, Object element, Subject $set) {
+    public Subject strictSet(Object sequent, Object element, Subject $set) {
         return new MonoSubject(element, $set);
     }
 

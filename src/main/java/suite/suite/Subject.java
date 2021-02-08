@@ -60,8 +60,8 @@ public abstract class Subject implements Sub {
 
     public abstract Subject set(Object element);
     public abstract Subject set(Object element, Subject $set);
-    public abstract Subject setBefore(Object sequent, Object element);
-    public abstract Subject setBefore(Object sequent, Object element, Subject $set);
+    public abstract Subject strictSet(Object sequent, Object element);
+    public abstract Subject strictSet(Object sequent, Object element, Subject $set);
     public abstract Subject shift(Object out, Object in);
     public abstract Subject unset();
     public abstract Subject unset(Object element);
@@ -74,10 +74,13 @@ public abstract class Subject implements Sub {
     public Subject add(Subject $sub) {
         return set(new Suite.Auto(), $sub);
     }
-    public Subject addBefore(Object sequent, Subject $sub) {
-        return setBefore(sequent, new Suite.Auto(), $sub);
+    public Subject strictAdd(Object sequent, Subject $sub) {
+        return strictSet(sequent, new Suite.Auto(), $sub);
     }
-    public Subject insert(Object ... elements) {
+    public Subject addUp(Object ... elements) {
+        throw new UnsupportedOperationException("Solid method");
+    }
+    public Subject setUp(Object ... elements) {
         throw new UnsupportedOperationException("Solid method");
     }
     public Subject getFilled(Object element) {
@@ -95,7 +98,7 @@ public abstract class Subject implements Sub {
     public Subject alter(Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
-    public Subject alterBefore(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject strictAlter(Object sequent, Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
 
