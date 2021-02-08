@@ -26,8 +26,11 @@ public class Suite {
     public static Subject add(Subject $) {
         return new SolidSubject(new MonoSubject(new Auto(), $));
     }
-    public static Subject insert(Object ... elements) {
+    public static Subject setUp(Object ... elements) {
         return new SolidSubject().setUp(elements);
+    }
+    public static Subject addUp(Object ... elements) {
+        return new SolidSubject().addUp(elements);
     }
     public static Subject alter(Iterable<Subject> source) {
         return new SolidSubject().alter(source);
@@ -195,7 +198,7 @@ public class Suite {
 
     public static Series postDfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser<>() {
-            final Subject $stack = insert($sub, serializer.apply($sub).iterator());
+            final Subject $stack = setUp($sub, serializer.apply($sub).iterator());
             final Subject $subjectStack = set();
             final Subject $hasNext = Suite.set();
 
