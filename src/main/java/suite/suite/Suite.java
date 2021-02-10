@@ -1,5 +1,6 @@
 package suite.suite;
 
+import suite.suite.action.Action;
 import suite.suite.util.*;
 
 import java.util.*;
@@ -65,6 +66,40 @@ public class Suite {
 
     public static Subject zip(Iterable<Object> keys, Iterable<Object> values) {
         return alter(Series.engage(keys, values));
+    }
+
+    public static Series parallel(Series ... series) {
+
+        return () -> new Browser() {
+            final Subject $its = set(); {
+                for(Series s : series) {
+                    $its.set(s.iterator());
+                }
+            }
+            Subject $collected = set();
+
+            @Override
+            public boolean hasNext() {
+                return collect();
+            }
+
+            @Override
+            public Subject next() {
+                var $c = $collected;
+                $collected = set();
+                return $c;
+            }
+
+            boolean collect() {
+                var $c = set();
+                for(Browser it : $its.eachAs(Browser.class)) {
+                    if(it.hasNext()) $c.add(it.next());
+                    else return false;
+                }
+                $collected = $c;
+                return true;
+            }
+        };
     }
 
     public static String describe(Series $ser) {
@@ -197,7 +232,7 @@ public class Suite {
     }
 
     public static Series postDfs(Subject $sub, Function<Subject, Series> serializer) {
-        return () -> new Browser<>() {
+        return () -> new Browser() {
             final Subject $stack = setUp($sub, serializer.apply($sub).iterator());
             final Subject $subjectStack = set();
             final Subject $hasNext = Suite.set();
@@ -241,22 +276,23 @@ public class Suite {
     }
 
     public static Series preDfs(Subject $sub, Function<Subject, Series> serializer) {
-        return () -> new Browser<>() {
+        return () -> new Browser() {
             final Subject $stack = set();
-            {
-                dig($sub);
-            }
+            boolean digDone = false;
+            Subject $nextUp = $sub;
 
             @Override
             public boolean hasNext() {
+                if(!digDone) dig($nextUp);
                 return $stack.present();
             }
 
             @Override
             public Subject next() {
                 Iterator<Subject> it = $stack.getLast().up().asExpected();
-                Subject $next = it.next();
-                dig($next.up().get());
+                var $next = it.next();
+                $nextUp = $next.up().get();
+                digDone = false;
                 return $next;
             }
 
@@ -267,6 +303,7 @@ public class Suite {
                     if(it.hasNext()) return;
                     Stack.pop($stack);
                 }
+                digDone = true;
             }
         };
     }
@@ -276,9 +313,9 @@ public class Suite {
     }
 
     public static Series bfs(Subject $sub, Function<Subject, Series> serializer) {
-        return () -> new Browser<>() {
+        return () -> new Browser() {
             final Subject $all = Suite.set($sub);
-            Browser<Subject> current = serializer.apply($sub).iterator();
+            Browser current = serializer.apply($sub).iterator();
             Series $nextFront = Series.empty();
 
             @Override
@@ -326,6 +363,17 @@ public class Suite {
     }
     public static <A, B> Map<A, B> asMapOf(Subject $, Glass<A, A> keyType, Glass<B, B> valueType, Map<A, B> reserve) {
         return $.as(Glass.Map(keyType, valueType), reserve);
+    }
+
+    public static Subject refactor(Subject $sub, Action refactor) {
+        for(var $ : preDfs(add($sub)).eachUp()) {
+            var $t = Suite.set();
+            for(var $1 : $) {
+                $t.alter(refactor.apply($1));
+            }
+            $.unset().alter($t);
+        }
+        return $sub;
     }
 
 }

@@ -130,15 +130,15 @@ class Chain implements Series {
     }
 
     @Override
-    public Browser<Subject> iterator() {
+    public Browser iterator() {
         return new LinkIterator(ward);
     }
 
-    public Browser<Subject> iterator(boolean reverse) {
+    public Browser iterator(boolean reverse) {
         return new LinkIterator(reverse, ward, ward);
     }
 
-    public Browser<Subject> iterator(boolean reverse, Link link) {
+    public Browser iterator(boolean reverse, Link link) {
         return new LinkIterator(reverse, link, ward);
     }
 

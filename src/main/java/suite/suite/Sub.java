@@ -104,11 +104,11 @@ public interface Sub extends Series {
     }
 
 
-    default Browser<Subject> iterator(boolean reverse) {
+    default Browser iterator(boolean reverse) {
         return get().iterator(reverse);
     }
 
-    default Browser<Subject> iterator() {
+    default Browser iterator() {
         return iterator(false);
     }
 

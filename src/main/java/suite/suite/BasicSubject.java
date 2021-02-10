@@ -142,7 +142,7 @@ class BasicSubject extends Subject {
     }
 
     @Override
-    public Browser<Subject> iterator(boolean reverse) {
+    public Browser iterator(boolean reverse) {
         link();
         return new LinkIterator(reverse, ward, ward);
     }

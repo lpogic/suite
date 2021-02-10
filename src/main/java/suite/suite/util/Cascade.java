@@ -6,7 +6,7 @@ import suite.suite.Suite;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public class Cascade<T> implements Browser<T>, Sequence<T> {
+public class Cascade<T> implements Iterator<T>, Sequence<T> {
 
     private final Iterator<T> iterator;
     private final Subject stored;
@@ -18,7 +18,7 @@ public class Cascade<T> implements Browser<T>, Sequence<T> {
     }
 
     @Override
-    public Browser<T> iterator() {
+    public Iterator<T> iterator() {
         return this;
     }
 
@@ -52,13 +52,15 @@ public class Cascade<T> implements Browser<T>, Sequence<T> {
         return falls;
     }
 
+    @SuppressWarnings("next")
     public Sequence<T> until(Predicate<T> predicate) {
         falls = 0;
-        return () -> new Browser<>() {
+        return () -> new Iterator<>() {
 
             @Override
             public boolean hasNext() {
                 if(Cascade.this.hasNext()) {
+                    //noinspection IteratorHasNextCallsIteratorNext
                     T next = Cascade.this.next();
                     if(predicate.test(next)) {
                         store(next);
@@ -81,7 +83,7 @@ public class Cascade<T> implements Browser<T>, Sequence<T> {
 
     public Sequence<T> toEnd() {
         falls = 0;
-        return () -> new Browser<>() {
+        return () -> new Iterator<>() {
             @Override
             public boolean hasNext() {
                 return Cascade.this.hasNext();

@@ -47,8 +47,8 @@ public abstract class Subject implements Sub {
     public abstract boolean absent();
     public abstract boolean absent(Object element);
     public abstract int size();
-    public abstract Browser<Subject> iterator(boolean reverse);
-    public Browser<Subject> iterator() {
+    public abstract Browser iterator(boolean reverse);
+    public Browser iterator() {
         return iterator(false);
     }
     public Series front() {
@@ -131,5 +131,77 @@ public abstract class Subject implements Sub {
     @Override
     public String toString() {
         return "$" + Integer.toHexString(hashCode());
+    }
+
+    public int asInt() {
+        return as(Number.class).intValue();
+    }
+
+    public byte asByte() {
+        return as(Number.class).byteValue();
+    }
+
+    public long asLong() {
+        return as(Number.class).longValue();
+    }
+
+    public long asShort() {
+        return as(Number.class).shortValue();
+    }
+
+    public float asFloat() {
+        return as(Number.class).floatValue();
+    }
+
+    public double asDouble() {
+        return as(Number.class).doubleValue();
+    }
+
+    public char asChar() {
+        return as(Character.class);
+    }
+
+    public boolean asBoolean() {
+        return as(Boolean.class);
+    }
+
+    public String asString() {
+        return as(String.class);
+    }
+
+    public int asInt(int reserve) {
+        return as(Number.class, reserve).intValue();
+    }
+
+    public byte asByte(byte reserve) {
+        return as(Number.class, reserve).byteValue();
+    }
+
+    public long asLong(long reserve) {
+        return as(Number.class, reserve).longValue();
+    }
+
+    public long asShort(short reserve) {
+        return as(Number.class, reserve).shortValue();
+    }
+
+    public float asFloat(float reserve) {
+        return as(Number.class, reserve).floatValue();
+    }
+
+    public double asDouble(double reserve) {
+        return as(Number.class, reserve).doubleValue();
+    }
+
+    public char asChar(char reserve) {
+        return as(Character.class, reserve);
+    }
+
+    public boolean asBoolean(boolean reserve) {
+        return as(Boolean.class, reserve);
+    }
+
+    public String asString(String reserve) {
+        return as(String.class, reserve);
     }
 }

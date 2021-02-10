@@ -128,7 +128,7 @@ class ZeroSubject extends Subject {
     }
 
     @Override
-    public Browser<Subject> iterator(boolean reverse) {
+    public Browser iterator(boolean reverse) {
         return Browser.empty();
     }
 

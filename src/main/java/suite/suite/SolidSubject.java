@@ -10,10 +10,10 @@ import java.util.function.Supplier;
 
 public class SolidSubject extends Subject {
 
-    class HomogenizedSubjectIterator implements Browser<Subject> {
+    class HomogenizedSubjectIterator implements Browser {
         Subject sub;
         boolean reverse;
-        Browser<Subject> it;
+        Browser it;
 
 
         HomogenizedSubjectIterator(Subject sub, boolean reverse) {
@@ -160,7 +160,7 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Browser<Subject> iterator(boolean reverse) {
+    public Browser iterator(boolean reverse) {
         return new HomogenizedSubjectIterator(subject, reverse);
     }
 
@@ -308,7 +308,7 @@ public class SolidSubject extends Subject {
 
     @Override
     public Series getAll(Iterable<?> iterable) {
-        return () -> new Browser<>() {
+        return () -> new Browser() {
             final Iterator<?> it = iterable.iterator();
 
             @Override
@@ -345,7 +345,7 @@ public class SolidSubject extends Subject {
 
     @Override
     public Series takeAll(Iterable<?> iterable) {
-        return () -> new Browser<>() {
+        return () -> new Browser() {
             final Iterator<?> it = iterable.iterator();
 
             @Override

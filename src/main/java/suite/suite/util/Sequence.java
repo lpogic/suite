@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public interface Sequence<T> extends Iterable<T>{
-    Browser<T> iterator();
+    Iterator<T> iterator();
 
     default Cascade<T> cascade() {
         return new Cascade<>(iterator());
@@ -22,7 +22,7 @@ public interface Sequence<T> extends Iterable<T>{
     }
 
     default <F> Sequence<F> filter(Glass<? super F, F> requestedType) {
-        return () -> new Browser<>() {
+        return () -> new Iterator<>() {
             final Iterator<T> origin = iterator();
             F next = null;
             boolean nextFound = false;
@@ -50,7 +50,7 @@ public interface Sequence<T> extends Iterable<T>{
     }
 
     default Sequence<T> filter(Predicate<T> predicate) {
-        return () -> new Browser<>() {
+        return () -> new Iterator<>() {
             final Iterator<T> origin = iterator();
             T next = null;
             boolean nextFound = false;
@@ -78,11 +78,21 @@ public interface Sequence<T> extends Iterable<T>{
     }
 
     static<I> Sequence<I> empty() {
-        return Browser::empty;
+        return () -> new Iterator<>() {
+            @Override
+            public boolean hasNext() {
+                return false;
+            }
+
+            @Override
+            public I next() {
+                return null;
+            }
+        };
     }
 
     default<O> Sequence<O> each(Function<T, O> function) {
-        return () -> new Browser<>() {
+        return () -> new Iterator<>() {
             final Iterator<T> origin = iterator();
 
             @Override
@@ -98,7 +108,7 @@ public interface Sequence<T> extends Iterable<T>{
     }
 
     default<P, O> Sequence<O> each(P param, BiFunction<T, P, O> function) {
-        return () -> new Browser<>() {
+        return () -> new Iterator<>() {
             final Iterator<T> origin = iterator();
 
             @Override
@@ -151,8 +161,8 @@ public interface Sequence<T> extends Iterable<T>{
     }
 
     default Series series() {
-        return () -> new Browser<>() {
-            final Browser<T> b = Sequence.this.iterator();
+        return () -> new Browser() {
+            final Iterator<T> b = Sequence.this.iterator();
 
             @Override
             public boolean hasNext() {
@@ -182,7 +192,7 @@ public interface Sequence<T> extends Iterable<T>{
     }
 
     static<I> Sequence<I> ofEntire(Iterable<I> iterable) {
-        return iterable instanceof Sequence ? (Sequence<I>)iterable : () -> Browser.of(iterable.iterator());
+        return iterable instanceof Sequence ? (Sequence<I>)iterable : iterable::iterator;
     }
 
     default<I extends T> Sequence<T> and(I i) {
@@ -190,8 +200,8 @@ public interface Sequence<T> extends Iterable<T>{
     }
 
     default<I extends T> Sequence<T> andEntire(Iterable<I> iterable) {
-        return () -> new Browser<>() {
-            Browser<T> selfWave = Sequence.this.iterator();
+        return () -> new Iterator<>() {
+            Iterator<T> selfWave = Sequence.this.iterator();
             final Iterator<I> thatIterator = iterable.iterator();
 
             @Override

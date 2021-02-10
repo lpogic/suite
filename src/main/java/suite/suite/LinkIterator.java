@@ -2,7 +2,7 @@ package suite.suite;
 
 import suite.suite.util.Browser;
 
-public class LinkIterator implements Browser<Subject> {
+public class LinkIterator implements Browser {
 
     private final boolean reverse;
     private Link current;

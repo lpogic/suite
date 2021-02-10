@@ -11,14 +11,14 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public interface Series extends Iterable<Subject> {
-    Browser<Subject> iterator();
+    Browser iterator();
 
     default Cascade<Subject> cascade() {
         return new Cascade<>(iterator());
     }
 
     default Series select(Predicate<Subject> predicate) {
-        return () -> new Browser<>() {
+        return () -> new Browser() {
             final Iterator<Subject> origin = iterator();
             Subject next = null;
             boolean nextFound = false;
@@ -57,7 +57,7 @@ public interface Series extends Iterable<Subject> {
     }
 
     default Series order() {
-        return () -> new Browser<>() {
+        return () -> new Browser() {
             final Iterator<Subject> origin = iterator();
             int i = 0;
 
@@ -78,12 +78,12 @@ public interface Series extends Iterable<Subject> {
     }
 
     default Subject getFirst() {
-        Browser<Subject> wave = iterator();
+        Browser wave = iterator();
         return wave.hasNext() ? wave.next() : Suite.set();
     }
 
     default Series convert(Action action) {
-        return () -> new Browser<>() {
+        return () -> new Browser() {
             final Iterator<Subject> origin = iterator();
 
             @Override
@@ -99,8 +99,8 @@ public interface Series extends Iterable<Subject> {
     }
 
     default Series join(Iterable<Subject> iterable) {
-        return () -> new Browser<>() {
-            Browser<Subject> selfWave = Series.this.iterator();
+        return () -> new Browser() {
+            Browser selfWave = Series.this.iterator();
             final Iterator<Subject> thatIterator = iterable.iterator();
 
             @Override
@@ -120,7 +120,7 @@ public interface Series extends Iterable<Subject> {
     }
 
     default Sequence<?> eachDirect() {
-        return () -> new Browser<>() {
+        return () -> new Iterator<>() {
             final Iterator<Subject> subIt = iterator();
 
             @Override
@@ -136,7 +136,7 @@ public interface Series extends Iterable<Subject> {
     }
 
     default<T> Sequence<T> eachAs(Class<T> type) {
-        return () -> new Browser<>() {
+        return () -> new Iterator<>() {
             final Iterator<Subject> subIt = iterator();
 
             @Override
@@ -152,7 +152,7 @@ public interface Series extends Iterable<Subject> {
     }
 
     default<T> Sequence<T> eachAs(Glass<? super T,T> type) {
-        return () -> new Browser<>() {
+        return () -> new Iterator<>() {
             final Iterator<Subject> subIt = iterator();
 
             @Override
@@ -167,8 +167,8 @@ public interface Series extends Iterable<Subject> {
         };
     }
 
-    default Series eachIn() {
-        return () -> new Browser<>() {
+    default Series eachUp() {
+        return () -> new Browser() {
             final Iterator<Subject> subIt = iterator();
 
             @Override
@@ -244,7 +244,7 @@ public interface Series extends Iterable<Subject> {
     }
 
     static Series engage(Iterable<?> keys, Iterable<?> values) {
-        return () -> new Browser<>() {
+        return () -> new Browser() {
             final Iterator<?> keyIt = keys.iterator();
             final Iterator<?> valIt = values.iterator();
 

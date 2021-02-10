@@ -2,28 +2,15 @@ package suite;
 
 import suite.suite.Subject;
 import suite.suite.Suite;
+import suite.suite.util.Sequence;
 
 public class Main {
 
     public static void main(String[] args) {
-        var $ = Suite.set(1);
-        int i = 0;
-        for(var $$ : $) {
-            $$.print();
-            if($$.as(Integer.class) == 1) {
-                $.shift(1, 2);
-            }
-        }
-        System.out.println("###");
-        $.print();
-//        for(var $1 : Suite.preDfs(Suite.add($)).eachIn().select(Subject::present)) {
-//            $1.print();
-//            if($1.as(Integer.class) == 1) {
-//                $1.unset().set(2).set(3, Suite.set(++i));
-//            }
-//        }
-//        System.out.println("@@@");
-//        $.print();
-
+        var $ = Suite.setUp("a", "b", "c").setUp("a", "d", "e").setUp("a", "d", "f");
+//        Suite.preDfs($).print();
+        Suite.refactor($, s -> s.shift(s.direct(), s.as(String.class).toUpperCase())).print();
+        $ = Suite.setAll(Sequence.of(1, 2, 3 ,4 , 5));
+        Suite.parallel($, $.reverse()).convert(s -> Suite.set(s.at(0).as(Integer.class) * s.at(1).as(Integer.class))).print();
     }
 }

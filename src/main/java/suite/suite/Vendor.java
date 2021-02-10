@@ -135,8 +135,8 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Browser<Subject> iterator(boolean b) {
-        return new Browser<>() {
+    public Browser iterator(boolean b) {
+        return new Browser() {
             final Iterator<Subject> source = $sub.iterator(b);
 
             @Override
