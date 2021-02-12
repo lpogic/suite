@@ -53,7 +53,7 @@ public interface Action extends Function<Subject, Subject>, Supplier<Subject>, C
     }
 
     static<T1, T2, U> Action biFunction(Class<T1> arg1Type, Class<T2> arg2Type, BiFunction<T1, T2, U> function) {
-        return $ -> Suite.set(function.apply($.asExpected(), $.getLast().asExpected()));
+        return $ -> Suite.set(function.apply($.asExpected(), $.last().asExpected()));
     }
 
     static<U> Action supplier(Supplier<U> supplier) {

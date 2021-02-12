@@ -27,8 +27,8 @@ public abstract class Subject implements Sub {
     protected abstract Subject jump(Object element);
     protected abstract boolean real(Object element);
 
-    public abstract Subject getFirst();
-    public abstract Subject getLast();
+    public abstract Subject first();
+    public abstract Subject last();
     public abstract Subject get(Object element);
     public Subject get(Object... elements) {
         return getAll(Sequence.of(elements)).set();

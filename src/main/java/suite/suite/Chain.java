@@ -29,7 +29,7 @@ class Chain implements Series {
         return data.getOrDefault(key, ward);
     }
 
-    Link first() {
+    Link getFirst() {
         return ward.back;
     }
 

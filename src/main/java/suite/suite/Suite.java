@@ -68,40 +68,6 @@ public class Suite {
         return alter(Series.engage(keys, values));
     }
 
-    public static Series parallel(Series ... series) {
-
-        return () -> new Browser() {
-            final Subject $its = set(); {
-                for(Series s : series) {
-                    $its.set(s.iterator());
-                }
-            }
-            Subject $collected = set();
-
-            @Override
-            public boolean hasNext() {
-                return collect();
-            }
-
-            @Override
-            public Subject next() {
-                var $c = $collected;
-                $collected = set();
-                return $c;
-            }
-
-            boolean collect() {
-                var $c = set();
-                for(Browser it : $its.eachAs(Browser.class)) {
-                    if(it.hasNext()) $c.add(it.next());
-                    else return false;
-                }
-                $collected = $c;
-                return true;
-            }
-        };
-    }
-
     public static String describe(Series $ser) {
         StringBuilder sb = new StringBuilder();
         for(var $ : $ser) {
@@ -128,7 +94,7 @@ public class Suite {
         while(!stack.empty()) {
             var $1 = stack.peek();
             Subject $current = $1.asExpected();
-            Cascade<Subject> it = $1.getLast().asExpected();
+            Cascade<Subject> it = $1.last().asExpected();
             for(Subject $s : it.toEnd()) {
                 if(tabsBefore)sb.append("\t".repeat(stack.size() - 1));
                 tabsBefore = false;
@@ -222,7 +188,7 @@ public class Suite {
         }
 
         public static Subject pop(Subject $stack) {
-            return $stack.take($stack.getLast().direct());
+            return $stack.take($stack.last().direct());
         }
 
     }
@@ -248,15 +214,15 @@ public class Suite {
             @Override
             public Subject next() {
                 if($hasNext.absent()) dig();
-                Subject $next = $subjectStack.take($subjectStack.getLast().direct()).up().get();
+                Subject $next = $subjectStack.take($subjectStack.last().direct()).up().get();
                 $hasNext.unset();
                 return $next;
             }
 
             private void dig() {
                 if ($stack.absent()) return;
-                Subject $i = $stack.getLast().asExpected();
-                Iterator<Subject> it = $stack.getLast().up().asExpected();
+                Subject $i = $stack.last().asExpected();
+                Iterator<Subject> it = $stack.last().up().asExpected();
                 while (it.hasNext()) {
                     var $ = it.next();
                     $subjectStack.add($);
@@ -289,7 +255,7 @@ public class Suite {
 
             @Override
             public Subject next() {
-                Iterator<Subject> it = $stack.getLast().up().asExpected();
+                Iterator<Subject> it = $stack.last().up().asExpected();
                 var $next = it.next();
                 $nextUp = $next.up().get();
                 digDone = false;
@@ -299,7 +265,7 @@ public class Suite {
             private void dig(Subject $) {
                 if($.present() && $stack.absent($)) $stack.setUp($, serializer.apply($).iterator());
                 while($stack.present()) {
-                    Iterator<Subject> it = $stack.getLast().up().asExpected();
+                    Iterator<Subject> it = $stack.last().up().asExpected();
                     if(it.hasNext()) return;
                     Stack.pop($stack);
                 }

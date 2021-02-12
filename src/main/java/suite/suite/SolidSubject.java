@@ -75,13 +75,13 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject getFirst() {
-        return new SolidSubject(subject.getFirst());
+    public Subject first() {
+        return new SolidSubject(subject.first());
     }
 
     @Override
-    public Subject getLast() {
-        return new SolidSubject(subject.getLast());
+    public Subject last() {
+        return new SolidSubject(subject.last());
     }
 
     @Override

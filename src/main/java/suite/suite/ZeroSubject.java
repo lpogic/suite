@@ -43,12 +43,12 @@ class ZeroSubject extends Subject {
     }
 
     @Override
-    public Subject getFirst() {
+    public Subject first() {
         return this;
     }
 
     @Override
-    public Subject getLast() {
+    public Subject last() {
         return this;
     }
 

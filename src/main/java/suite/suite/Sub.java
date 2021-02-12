@@ -19,13 +19,13 @@ public interface Sub extends Series {
         return new FrontierSub(this, element);
     }
 
-    default Subject getFirst() {
-        return get().getFirst();
+    default Subject first() {
+        return get().first();
     }
 
 
-    default Subject getLast() {
-        return get().getLast();
+    default Subject last() {
+        return get().last();
     }
 
 

@@ -19,7 +19,7 @@ class MultiSubject extends Subject {
 
     @Override
     protected Subject materialize() {
-        var link = chain.first();
+        var link = chain.getFirst();
         if(link == chain.ward) {
             chain.put(new Suite.Auto(), Suite.set());
         } else {
@@ -41,7 +41,7 @@ class MultiSubject extends Subject {
 
     @Override
     protected Subject jump() {
-        return chain.first().subject.jump();
+        return chain.getFirst().subject.jump();
     }
 
     @Override
@@ -55,12 +55,12 @@ class MultiSubject extends Subject {
     }
 
     @Override
-    public Subject getFirst() {
-        return chain.first().subject;
+    public Subject first() {
+        return chain.getFirst().subject;
     }
 
     @Override
-    public Subject getLast() {
+    public Subject last() {
         return chain.getLast().subject;
     }
 
@@ -71,47 +71,47 @@ class MultiSubject extends Subject {
 
     @Override
     public Object direct() {
-        return chain.first().subject.direct();
+        return chain.getFirst().subject.direct();
     }
     
     @Override
     public <B> B asExpected() {
-        return chain.first().subject.asExpected();
+        return chain.getFirst().subject.asExpected();
     }
 
     @Override
     public <B> B as(Class<B> requestedType) {
-        return chain.first().subject.as(requestedType);
+        return chain.getFirst().subject.as(requestedType);
     }
 
     @Override
     public <B> B as(Glass<? super B, B> requestedType) {
-        return chain.first().subject.as(requestedType);
+        return chain.getFirst().subject.as(requestedType);
     }
 
     @Override
     public <B> B as(Class<B> requestedType, B reserve) {
-        return chain.first().subject.as(requestedType, reserve);
+        return chain.getFirst().subject.as(requestedType, reserve);
     }
 
     @Override
     public <B> B as(Glass<? super B, B> requestedType, B reserve) {
-        return chain.first().subject.as(requestedType, reserve);
+        return chain.getFirst().subject.as(requestedType, reserve);
     }
 
     @Override
     public <B> B orGiven(B reserve) {
-        return chain.first().subject.orGiven(reserve);
+        return chain.getFirst().subject.orGiven(reserve);
     }
 
     @Override
     public <B> B orDo(Supplier<B> supplier) {
-        return chain.first().subject.orDo(supplier);
+        return chain.getFirst().subject.orDo(supplier);
     }
 
     @Override
     public boolean is(Class<?> type) {
-        return chain.first().subject.is(type);
+        return chain.getFirst().subject.is(type);
     }
 
     @Override

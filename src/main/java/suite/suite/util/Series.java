@@ -7,6 +7,7 @@ import suite.suite.action.Action;
 import suite.suite.selector.Index;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -56,6 +57,10 @@ public interface Series extends Iterable<Subject> {
         return select(new Index(i)).up().get();
     }
 
+    default Subject at() {
+        return first().up().get();
+    }
+
     default Series order() {
         return () -> new Browser() {
             final Iterator<Subject> origin = iterator();
@@ -77,7 +82,7 @@ public interface Series extends Iterable<Subject> {
         return select(predicate.negate());
     }
 
-    default Subject getFirst() {
+    default Subject first() {
         Browser wave = iterator();
         return wave.hasNext() ? wave.next() : Suite.set();
     }
@@ -184,59 +189,63 @@ public interface Series extends Iterable<Subject> {
     }
 
     default Sub up() {
-        return getFirst().up();
+        return first().up();
     }
 
     default Object direct() {
-        return getFirst().direct();
+        return first().direct();
     }
 
     default <B> B asExpected() {
-        return getFirst().asExpected();
+        return first().asExpected();
     }
 
     default <B> B as(Class<B> requestedType) {
-        return getFirst().as(requestedType);
+        return first().as(requestedType);
     }
 
     default <B> B as(Glass<? super B, B> requestedType) {
-        return getFirst().as(requestedType);
+        return first().as(requestedType);
     }
 
     default <B> B as(Class<B> requestedType, B reserve) {
-        return getFirst().as(requestedType, reserve);
+        return first().as(requestedType, reserve);
     }
 
     default <B> B as(Glass<? super B, B> requestedType, B reserve) {
-        return getFirst().as(requestedType, reserve);
+        return first().as(requestedType, reserve);
     }
 
     default <B> B orGiven(B reserve) {
-        return getFirst().orGiven(reserve);
+        return first().orGiven(reserve);
     }
 
     default <B> B orDo(Supplier<B> supplier) {
-        return getFirst().orDo(supplier);
+        return first().orDo(supplier);
     }
 
     default boolean is(Class<?> type) {
-        return getFirst().is(type);
+        return first().is(type);
     }
 
     default boolean present() {
-        return getFirst().present();
+        return first().present();
     }
 
     default boolean absent() {
-        return getFirst().absent();
+        return first().absent();
     }
 
     default Subject set() {
         return Suite.alter(this);
     }
 
-    static Series of(Iterable<Subject> iterable) {
+    static Series ofEntire(Iterable<Subject> iterable) {
         return iterable instanceof Series ? (Series)iterable : () -> Browser.of(iterable.iterator());
+    }
+
+    static Series of(Subject ... subjects) {
+        return ofEntire(List.of(subjects));
     }
 
     static Series empty() {
@@ -256,6 +265,40 @@ public interface Series extends Iterable<Subject> {
             @Override
             public Subject next() {
                 return Suite.set(keyIt.next(), Suite.set(valIt.next()));
+            }
+        };
+    }
+
+    static Series parallel(Series ... series) {
+
+        return () -> new Browser() {
+            final Subject $its = Suite.set(); {
+                for(Series s : series) {
+                    $its.set(s.iterator());
+                }
+            }
+            Subject $collected = Suite.set();
+
+            @Override
+            public boolean hasNext() {
+                return collect();
+            }
+
+            @Override
+            public Subject next() {
+                var $c = $collected;
+                $collected = Suite.set();
+                return $c;
+            }
+
+            boolean collect() {
+                var $c = Suite.set();
+                for(Browser it : $its.eachAs(Browser.class)) {
+                    if(it.hasNext()) $c.add(it.next());
+                    else return false;
+                }
+                $collected = $c;
+                return true;
             }
         };
     }

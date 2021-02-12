@@ -50,13 +50,13 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Subject getFirst() {
-        return monoWrap($sub.getFirst());
+    public Subject first() {
+        return monoWrap($sub.first());
     }
 
     @Override
-    public Subject getLast() {
-        return monoWrap($sub.getLast());
+    public Subject last() {
+        return monoWrap($sub.last());
     }
 
     @Override
