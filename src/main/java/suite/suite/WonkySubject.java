@@ -1,40 +1,71 @@
 package suite.suite;
 
-public class WonkySubject {} //  extends SolidSubject {
+import suite.suite.util.Browser;
+import suite.suite.util.Glass;
+import suite.suite.util.Series;
 
+import java.lang.ref.WeakReference;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
+public class WonkySubject{}/* extends SolidSubject {
 
-    /*class HomogenizedSubjectIterator implements Wave<Subject> {
-        Subject jump;
-        boolean reverse;
-        Wave<Subject> it;
+    class Vestige {
+        WeakReference<?> ref;
+        int hashCode;
 
-        boolean hasNext;
-        Subject next;
-
-        HomogenizedSubjectIterator(Subject jump, boolean reverse) {
-            this.jump = jump;
-            this.reverse = reverse;
-            this.it = jump.iterator(reverse);
+        public Vestige(Object o) {
+            ref = new WeakReference<>(o);
+            hashCode = Objects.hashCode(o);
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Vestige vestige = (Vestige) o;
+            return Objects.equals(ref.get(), vestige.ref.get());
+        }
+
+        @Override
+        public int hashCode() {
+            return hashCode;
+        }
+    }
+
+    class HomogenizedSubjectIterator implements Browser {
+        Subject sub;
+        boolean reverse;
+        Browser it;
+
+        boolean hasNext = false;
+        Subject next;
+
+
+        HomogenizedSubjectIterator(Subject sub, boolean reverse) {
+            this.sub = sub;
+            this.reverse = reverse;
+            this.it = sub.iterator(reverse);
+        }
 
         @Override
         public boolean hasNext() {
+            if(sub.origin != subject.origin) {
+                it = subject.iterator(reverse);
+                sub = subject;
+            }
+            return it.hasNext();
+
             if(hasNext) return true;
-            if(jump != sub) {
-                if(jump == ZeroSubject.getInstance()) {
-                    it = sub.iterator(reverse);
-                } else if(sub == ZeroSubject.getInstance()) {
-                    it = Wave.empty();
-                }
-                jump = sub;
+            if(sub.origin != subject.origin) {
+                it = subject.iterator(reverse);
+                sub = subject;
             }
             while (hasNext = it.hasNext()) {
-                Subject v = it.next();
-                v = unweak(v);
-                if(v != ZeroSubject.getInstance()) {
-                    next = v;
+                next = strengthen(it.next());
+                if(next.present()) {
                     return true;
                 }
             }
@@ -43,274 +74,350 @@ public class WonkySubject {} //  extends SolidSubject {
 
         @Override
         public Subject next() {
-            if(hasNext) {
-                hasNext = false;
-                return new SolidSubject(next);
-            } else return new SolidSubject(next.fuse());
+            return new SolidSubject(next);
         }
     }
 
-    private Subject sub;
-
     WonkySubject() {
-        sub = ZeroSubject.getInstance();
+        super();
     }
 
-    private WeakReference<Object> weak(Object o) {
-        return o == null ? null : new WeakReference<>(o);
-    }
-
-    private Subject unweak(Subject s) {
-        WeakReference<Object> ref = s.orGiven(null);
-        if(ref == null) return s;
-        Object o = ref.get();
-        if(o == null) return ZeroSubject.getInstance();
-        return new CoupleSubject(s.key(), o);
-    }
-
-    @Override
-    public Object key() {
-        return sub.key();
+    private Subject strengthen(Subject s) {
+        if(s.present()) {
+            if(s.is(Vestige.class)) {
+                Vestige v = s.asExpected();
+                Object o = v.ref.get();
+                if (o != null) {
+                    return new MonoSubject(o, s.up().get());
+                }
+            } else return s;
+        }
+        return ZeroSubject.getInstance();
     }
 
     @Override
-    public Subject get() {
-        Wave<Subject> slime = iterator();
-        return slime.hasNext() ? slime.next() : Suite.set();
+    protected Subject materialize(Object element) {
+        subject = subject.materialize(new Vestige(element));
+        return this;
     }
 
     @Override
-    public Subject get(Object key) {
-        return unweak(sub.get(key));
+    protected Subject materialize() {
+        subject = subject.materialize();
+        return this;
     }
 
     @Override
-    public Subject getAt(Slot slot) {
-        return new SolidSubject(unweak(sub.getAt(slot)));
+    protected Subject jump() {
+        return strengthen(subject.jump());
     }
 
     @Override
-    public Subject getAt(int slotIndex) {
-        return new SolidSubject(unweak(sub.getAt(slotIndex)));
+    protected Subject jump(Object element) {
+        return strengthen(subject.jump(new Vestige(element)));
+    }
+
+    @Override
+    protected boolean real(Object element) {
+        return subject.real(new Vestige(element));
+    }
+
+    @Override
+    public Subject first() {
+        return front().first();
+    }
+
+    @Override
+    public Subject last() {
+        return reverse().first();
+    }
+
+    @Override
+    public Subject get(Object element) {
+        return strengthen(subject.get(new Vestige(element)));
     }
 
     @Override
     public Object direct() {
-        return get().direct();
+        return strengthen(subject).direct();
     }
 
     @Override
     public <B> B asExpected() {
-        return get().asExpected();
+        return strengthen(subject).asExpected();
     }
 
     @Override
     public <B> B as(Class<B> requestedType) {
-        return get().as(requestedType);
+        return strengthen(subject).as(requestedType);
     }
 
     @Override
     public <B> B as(Glass<? super B, B> requestedType) {
-        return get().as(requestedType);
+        return strengthen(subject).as(requestedType);
     }
 
     @Override
-    public <B> B as(Class<B> requestedType, B substitute) {
-        return get().as(requestedType, substitute);
+    public <B> B as(Class<B> requestedType, B reserve) {
+        return strengthen(subject).as(requestedType, reserve);
     }
 
     @Override
-    public <B> B as(Glass<? super B, B> requestedType, B substitute) {
-        return get().as(requestedType, substitute);
+    public <B> B as(Glass<? super B, B> requestedType, B reserve) {
+        return strengthen(subject).as(requestedType, reserve);
     }
 
     @Override
-    public <B> B orGiven(B substitute) {
-        return get().orGiven(substitute);
+    public <B> B orGiven(B reserve) {
+        return strengthen(subject).orGiven(reserve);
     }
 
     @Override
     public <B> B orDo(Supplier<B> supplier) {
-        return get().orDo(supplier);
+        return strengthen(subject).orDo(supplier);
     }
 
     @Override
     public boolean is(Class<?> type) {
-        return get().is(type);
+        return strengthen(subject).is(type);
     }
 
     @Override
     public boolean present() {
-        return iterator( false).hasNext();
+        return strengthen(subject).present();
+    }
+
+    @Override
+    public boolean present(Object element) {
+        return strengthen(subject).present(new Vestige(element));
     }
 
     @Override
     public boolean absent() {
-        return !present();
+        return strengthen(subject).absent();
+    }
+
+    @Override
+    public boolean absent(Object element) {
+        return strengthen(subject).absent(new Vestige(element));
     }
 
     @Override
     public int size() {
-        return sub.size();
+        return subject.size();
     }
 
     @Override
-    public Wave<Subject> iterator(boolean reverse) {
-        return new HomogenizedSubjectIterator(sub, reverse);
-    }
-
-    @Override
-    public Fluid front() {
-        return () -> new HomogenizedSubjectIterator(sub, false);
-    }
-
-    @Override
-    public Fluid reverse() {
-        return () -> new HomogenizedSubjectIterator(sub, true);
+    public Browser iterator(boolean reverse) {
+        return new SolidSubject.HomogenizedSubjectIterator(subject, reverse);
     }
 
     @Override
     public Subject set(Object element) {
-        System.err.println("Keys up WeakSubject are not weak wrapped");
-        sub = sub.set(element, weak(element));
+        subject = subject.set(element);
         return this;
     }
 
     @Override
-    public Subject set(Object key, Object value) {
-        sub = sub.set(key, weak(value));
+    public Subject set(Object element, Subject $set) {
+        subject = subject.set(element, $set);
         return this;
     }
 
     @Override
-    public Subject put(Object element) {
-        System.err.println("Keys up WeakSubject are not weak wrapped");
-        if(unweak(sub.get(element)).absent())
-            sub = sub.set(element, weak(element));
+    public Subject strictSet(Object sequent, Object element) {
+        subject = subject.strictSet(sequent, element);
         return this;
     }
 
     @Override
-    public Subject put(Object key, Object value) {
-        if(unweak(sub.get(key)).absent())
-            sub = sub.set(key, weak(value));
+    public Subject strictSet(Object sequent, Object element, Subject $set) {
+        subject = subject.strictSet(sequent, element, $set);
         return this;
     }
 
     @Override
-    public Subject add(Object element) {
-        sub = sub.add(weak(element));
+    public Subject shift(Object out, Object in) {
+        subject = subject.shift(out, in);
+        return this;
+    }
+
+    @Override
+    public Subject setIf(Object element, Predicate<Object> test) {
+        subject = subject.setIf(element, test);
         return this;
     }
 
     @Override
     public Subject unset() {
-        sub = sub.unset();
+        subject = subject.unset();
         return this;
     }
 
     @Override
-    public Subject unset(Object key) {
-        sub = sub.unset(key);
+    public Subject unset(Object element) {
+        subject = subject.unset(element);
         return this;
     }
 
     @Override
-    public Subject unsetAt(Slot slot) {
-        sub = sub.unsetAt(slot);
+    public Subject setUp(Object... elements) {
+        Sub $ = this;
+        int i = 0;
+        Object o = null;
+        for(Object e : elements) {
+            if(i > 0) $ = $.up(o);
+            o = e;
+            ++i;
+        }
+        if(i > 0) $.set(o);
+
         return this;
     }
 
     @Override
-    public Subject getSaved(Object key, Object reserve) {
-        Subject saved = unweak(sub.get(key));
-        if(saved.present())return new SolidSubject(saved);
-        sub = sub.set(key, weak(reserve));
-        return get(key);
+    public Subject addUp(Object... elements) {
+        Sub $ = up(new Suite.Auto());
+        int i = 0;
+        Object o = null;
+        for(Object e : elements) {
+            if(i > 0) $ = $.up(o);
+            o = e;
+            ++i;
+        }
+        if(i > 0) $.set(o);
+        else $.set();
+
+        return this;
     }
 
     @Override
-    public Subject getDone(Object key, Supplier<?> supplier) {
-        Subject done = unweak(sub.get(key));
-        if(done.present())return new SolidSubject(done);
-        sub = sub.set(key, weak(supplier.get()));
-        return get(key);
+    public Series front() {
+        return this;
     }
 
     @Override
-    public Subject getDone(Object key, Function<Subject, ?> function, Subject argument) {
-        Subject done = unweak(sub.get(key));
-        if(done.present())return new SolidSubject(done);
-        sub = sub.set(key, weak(function.apply(argument)));
-        return get(key);
+    public Series reverse() {
+        return () -> iterator(true);
+    }
+
+    @Override
+    public Subject getFilled(Object element) {
+        subject = subject.setIf(element, subject::absent);
+        return subject.get(element);
+    }
+
+    @Override
+    public Subject getFilled(Object element, Subject $set) {
+        subject = subject.setIf(element, $set, subject::absent);
+        return subject.get(element);
     }
 
     @Override
     public Subject take(Object key) {
         Subject taken = get(key);
-        if(taken.present()) sub = sub.unset(key);
-        return unweak(taken);
-    }
-
-    @Override
-    public Subject takeAt(Slot slot) {
-        Subject taken = getAt(slot);
-        if(taken.present()) sub = sub.unset(taken.key());
-        return unweak(taken);
+        if(taken.present()) subject = subject.unset(key);
+        return taken;
     }
 
     @Override
     public Subject alter(Iterable<? extends Subject> iterable) {
-        for(Subject v : iterable) {
-            sub = sub.set(v.key(), v.direct());
+        var $ = subject;
+        for(var it : iterable) {
+            if(it.present()) {
+                Object o = it.direct();
+                if (it.real(o)) {
+                    $ = $.set(o, it.jump(o));
+                } else {
+                    $ = $.set(o);
+                }
+            }
         }
+        subject = $;
         return this;
     }
 
     @Override
-    public Subject input(Iterable<? extends Subject> iterable) {
-        for(Subject v : iterable) {
-            sub = sub.put(v.key(), v.direct());
+    public Subject strictAlter(Object sequent, Iterable<? extends Subject> iterable) {
+        var $ = subject;
+        for(var it : iterable) {
+            if(it.present()) {
+                Object o = it.direct();
+                if (it.real(o)) {
+                    $ = $.strictSet(sequent, o, it.jump(o));
+                } else {
+                    $ = $.strictSet(sequent, o);
+                }
+            }
         }
+        subject = $;
         return this;
     }
 
     @Override
-    public Subject setAt(Slot slot, Object element) {
-        System.err.println("Keys up WeakSubject are not weak wrapped");
-        sub = sub.setAt(slot, element, weak(element));
+    public Series getAll(Iterable<?> iterable) {
+        return () -> new Browser() {
+            final Iterator<?> it = iterable.iterator();
+
+            @Override
+            public boolean hasNext() {
+                return it.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                return get(it.next());
+            }
+        };
+    }
+
+    @Override
+    public Subject setAll(Iterable<?> iterable) {
+        var $ = subject;
+        for(Object it : iterable) {
+            $ = $.set(it);
+        }
+        subject = $;
         return this;
     }
 
     @Override
-    public Subject setAt(Slot slot, Object key, Object value) {
-        sub = sub.setAt(slot, key, weak(value));
+    public Subject unsetAll(Iterable<?> iterable) {
+        var $ = subject;
+        for(Object it : iterable) {
+            $ = $.unset(it);
+        }
+        subject = $;
         return this;
     }
 
     @Override
-    public Subject putAt(Slot slot, Object element) {
-        System.err.println("Keys up WeakSubject are not weak wrapped");
-        if(unweak(get(element)).absent())
-            sub = sub.setAt(slot, element, weak(element));
-        return this;
+    public*//* Series takeAll(Iterable<?> iterable) {
+        return () -> new Browser() {
+            final Iterator<?> it = iterable.iterator();
+
+            @Override
+            public boolean hasNext() {
+                return it.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                return take(it.next());
+            }
+        };
     }
 
     @Override
-    public Subject putAt(Slot slot, Object key, Object value) {
-        if(unweak(get(key)).absent())
-            sub = sub.setAt(slot, key, weak(value));
-        return this;
+    public Subject separate() {
+        return subject.separate();
     }
 
     @Override
-    public Subject addAt(Slot slot, Object element) {
-        sub = sub.addAt(slot, weak(element));
+    public Subject set() {
+        subject = subject.set();
         return this;
     }
 
-    @Override
-    public boolean fused() {
-        return sub.fused();
-    }
-}*/
+}
+*/

@@ -40,8 +40,6 @@ public class Suite {
         return new SolidSubject().setAll(source);
     }
 
-//    public static boolean absent(Subject $, Object element)
-
 //    public static Subject fuse(Subject sub) {
 //        if(sub == null) {
 //            return Suite.set();
@@ -52,9 +50,9 @@ public class Suite {
 //        }
 //    }
 
-//    public static Subject thready() {
-//        return new ThreadySubject();
-//    }
+    public static Subject thready() {
+        return new ThreadySubject();
+    }
 
 //    public static Subject wonky() {
 //        return new WonkySubject();

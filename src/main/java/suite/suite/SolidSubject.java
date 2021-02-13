@@ -37,7 +37,7 @@ public class SolidSubject extends Subject {
         }
     }
 
-    private Subject subject;
+    Subject subject;
 
     public SolidSubject() {
         subject = ZeroSubject.getInstance();
