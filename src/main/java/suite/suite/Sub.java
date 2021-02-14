@@ -4,6 +4,7 @@ import suite.suite.util.Browser;
 import suite.suite.util.Glass;
 import suite.suite.util.Series;
 
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -150,15 +151,15 @@ public interface Sub extends Series {
         return tester.test(get()) ? set() : this;
     }
 
-    default Sub setIf(Predicate<Subject> tester, Object element) {
-        return tester.test(get()) ? set(element) : this;
+    default Sub setIf(BiPredicate<Subject, Object> tester, Object element) {
+        return tester.test(get(), element) ? set(element) : this;
     }
 
-    default Sub setIf(Predicate<Subject> tester, Object element, Subject $sub) {
-        return tester.test(get()) ? set(element, $sub) : this;
+    default Sub setIf(BiPredicate<Subject, Object> tester, Object element, Subject $sub) {
+        return tester.test(get(), element) ? set(element, $sub) : this;
     }
 
-    default Sub useIf(Predicate<Subject> tester, Supplier<?> supplier) {
+    default Sub feedIf(Predicate<Subject> tester, Supplier<?> supplier) {
         return tester.test(get()) ? set(supplier.get()) : this;
     }
 }

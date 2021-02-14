@@ -302,13 +302,13 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Subject getAt(Object element) {
+    public Subject sate(Object element) {
         subject = subject.setIf(element, subject::absent);
         return subject.get(element);
     }
 
     @Override
-    public Subject getAt(Object element, Subject $set) {
+    public Subject sate(Object element, Subject $set) {
         subject = subject.setIf(element, $set, subject::absent);
         return subject.get(element);
     }

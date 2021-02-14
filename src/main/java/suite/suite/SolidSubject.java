@@ -5,7 +5,6 @@ import suite.suite.util.Series;
 import suite.suite.util.Glass;
 
 import java.util.Iterator;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class SolidSubject extends Subject {
@@ -248,7 +247,7 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject getAt(Object element) {
+    public Subject sate(Object element) {
         var $ = get(element);
         if($.present()) return $;
         set(element);
@@ -256,7 +255,7 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject getAt(Object element, Subject $set) {
+    public Subject sate(Object element, Subject $set) {
         var $ = get(element);
         if($.present()) return $;
         set(element, $set);

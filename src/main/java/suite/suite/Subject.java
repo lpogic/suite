@@ -5,6 +5,7 @@ import suite.suite.util.Series;
 import suite.suite.util.Glass;
 import suite.suite.util.Browser;
 
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -65,13 +66,13 @@ public abstract class Subject implements Sub {
     public abstract Subject shift(Object out, Object in);
     public abstract Subject unset();
     public abstract Subject unset(Object element);
-    public Subject setIf(Predicate<Subject> tester, Object element) {
-        return tester.test(this) ? set(element) : this;
+    public Subject setIf(BiPredicate<Subject, Object> tester, Object element) {
+        return tester.test(this, element) ? set(element) : this;
     }
-    public Subject setIf(Predicate<Subject> tester, Object element, Subject $sub) {
-        return tester.test(this) ? set(element, $sub) : this;
+    public Subject setIf(BiPredicate<Subject, Object> tester, Object element, Subject $sub) {
+        return tester.test(this, element) ? set(element, $sub) : this;
     }
-    public Subject useIf(Predicate<Subject> tester, Supplier<?> supplier) {
+    public Subject feedIf(Predicate<Subject> tester, Supplier<?> supplier) {
         return tester.test(this) ? set(supplier.get()) : this;
     }
     public Subject add(Subject $sub) {
@@ -86,10 +87,10 @@ public abstract class Subject implements Sub {
     public Subject setUp(Object ... elements) {
         throw new UnsupportedOperationException("Solid method");
     }
-    public Subject getAt(Object element) {
+    public Subject sate(Object element) {
         throw new UnsupportedOperationException("Solid method");
     }
-    public Subject getAt(Object element, Subject $set) {
+    public Subject sate(Object element, Subject $set) {
         throw new UnsupportedOperationException("Solid method");
     }
     public Subject take(Object element) {
