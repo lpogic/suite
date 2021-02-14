@@ -65,11 +65,14 @@ public abstract class Subject implements Sub {
     public abstract Subject shift(Object out, Object in);
     public abstract Subject unset();
     public abstract Subject unset(Object element);
-    public Subject setIf(Object element, Predicate<Object> tester) {
-        return tester.test(element) ? set(element) : this;
+    public Subject setIf(Predicate<Subject> tester, Object element) {
+        return tester.test(this) ? set(element) : this;
     }
-    public Subject setIf(Object element, Subject $sub, Predicate<Object> tester) {
-        return tester.test(element) ? set(element, $sub) : this;
+    public Subject setIf(Predicate<Subject> tester, Object element, Subject $sub) {
+        return tester.test(this) ? set(element, $sub) : this;
+    }
+    public Subject useIf(Predicate<Subject> tester, Supplier<?> supplier) {
+        return tester.test(this) ? set(supplier.get()) : this;
     }
     public Subject add(Subject $sub) {
         return set(new Suite.Auto(), $sub);
@@ -83,10 +86,10 @@ public abstract class Subject implements Sub {
     public Subject setUp(Object ... elements) {
         throw new UnsupportedOperationException("Solid method");
     }
-    public Subject getFilled(Object element) {
+    public Subject getAt(Object element) {
         throw new UnsupportedOperationException("Solid method");
     }
-    public Subject getFilled(Object element, Subject $set) {
+    public Subject getAt(Object element, Subject $set) {
         throw new UnsupportedOperationException("Solid method");
     }
     public Subject take(Object element) {

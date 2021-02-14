@@ -1,5 +1,7 @@
 package suite;
 
+import suite.suite.SolidSubject;
+import suite.suite.Sub;
 import suite.suite.Subject;
 import suite.suite.Suite;
 import suite.suite.util.Sequence;
@@ -14,5 +16,9 @@ public class Main {
         $ = Suite.setAll(Sequence.of(1, 2, 3 ,4 , 5));
         Series.parallel($, $.reverse()).
                 convert(s -> Suite.set(s.at(0).as(Integer.class) * s.at(1).as(Integer.class))).print();
+
+        var $2 = Suite.setUp(1 );
+        $2.up(1).useIf(Subject::absent, SolidSubject::new).print();
+        $2.print();
     }
 }

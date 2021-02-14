@@ -195,12 +195,6 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject setIf(Object element, Predicate<Object> test) {
-        subject = subject.setIf(element, test);
-        return this;
-    }
-
-    @Override
     public Subject unset() {
         subject = subject.unset();
         return this;
@@ -254,15 +248,19 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject getFilled(Object element) {
-        subject = subject.setIf(element, subject::absent);
-        return subject.get(element);
+    public Subject getAt(Object element) {
+        var $ = get(element);
+        if($.present()) return $;
+        set(element);
+        return get(element);
     }
 
     @Override
-    public Subject getFilled(Object element, Subject $set) {
-        subject = subject.setIf(element, $set, subject::absent);
-        return subject.get(element);
+    public Subject getAt(Object element, Subject $set) {
+        var $ = get(element);
+        if($.present()) return $;
+        set(element, $set);
+        return get(element);
     }
 
     @Override

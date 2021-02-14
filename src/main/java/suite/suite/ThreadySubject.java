@@ -6,7 +6,6 @@ import suite.suite.util.Series;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 class ThreadySubject extends SolidSubject {
@@ -275,16 +274,6 @@ class ThreadySubject extends SolidSubject {
     }
 
     @Override
-    public Subject setIf(Object element, Predicate<Object> test) {
-        if(test.test(element)) {
-            try(var ignored = writeLock.lock()) {
-                super.set(element);
-            }
-        }
-        return this;
-    }
-
-    @Override
     public Subject unset() {
         try(var ignored = writeLock.lock()) {
             super.unset();
@@ -320,20 +309,6 @@ class ThreadySubject extends SolidSubject {
     @Override
     public Series reverse() {
         return () -> iterator(true);
-    }
-
-    @Override
-    public Subject getFilled(Object element) {
-        try(var ignored = writeLock.lock()) {
-            return super.getFilled(element);
-        }
-    }
-
-    @Override
-    public Subject getFilled(Object element, Subject $set) {
-        try(var ignored = writeLock.lock()) {
-            return super.getFilled(element, $set);
-        }
     }
 
     @Override

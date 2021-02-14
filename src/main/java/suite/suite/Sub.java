@@ -4,6 +4,7 @@ import suite.suite.util.Browser;
 import suite.suite.util.Glass;
 import suite.suite.util.Series;
 
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public interface Sub extends Series {
@@ -143,5 +144,17 @@ public interface Sub extends Series {
 
     default Subject unset(Object element) {
         return set().unset(element);
+    }
+
+    default Sub setIf(Predicate<Subject> tester, Object element) {
+        return tester.test(get()) ? set(element) : this;
+    }
+
+    default Sub setIf(Predicate<Subject> tester, Object element, Subject $sub) {
+        return tester.test(get()) ? set(element, $sub) : this;
+    }
+
+    default Sub useIf(Predicate<Subject> tester, Supplier<?> supplier) {
+        return tester.test(get()) ? set(supplier.get()) : this;
     }
 }
