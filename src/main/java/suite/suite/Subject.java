@@ -125,6 +125,13 @@ public abstract class Subject implements Sub {
     public Subject get() {
         return this;
     }
+
+    @Override
+    public Sub setIf(Predicate<Subject> tester) {
+        tester.test(this);
+        return this;
+    }
+
     abstract Subject separate();
     public Subject print() {
         System.out.println(Suite.describe(this));

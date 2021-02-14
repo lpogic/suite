@@ -146,6 +146,10 @@ public interface Sub extends Series {
         return set().unset(element);
     }
 
+    default Sub setIf(Predicate<Subject> tester) {
+        return tester.test(get()) ? set() : this;
+    }
+
     default Sub setIf(Predicate<Subject> tester, Object element) {
         return tester.test(get()) ? set(element) : this;
     }
