@@ -81,10 +81,10 @@ public abstract class Subject implements Sub {
     public Subject exactPut(Object sequent, Subject $sub) {
         return exactSet(sequent, new Suite.Auto(), $sub);
     }
-    public Subject inPut(Object ... elements) {
+    public Subject input(Object ... elements) {
         throw new UnsupportedOperationException("Solid method");
     }
-    public Subject inSet(Object ... elements) {
+    public Subject inset(Object ... elements) {
         throw new UnsupportedOperationException("Solid method");
     }
     public Subject sate(Object element) {

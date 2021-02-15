@@ -261,7 +261,7 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Subject inSet(Object... elements) {
+    public Subject inset(Object... elements) {
         Sub $ = this;
         int i = 0;
         Object o = null;
@@ -276,7 +276,7 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Subject inPut(Object... elements) {
+    public Subject input(Object... elements) {
         Sub $ = in(new Suite.Auto());
         int i = 0;
         Object o = null;

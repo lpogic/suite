@@ -27,11 +27,11 @@ public class Suite {
     public static Subject put(Subject $) {
         return new SolidSubject(new MonoSubject(new Auto(), $));
     }
-    public static Subject inSet(Object ... elements) {
-        return new SolidSubject().inSet(elements);
+    public static Subject inset(Object ... elements) {
+        return new SolidSubject().inset(elements);
     }
-    public static Subject inPut(Object ... elements) {
-        return new SolidSubject().inPut(elements);
+    public static Subject input(Object ... elements) {
+        return new SolidSubject().input(elements);
     }
     public static Subject alter(Iterable<Subject> source) {
         return new SolidSubject().alter(source);
@@ -197,7 +197,7 @@ public class Suite {
 
     public static Series postDfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
-            final Subject $stack = inSet($sub, serializer.apply($sub).iterator());
+            final Subject $stack = inset($sub, serializer.apply($sub).iterator());
             final Subject $subjectStack = set();
             final Subject $hasNext = set();
 
@@ -261,7 +261,7 @@ public class Suite {
             }
 
             private void dig(Subject $) {
-                if($.present() && $stack.absent($)) $stack.inSet($, serializer.apply($).iterator());
+                if($.present() && $stack.absent($)) $stack.inset($, serializer.apply($).iterator());
                 while($stack.present()) {
                     Iterator<Subject> it = $stack.last().in().asExpected();
                     if(it.hasNext()) return;

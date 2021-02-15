@@ -290,14 +290,14 @@ class ThreadySubject extends SolidSubject {
     }
 
     @Override
-    public Subject inSet(Object... elements) {
-        super.inSet(elements);
+    public Subject inset(Object... elements) {
+        super.inset(elements);
         return this;
     }
 
     @Override
-    public Subject inPut(Object... elements) {
-        super.inPut(elements);
+    public Subject input(Object... elements) {
+        super.input(elements);
         return this;
     }
 

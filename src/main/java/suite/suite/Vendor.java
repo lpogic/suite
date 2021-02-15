@@ -197,7 +197,7 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Subject inSet(Object ... elements) {
+    public Subject inset(Object ... elements) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
