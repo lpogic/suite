@@ -166,20 +166,20 @@ class BasicSubject extends Subject {
     }
 
     @Override
-    public Subject strictSet(Object sequent, Object element) {
+    public Subject exactSet(Object sequent, Object element) {
         if(Objects.equals(this.element, element)) {
             return this;
         } else {
-            return new MultiSubject(link()).strictSet(sequent, element);
+            return new MultiSubject(link()).exactSet(sequent, element);
         }
     }
 
     @Override
-    public Subject strictSet(Object sequent, Object element, Subject $set) {
+    public Subject exactSet(Object sequent, Object element, Subject $set) {
         if(Objects.equals(this.element, element)) {
             return new MonoSubject(element, $set);
         } else {
-            return new MultiSubject(link()).strictSet(sequent, element, $set);
+            return new MultiSubject(link()).exactSet(sequent, element, $set);
         }
     }
 

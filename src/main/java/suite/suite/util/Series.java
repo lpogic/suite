@@ -50,15 +50,15 @@ public interface Series extends Iterable<Subject> {
     }
 
     default Series at(Predicate<Subject> predicate) {
-        return select(predicate).up().get();
+        return select(predicate).in().get();
     }
 
     default Subject at(int i) {
-        return select(new Index(i)).up().get();
+        return select(new Index(i)).in().get();
     }
 
     default Subject at() {
-        return first().up().get();
+        return first().in().get();
     }
 
     default Series order() {
@@ -172,7 +172,7 @@ public interface Series extends Iterable<Subject> {
         };
     }
 
-    default Series eachUp() {
+    default Series eachIn() {
         return () -> new Browser() {
             final Iterator<Subject> subIt = iterator();
 
@@ -183,13 +183,13 @@ public interface Series extends Iterable<Subject> {
 
             @Override
             public Subject next() {
-                return subIt.next().up().get();
+                return subIt.next().in().get();
             }
         };
     }
 
-    default Sub up() {
-        return first().up();
+    default Sub in() {
+        return first().in();
     }
 
     default Object direct() {
@@ -294,7 +294,7 @@ public interface Series extends Iterable<Subject> {
             boolean collect() {
                 var $c = Suite.set();
                 for(Browser it : $its.eachAs(Browser.class)) {
-                    if(it.hasNext()) $c.add(it.next());
+                    if(it.hasNext()) $c.put(it.next());
                     else return false;
                 }
                 $collected = $c;

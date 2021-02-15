@@ -13,11 +13,11 @@ public interface Sub extends Series {
     Subject get();
     Subject set();
 
-    default Sub up() {
+    default Sub in() {
         return new FirstSub(this);
     }
 
-    default Sub up(Object element) {
+    default Sub in(Object element) {
         return new FrontierSub(this, element);
     }
 
@@ -124,13 +124,13 @@ public interface Sub extends Series {
     }
 
 
-    default Subject strictSet(Object sequent, Object element) {
-        return set().strictSet(sequent, element);
+    default Subject exactSet(Object sequent, Object element) {
+        return set().exactSet(sequent, element);
     }
 
 
-    default Subject strictSet(Object sequent, Object element, Subject $set) {
-        return set().strictSet(sequent, element, $set);
+    default Subject exactSet(Object sequent, Object element, Subject $set) {
+        return set().exactSet(sequent, element, $set);
     }
 
     default Subject shift(Object out, Object in) {

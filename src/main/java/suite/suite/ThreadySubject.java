@@ -250,17 +250,17 @@ class ThreadySubject extends SolidSubject {
     }
 
     @Override
-    public Subject strictSet(Object sequent, Object element) {
+    public Subject exactSet(Object sequent, Object element) {
         try(var ignored = writeLock.lock()) {
-            super.strictSet(sequent, element);
+            super.exactSet(sequent, element);
             return this;
         }
     }
 
     @Override
-    public Subject strictSet(Object sequent, Object element, Subject $set) {
+    public Subject exactSet(Object sequent, Object element, Subject $set) {
         try(var ignored = writeLock.lock()) {
-            super.strictSet(sequent, element, $set);
+            super.exactSet(sequent, element, $set);
             return this;
         }
     }
@@ -290,14 +290,14 @@ class ThreadySubject extends SolidSubject {
     }
 
     @Override
-    public Subject setUp(Object... elements) {
-        super.setUp(elements);
+    public Subject inSet(Object... elements) {
+        super.inSet(elements);
         return this;
     }
 
     @Override
-    public Subject addUp(Object... elements) {
-        super.addUp(elements);
+    public Subject inPut(Object... elements) {
+        super.inPut(elements);
         return this;
     }
 
@@ -334,14 +334,14 @@ class ThreadySubject extends SolidSubject {
     }
 
     @Override
-    public Subject strictAlter(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject exactAlter(Object sequent, Iterable<? extends Subject> iterable) {
         for(var it : iterable) {
             if(it.present()) {
                 Object o = it.direct();
                 if (it.real(o)) {
-                    strictSet(sequent, o, it.jump(o));
+                    this.exactSet(sequent, o, it.jump(o));
                 } else {
-                    strictSet(sequent, o);
+                    this.exactSet(sequent, o);
                 }
             }
         }

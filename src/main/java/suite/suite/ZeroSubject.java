@@ -143,12 +143,12 @@ class ZeroSubject extends Subject {
     }
 
     @Override
-    public Subject strictSet(Object sequent, Object element) {
+    public Subject exactSet(Object sequent, Object element) {
         return new MonoSubject(element);
     }
 
     @Override
-    public Subject strictSet(Object sequent, Object element, Subject $set) {
+    public Subject exactSet(Object sequent, Object element, Subject $set) {
         return new MonoSubject(element, $set);
     }
 

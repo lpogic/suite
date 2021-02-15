@@ -157,13 +157,13 @@ class MultiSubject extends Subject {
     }
 
     @Override
-    public Subject strictSet(Object sequent, Object element) {
+    public Subject exactSet(Object sequent, Object element) {
         chain.put(chain.get(sequent), element);
         return this;
     }
 
     @Override
-    public Subject strictSet(Object sequent, Object element, Subject $set) {
+    public Subject exactSet(Object sequent, Object element, Subject $set) {
         chain.put(chain.get(sequent), element, $set);
         return this;
     }

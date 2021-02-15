@@ -88,7 +88,7 @@ public class WonkySubject{}/* extends SolidSubject {
                 Vestige v = s.asExpected();
                 Object o = v.ref.get();
                 if (o != null) {
-                    return new MonoSubject(o, s.up().get());
+                    return new MonoSubject(o, s.in().get());
                 }
             } else return s;
         }
@@ -225,14 +225,14 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Subject strictSet(Object sequent, Object element) {
-        subject = subject.strictSet(sequent, element);
+    public Subject exactSet(Object sequent, Object element) {
+        subject = subject.exactSet(sequent, element);
         return this;
     }
 
     @Override
-    public Subject strictSet(Object sequent, Object element, Subject $set) {
-        subject = subject.strictSet(sequent, element, $set);
+    public Subject exactSet(Object sequent, Object element, Subject $set) {
+        subject = subject.exactSet(sequent, element, $set);
         return this;
     }
 
@@ -261,12 +261,12 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Subject setUp(Object... elements) {
+    public Subject inSet(Object... elements) {
         Sub $ = this;
         int i = 0;
         Object o = null;
         for(Object e : elements) {
-            if(i > 0) $ = $.up(o);
+            if(i > 0) $ = $.in(o);
             o = e;
             ++i;
         }
@@ -276,12 +276,12 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Subject addUp(Object... elements) {
-        Sub $ = up(new Suite.Auto());
+    public Subject inPut(Object... elements) {
+        Sub $ = in(new Suite.Auto());
         int i = 0;
         Object o = null;
         for(Object e : elements) {
-            if(i > 0) $ = $.up(o);
+            if(i > 0) $ = $.in(o);
             o = e;
             ++i;
         }
@@ -338,15 +338,15 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Subject strictAlter(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject exactAlter(Object sequent, Iterable<? extends Subject> iterable) {
         var $ = subject;
         for(var it : iterable) {
             if(it.present()) {
                 Object o = it.direct();
                 if (it.real(o)) {
-                    $ = $.strictSet(sequent, o, it.jump(o));
+                    $ = $.exactSet(sequent, o, it.jump(o));
                 } else {
-                    $ = $.strictSet(sequent, o);
+                    $ = $.exactSet(sequent, o);
                 }
             }
         }

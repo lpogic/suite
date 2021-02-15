@@ -61,8 +61,8 @@ public abstract class Subject implements Sub {
 
     public abstract Subject set(Object element);
     public abstract Subject set(Object element, Subject $set);
-    public abstract Subject strictSet(Object sequent, Object element);
-    public abstract Subject strictSet(Object sequent, Object element, Subject $set);
+    public abstract Subject exactSet(Object sequent, Object element);
+    public abstract Subject exactSet(Object sequent, Object element, Subject $set);
     public abstract Subject shift(Object out, Object in);
     public abstract Subject unset();
     public abstract Subject unset(Object element);
@@ -75,16 +75,16 @@ public abstract class Subject implements Sub {
     public Subject feedIf(Predicate<Subject> tester, Supplier<?> supplier) {
         return tester.test(this) ? set(supplier.get()) : this;
     }
-    public Subject add(Subject $sub) {
+    public Subject put(Subject $sub) {
         return set(new Suite.Auto(), $sub);
     }
-    public Subject strictAdd(Object sequent, Subject $sub) {
-        return strictSet(sequent, new Suite.Auto(), $sub);
+    public Subject exactPut(Object sequent, Subject $sub) {
+        return exactSet(sequent, new Suite.Auto(), $sub);
     }
-    public Subject addUp(Object ... elements) {
+    public Subject inPut(Object ... elements) {
         throw new UnsupportedOperationException("Solid method");
     }
-    public Subject setUp(Object ... elements) {
+    public Subject inSet(Object ... elements) {
         throw new UnsupportedOperationException("Solid method");
     }
     public Subject sate(Object element) {
@@ -102,7 +102,7 @@ public abstract class Subject implements Sub {
     public Subject alter(Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
-    public Subject strictAlter(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject exactAlter(Object sequent, Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
 

@@ -24,14 +24,14 @@ public class Suite {
     public static Subject set(Object element, Subject $) {
         return new SolidSubject(new MonoSubject(element, $));
     }
-    public static Subject add(Subject $) {
+    public static Subject put(Subject $) {
         return new SolidSubject(new MonoSubject(new Auto(), $));
     }
-    public static Subject setUp(Object ... elements) {
-        return new SolidSubject().setUp(elements);
+    public static Subject inSet(Object ... elements) {
+        return new SolidSubject().inSet(elements);
     }
-    public static Subject addUp(Object ... elements) {
-        return new SolidSubject().addUp(elements);
+    public static Subject inPut(Object ... elements) {
+        return new SolidSubject().inPut(elements);
     }
     public static Subject alter(Iterable<Subject> source) {
         return new SolidSubject().alter(source);
@@ -79,14 +79,14 @@ public class Suite {
     }
 
     public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder) {
-        if($sub == null) $sub = Suite.set();
+        if($sub == null) $sub = set();
         if(pack) {
-            $sub = Suite.add($sub.absent() ? Suite.set(new Auto()) : $sub);
+            $sub = put($sub.absent() ? set(new Auto()) : $sub);
         }
         StringBuilder sb = new StringBuilder();
         java.util.Stack<Subject> stack = new java.util.Stack<>();
-        Subject printed = Suite.set();
-        stack.add(Suite.set($sub).set($sub.cascade()));
+        Subject printed = set();
+        stack.add(set($sub).set($sub.cascade()));
         int goTo = 0;
         boolean tabsBefore = false;
         while(!stack.empty()) {
@@ -97,7 +97,7 @@ public class Suite {
                 if(tabsBefore)sb.append("\t".repeat(stack.size() - 1));
                 tabsBefore = false;
                 sb.append(encoder.apply($s.direct()));
-                Subject $ = $s.up().get();
+                Subject $ = $s.in().get();
                 if($.absent()) {
                     if($current.size() > 1) {
                         sb.append("[]\n");
@@ -108,13 +108,13 @@ public class Suite {
                         sb.append("[ ").append($).append(" ]\n");
                         tabsBefore = true;
                     } else {
-                        if($.size() > 1 || $.up().present()) {
+                        if($.size() > 1 || $.in().present()) {
                             sb.append("[\n");
                             tabsBefore = true;
                         } else {
                             sb.append("[ ");
                         }
-                        stack.add(Suite.set($).set($.cascade()));
+                        stack.add(set($).set($.cascade()));
                         printed.set($);
                         goTo = 1;
                         break;
@@ -137,11 +137,11 @@ public class Suite {
 
     public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
         if(!compress)return describe($sub, pack, encoder);
-        if($sub == null) $sub = Suite.set();
-        if(pack) $sub = Suite.add($sub.set());
+        if($sub == null) $sub = set();
+        if(pack) $sub = put($sub.set());
         StringBuilder sb = new StringBuilder();
         java.util.Stack<Iterator<Subject>> stack = new java.util.Stack<>();
-        Subject printed = Suite.set();
+        Subject printed = set();
         stack.add($sub.iterator());
         int goTo = 0;
         while(!stack.empty()) {
@@ -150,13 +150,13 @@ public class Suite {
                 if(!$s.is(Auto.class)) {
                     sb.append(encoder.apply($s.direct()));
                 }
-                var $ = $s.up().get();
+                var $ = $s.in().get();
                 if($.absent()) {
                     if(it.hasNext()) {
                         sb.append("[]");
                     }
                 } else {
-                    if(printed.up($).present()) {
+                    if(printed.in($).present()) {
                         sb.append("[").append($).append("]");
                     } else {
                         sb.append("[");
@@ -182,7 +182,7 @@ public class Suite {
     public static class Stack {
 
         public static void push(Subject $stack, Subject $extension) {
-            $stack.strictAlter(new Auto(), $extension);
+            $stack.exactAlter(new Auto(), $extension);
         }
 
         public static Subject pop(Subject $stack) {
@@ -197,9 +197,9 @@ public class Suite {
 
     public static Series postDfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
-            final Subject $stack = setUp($sub, serializer.apply($sub).iterator());
+            final Subject $stack = inSet($sub, serializer.apply($sub).iterator());
             final Subject $subjectStack = set();
-            final Subject $hasNext = Suite.set();
+            final Subject $hasNext = set();
 
             @Override
             public boolean hasNext() {
@@ -212,7 +212,7 @@ public class Suite {
             @Override
             public Subject next() {
                 if($hasNext.absent()) dig();
-                Subject $next = $subjectStack.take($subjectStack.last().direct()).up().get();
+                Subject $next = $subjectStack.take($subjectStack.last().direct()).in().get();
                 $hasNext.unset();
                 return $next;
             }
@@ -220,14 +220,14 @@ public class Suite {
             private void dig() {
                 if ($stack.absent()) return;
                 Subject $i = $stack.last().asExpected();
-                Iterator<Subject> it = $stack.last().up().asExpected();
+                Iterator<Subject> it = $stack.last().in().asExpected();
                 while (it.hasNext()) {
                     var $ = it.next();
-                    $subjectStack.add($);
-                    $i = $.up().get();
+                    $subjectStack.put($);
+                    $i = $.in().get();
                     if ($i.present() && $stack.absent($i)) {
                         it = serializer.apply($i).iterator();
-                        $stack.up($i).set(it);
+                        $stack.in($i).set(it);
                     } else return;
                 }
                 $stack.unset($i);
@@ -253,17 +253,17 @@ public class Suite {
 
             @Override
             public Subject next() {
-                Iterator<Subject> it = $stack.last().up().asExpected();
+                Iterator<Subject> it = $stack.last().in().asExpected();
                 var $next = it.next();
-                $nextUp = $next.up().get();
+                $nextUp = $next.in().get();
                 digDone = false;
                 return $next;
             }
 
             private void dig(Subject $) {
-                if($.present() && $stack.absent($)) $stack.setUp($, serializer.apply($).iterator());
+                if($.present() && $stack.absent($)) $stack.inSet($, serializer.apply($).iterator());
                 while($stack.present()) {
-                    Iterator<Subject> it = $stack.last().up().asExpected();
+                    Iterator<Subject> it = $stack.last().in().asExpected();
                     if(it.hasNext()) return;
                     Stack.pop($stack);
                 }
@@ -278,7 +278,7 @@ public class Suite {
 
     public static Series bfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
-            final Subject $all = Suite.set($sub);
+            final Subject $all = set($sub);
             Browser current = serializer.apply($sub).iterator();
             Series $nextFront = Series.empty();
 
@@ -293,7 +293,7 @@ public class Suite {
             @Override
             public Subject next() {
                 var $ = current.next();
-                var $i = $.up().get();
+                var $i = $.in().get();
                 if($i.present() && $all.absent($i)) {
                     $all.set($i);
                     $nextFront = $nextFront.join(serializer.apply($i));
@@ -330,8 +330,8 @@ public class Suite {
     }
 
     public static Subject refactor(Subject $sub, Action refactor) {
-        for(var $ : preDfs(add($sub)).eachUp()) {
-            var $t = Suite.set();
+        for(var $ : preDfs(put($sub)).eachIn()) {
+            var $t = set();
             for(var $1 : $) {
                 $t.alter(refactor.apply($1));
             }

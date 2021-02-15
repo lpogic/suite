@@ -16,7 +16,7 @@ public abstract class Vendor extends Subject {
 
     protected Subject monoWrap(Subject $) {
         if($.absent()) return $;
-        return Suite.set($.direct(), wrap($.up().get()));
+        return Suite.set($.direct(), wrap($.in().get()));
     }
 
     @Override
@@ -167,12 +167,12 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Subject strictSet(Object sequent, Object element)  {
+    public Subject exactSet(Object sequent, Object element)  {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
     @Override
-    public Subject strictSet(Object sequent, Object element, Subject $set) {
+    public Subject exactSet(Object sequent, Object element, Subject $set) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
@@ -192,12 +192,12 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Subject add(Subject $sub) {
+    public Subject put(Subject $sub) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
     @Override
-    public Subject setUp(Object ... elements) {
+    public Subject inSet(Object ... elements) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
@@ -212,7 +212,7 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Subject strictAlter(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject exactAlter(Object sequent, Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 

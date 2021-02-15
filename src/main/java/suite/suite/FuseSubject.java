@@ -19,8 +19,8 @@ class FuseSubject {}/* implements Subject {
     }
 
     @Override
-    public Subject up(Object element) {
-        return sub.up(element);
+    public Subject in(Object element) {
+        return sub.in(element);
     }
 
     @Override
@@ -114,12 +114,12 @@ class FuseSubject {}/* implements Subject {
     }
 
     @Override
-    public Subject strictSet(Object sequent, Object element) {
+    public Subject exactSet(Object sequent, Object element) {
         return null;
     }
 
     @Override
-    public Subject strictSet(Object sequent, Object element, Subject $set) {
+    public Subject exactSet(Object sequent, Object element, Subject $set) {
         return null;
     }
 

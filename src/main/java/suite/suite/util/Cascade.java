@@ -45,7 +45,7 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
     }
 
     public void store(T t) {
-        stored.up().set(t);
+        stored.in().set(t);
     }
 
     public int getFalls() {
