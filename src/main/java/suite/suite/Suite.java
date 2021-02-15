@@ -179,18 +179,6 @@ public class Suite {
         return sb.toString();
     }
 
-    public static class Stack {
-
-        public static void push(Subject $stack, Subject $extension) {
-            $stack.exactAlter(new Auto(), $extension);
-        }
-
-        public static Subject pop(Subject $stack) {
-            return $stack.take($stack.last().direct());
-        }
-
-    }
-
     public static Series postDfs(Subject $sub) {
         return postDfs($sub, Subject::front);
     }
@@ -265,7 +253,7 @@ public class Suite {
                 while($stack.present()) {
                     Iterator<Subject> it = $stack.last().in().asExpected();
                     if(it.hasNext()) return;
-                    Stack.pop($stack);
+                    $stack.unset($stack.last().direct());
                 }
                 digDone = true;
             }
