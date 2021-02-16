@@ -5,8 +5,6 @@ import suite.suite.util.Series;
 import suite.suite.util.Glass;
 import suite.suite.util.Browser;
 
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @SuppressWarnings("UnusedReturnValue")
@@ -60,33 +58,36 @@ public abstract class Subject implements Sub {
     }
 
     public abstract Subject set(Object element);
-    public abstract Subject set(Object element, Subject $set);
-    public abstract Subject exactSet(Object sequent, Object element);
-    public abstract Subject exactSet(Object sequent, Object element, Subject $set);
+    public abstract Subject exactSet(Object aim, Object element);
+    public Subject set(Object key, Object value, Object ... rest) {
+        return inset(key, Suite.set(value, rest));
+    }
+    public Subject exactSet(Object aim, Object key, Object value, Object... rest) {
+        return exactInset(aim, key, Suite.set(value, rest));
+    }
+    public abstract Subject inset(Object element, Subject $set);
+    public abstract Subject exactInset(Object aim, Object element, Subject $set);
+    public Subject put(Object element) {
+        return set(new Suite.Auto(), element);
+    }
+    public Subject exactPut(Object aim, Object element) {
+        return exactSet(aim, new Suite.Auto(), element);
+    }
+    public Subject put(Object value, Object ... rest) {
+        return inset(new Suite.Auto(), Suite.set(value, rest));
+    }
+    public Subject exactPut(Object aim, Object value, Object... rest) {
+        return exactInset(aim, new Suite.Auto(), Suite.set(value, rest));
+    }
+    public Subject input(Subject $set) {
+        return inset(new Suite.Auto(), $set);
+    }
+    public Subject exactInput(Object target, Subject $set) {
+        return exactInset(target, new Suite.Auto(), $set);
+    }
     public abstract Subject shift(Object out, Object in);
     public abstract Subject unset();
     public abstract Subject unset(Object element);
-    public Subject setIf(BiPredicate<Subject, Object> tester, Object element) {
-        return tester.test(this, element) ? set(element) : this;
-    }
-    public Subject setIf(BiPredicate<Subject, Object> tester, Object element, Subject $sub) {
-        return tester.test(this, element) ? set(element, $sub) : this;
-    }
-    public Subject feedIf(Predicate<Subject> tester, Supplier<?> supplier) {
-        return tester.test(this) ? set(supplier.get()) : this;
-    }
-    public Subject put(Subject $sub) {
-        return set(new Suite.Auto(), $sub);
-    }
-    public Subject exactPut(Object sequent, Subject $sub) {
-        return exactSet(sequent, new Suite.Auto(), $sub);
-    }
-    public Subject input(Object ... elements) {
-        throw new UnsupportedOperationException("Solid method");
-    }
-    public Subject inset(Object ... elements) {
-        throw new UnsupportedOperationException("Solid method");
-    }
     public Subject sate(Object element) {
         throw new UnsupportedOperationException("Solid method");
     }
@@ -110,10 +111,22 @@ public abstract class Subject implements Sub {
         throw new UnsupportedOperationException("Solid method");
     }
     public Subject setAll(Iterable<?> iterable) {
-        throw new UnsupportedOperationException("Solid method");
+        for(Object it : iterable) {
+            set(it);
+        }
+        return this;
+    }
+    public Subject putAll(Iterable<?> iterable) {
+        for(Object it : iterable) {
+            put(it);
+        }
+        return this;
     }
     public Subject unsetAll(Iterable<?> iterable) {
-        throw new UnsupportedOperationException("Solid method");
+        for(Object it : iterable) {
+            unset(it);
+        }
+        return this;
     }
     public Series takeAll(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");
@@ -124,12 +137,6 @@ public abstract class Subject implements Sub {
     }
     @Override
     public Subject get() {
-        return this;
-    }
-
-    @Override
-    public Sub setIf(Predicate<Subject> tester) {
-        tester.test(this);
         return this;
     }
 

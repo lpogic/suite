@@ -170,20 +170,20 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject set(Object element, Subject $set) {
-        subject = subject.set(element, $set);
+    public Subject exactSet(Object aim, Object element) {
+        subject = subject.exactSet(aim, element);
         return this;
     }
 
     @Override
-    public Subject exactSet(Object sequent, Object element) {
-        subject = subject.exactSet(sequent, element);
+    public Subject inset(Object element, Subject $set) {
+        subject = subject.inset(element, $set);
         return this;
     }
 
     @Override
-    public Subject exactSet(Object sequent, Object element, Subject $set) {
-        subject = subject.exactSet(sequent, element, $set);
+    public Subject exactInset(Object aim, Object element, Subject $set) {
+        subject = subject.exactInset(aim, element, $set);
         return this;
     }
 
@@ -202,37 +202,6 @@ public class SolidSubject extends Subject {
     @Override
     public Subject unset(Object element) {
         subject = subject.unset(element);
-        return this;
-    }
-
-    @Override
-    public Subject inset(Object... elements) {
-        Sub $ = this;
-        int i = 0;
-        Object o = null;
-        for(Object e : elements) {
-            if(i > 0) $ = $.in(o);
-            o = e;
-            ++i;
-        }
-        if(i > 0) $.set(o);
-
-        return this;
-    }
-
-    @Override
-    public Subject input(Object... elements) {
-        Sub $ = in(new Suite.Auto());
-        int i = 0;
-        Object o = null;
-        for(Object e : elements) {
-            if(i > 0) $ = $.in(o);
-            o = e;
-            ++i;
-        }
-        if(i > 0) $.set(o);
-        else $.set();
-
         return this;
     }
 
@@ -258,7 +227,7 @@ public class SolidSubject extends Subject {
     public Subject sate(Object element, Subject $set) {
         var $ = get(element);
         if($.present()) return $;
-        set(element, $set);
+        this.inset(element, $set);
         return get(element);
     }
 
@@ -276,7 +245,7 @@ public class SolidSubject extends Subject {
             if(it.present()) {
                 Object o = it.direct();
                 if (it.real(o)) {
-                    $ = $.set(o, it.jump(o));
+                    $ = $.inset(o, it.jump(o));
                 } else {
                     $ = $.set(o);
                 }
@@ -293,7 +262,7 @@ public class SolidSubject extends Subject {
             if(it.present()) {
                 Object o = it.direct();
                 if (it.real(o)) {
-                    $ = $.exactSet(sequent, o, it.jump(o));
+                    $ = $.exactInset(sequent, o, it.jump(o));
                 } else {
                     $ = $.exactSet(sequent, o);
                 }
@@ -318,26 +287,6 @@ public class SolidSubject extends Subject {
                 return get(it.next());
             }
         };
-    }
-
-    @Override
-    public Subject setAll(Iterable<?> iterable) {
-        var $ = subject;
-        for(Object it : iterable) {
-            $ = $.set(it);
-        }
-        subject = $;
-        return this;
-    }
-
-    @Override
-    public Subject unsetAll(Iterable<?> iterable) {
-        var $ = subject;
-        for(Object it : iterable) {
-            $ = $.unset(it);
-        }
-        subject = $;
-        return this;
     }
 
     @Override

@@ -100,7 +100,7 @@ public class Query {
 
     public<T> Query map(Class<T> mappedType, Function<T, Object> function) {
         $result = $result.convert($ -> $.is(mappedType) ?
-                Suite.set($.direct(), Suite.set(function.apply($.in($.direct()).asExpected()))) : $).set();
+                Suite.inset($.direct(), Suite.set(function.apply($.in($.direct()).asExpected()))) : $).set();
         return this;
     }
 }

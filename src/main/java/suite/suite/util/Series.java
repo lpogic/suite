@@ -73,7 +73,7 @@ public interface Series extends Iterable<Subject> {
 
             @Override
             public Subject next() {
-                return Suite.set(i++, origin.next());
+                return Suite.inset(i++, origin.next());
             }
         };
     }
@@ -264,7 +264,7 @@ public interface Series extends Iterable<Subject> {
 
             @Override
             public Subject next() {
-                return Suite.set(keyIt.next(), Suite.set(valIt.next()));
+                return Suite.inset(keyIt.next(), Suite.set(valIt.next()));
             }
         };
     }
@@ -294,7 +294,7 @@ public interface Series extends Iterable<Subject> {
             boolean collect() {
                 var $c = Suite.set();
                 for(Browser it : $its.eachAs(Browser.class)) {
-                    if(it.hasNext()) $c.put(it.next());
+                    if(it.hasNext()) $c.input(it.next());
                     else return false;
                 }
                 $collected = $c;

@@ -21,17 +21,25 @@ public class Suite {
     public static Subject set(Object element) {
         return new SolidSubject(new BasicSubject(element));
     }
-    public static Subject set(Object element, Subject $) {
+    public static Subject set(Object key, Object ... rest) {
+        if(rest.length == 0) return set(key);
+        var $ = set(rest[rest.length - 1]);
+        for(int i = rest.length - 2;i >= 0;--i) {
+            $ = inset(rest[i], $);
+        }
+        return inset(key, $);
+    }
+    public static Subject inset(Object element, Subject $) {
         return new SolidSubject(new MonoSubject(element, $));
     }
-    public static Subject put(Subject $) {
+    public static Subject put(Object element) {
+        return new SolidSubject().put(element);
+    }
+    public static Subject put(Object value, Object ... rest) {
+        return new SolidSubject().put(value, rest);
+    }
+    public static Subject input(Subject $) {
         return new SolidSubject(new MonoSubject(new Auto(), $));
-    }
-    public static Subject inset(Object ... elements) {
-        return new SolidSubject().inset(elements);
-    }
-    public static Subject input(Object ... elements) {
-        return new SolidSubject().input(elements);
     }
     public static Subject alter(Iterable<Subject> source) {
         return new SolidSubject().alter(source);
@@ -42,7 +50,7 @@ public class Suite {
 
 //    public static Subject fuse(Subject sub) {
 //        if(sub == null) {
-//            return Suite.set();
+//            return Suite.inset();
 //        } else if(sub.fused()) {
 //            return sub;
 //        } else {
@@ -81,7 +89,7 @@ public class Suite {
     public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder) {
         if($sub == null) $sub = set();
         if(pack) {
-            $sub = put($sub.absent() ? set(new Auto()) : $sub);
+            $sub = input($sub.absent() ? set(new Auto()) : $sub);
         }
         StringBuilder sb = new StringBuilder();
         java.util.Stack<Subject> stack = new java.util.Stack<>();
@@ -138,7 +146,7 @@ public class Suite {
     public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
         if(!compress)return describe($sub, pack, encoder);
         if($sub == null) $sub = set();
-        if(pack) $sub = put($sub.set());
+        if(pack) $sub = input($sub.set());
         StringBuilder sb = new StringBuilder();
         java.util.Stack<Iterator<Subject>> stack = new java.util.Stack<>();
         Subject printed = set();
@@ -185,7 +193,7 @@ public class Suite {
 
     public static Series postDfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
-            final Subject $stack = inset($sub, serializer.apply($sub).iterator());
+            final Subject $stack = set($sub, serializer.apply($sub).iterator());
             final Subject $subjectStack = set();
             final Subject $hasNext = set();
 
@@ -211,7 +219,7 @@ public class Suite {
                 Iterator<Subject> it = $stack.last().in().asExpected();
                 while (it.hasNext()) {
                     var $ = it.next();
-                    $subjectStack.put($);
+                    $subjectStack.input($);
                     $i = $.in().get();
                     if ($i.present() && $stack.absent($i)) {
                         it = serializer.apply($i).iterator();
@@ -249,7 +257,7 @@ public class Suite {
             }
 
             private void dig(Subject $) {
-                if($.present() && $stack.absent($)) $stack.inset($, serializer.apply($).iterator());
+                if($.present() && $stack.absent($)) $stack.set($, serializer.apply($).iterator());
                 while($stack.present()) {
                     Iterator<Subject> it = $stack.last().in().asExpected();
                     if(it.hasNext()) return;
@@ -318,7 +326,7 @@ public class Suite {
     }
 
     public static Subject refactor(Subject $sub, Action refactor) {
-        for(var $ : preDfs(put($sub)).eachIn()) {
+        for(var $ : preDfs(input($sub)).eachIn()) {
             var $t = set();
             for(var $1 : $) {
                 $t.alter(refactor.apply($1));

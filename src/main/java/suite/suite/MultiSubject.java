@@ -151,20 +151,20 @@ class MultiSubject extends Subject {
     }
 
     @Override
-    public Subject set(Object element, Subject $set) {
+    public Subject exactSet(Object aim, Object element) {
+        chain.put(chain.get(aim), element);
+        return this;
+    }
+
+    @Override
+    public Subject inset(Object element, Subject $set) {
         chain.put(element, $set);
         return this;
     }
 
     @Override
-    public Subject exactSet(Object sequent, Object element) {
-        chain.put(chain.get(sequent), element);
-        return this;
-    }
-
-    @Override
-    public Subject exactSet(Object sequent, Object element, Subject $set) {
-        chain.put(chain.get(sequent), element, $set);
+    public Subject exactInset(Object aim, Object element, Subject $set) {
+        chain.put(chain.get(aim), element, $set);
         return this;
     }
 

@@ -173,32 +173,32 @@ class MonoSubject extends Subject {
     }
 
     @Override
-    public Subject set(Object element, Subject $set) {
-        if(Objects.equals(this.element, element)) {
-            subject = $set;
-            return this;
-        } else {
-            return new MultiSubject(link()).set(element, $set);
-        }
-    }
-
-    @Override
-    public Subject exactSet(Object sequent, Object element) {
+    public Subject exactSet(Object aim, Object element) {
         if(Objects.equals(this.element, element)) {
             subject = Suite.set();
             return this;
         } else {
-            return new MultiSubject(link()).exactSet(sequent, element);
+            return new MultiSubject(link()).exactSet(aim, element);
         }
     }
 
     @Override
-    public Subject exactSet(Object sequent, Object element, Subject $set) {
+    public Subject inset(Object element, Subject $set) {
         if(Objects.equals(this.element, element)) {
             subject = $set;
             return this;
         } else {
-            return new MultiSubject(link()).exactSet(sequent, element, $set);
+            return new MultiSubject(link()).inset(element, $set);
+        }
+    }
+
+    @Override
+    public Subject exactInset(Object aim, Object element, Subject $set) {
+        if(Objects.equals(this.element, element)) {
+            subject = $set;
+            return this;
+        } else {
+            return new MultiSubject(link()).exactInset(aim, element, $set);
         }
     }
 

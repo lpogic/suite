@@ -213,26 +213,26 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Subject set(Object element) {
-        subject = subject.set(element);
+    public Subject inset(Object element) {
+        subject = subject.inset(element);
         return this;
     }
 
     @Override
-    public Subject set(Object element, Subject $set) {
-        subject = subject.set(element, $set);
+    public Subject inset(Object element, Subject $inset) {
+        subject = subject.inset(element, $inset);
         return this;
     }
 
     @Override
-    public Subject exactSet(Object sequent, Object element) {
-        subject = subject.exactSet(sequent, element);
+    public Subject exactInset(Object sequent, Object element) {
+        subject = subject.exactInset(sequent, element);
         return this;
     }
 
     @Override
-    public Subject exactSet(Object sequent, Object element, Subject $set) {
-        subject = subject.exactSet(sequent, element, $set);
+    public Subject exactInset(Object sequent, Object element, Subject $inset) {
+        subject = subject.exactInset(sequent, element, $inset);
         return this;
     }
 
@@ -270,7 +270,7 @@ public class WonkySubject{}/* extends SolidSubject {
             o = e;
             ++i;
         }
-        if(i > 0) $.set(o);
+        if(i > 0) $.inset(o);
 
         return this;
     }
@@ -285,8 +285,8 @@ public class WonkySubject{}/* extends SolidSubject {
             o = e;
             ++i;
         }
-        if(i > 0) $.set(o);
-        else $.set();
+        if(i > 0) $.inset(o);
+        else $.inset();
 
         return this;
     }
@@ -308,8 +308,8 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Subject sate(Object element, Subject $set) {
-        subject = subject.setIf(element, $set, subject::absent);
+    public Subject sate(Object element, Subject $inset) {
+        subject = subject.setIf(element, $inset, subject::absent);
         return subject.get(element);
     }
 
@@ -327,9 +327,9 @@ public class WonkySubject{}/* extends SolidSubject {
             if(it.present()) {
                 Object o = it.direct();
                 if (it.real(o)) {
-                    $ = $.set(o, it.jump(o));
+                    $ = $.inset(o, it.jump(o));
                 } else {
-                    $ = $.set(o);
+                    $ = $.inset(o);
                 }
             }
         }
@@ -344,9 +344,9 @@ public class WonkySubject{}/* extends SolidSubject {
             if(it.present()) {
                 Object o = it.direct();
                 if (it.real(o)) {
-                    $ = $.exactSet(sequent, o, it.jump(o));
+                    $ = $.exactInset(sequent, o, it.jump(o));
                 } else {
-                    $ = $.exactSet(sequent, o);
+                    $ = $.exactInset(sequent, o);
                 }
             }
         }
@@ -375,7 +375,7 @@ public class WonkySubject{}/* extends SolidSubject {
     public Subject setAll(Iterable<?> iterable) {
         var $ = subject;
         for(Object it : iterable) {
-            $ = $.set(it);
+            $ = $.inset(it);
         }
         subject = $;
         return this;
@@ -414,8 +414,8 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Subject set() {
-        subject = subject.set();
+    public Subject inset() {
+        subject = subject.inset();
         return this;
     }
 

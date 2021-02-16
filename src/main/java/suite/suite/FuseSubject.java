@@ -104,22 +104,22 @@ class FuseSubject {}/* implements Subject {
     }
 
     @Override
-    public Subject set(Object element) {
+    public Subject inset(Object element) {
         return null;
     }
 
     @Override
-    public Subject set(Object element, Subject $set) {
+    public Subject inset(Object element, Subject $inset) {
         return null;
     }
 
     @Override
-    public Subject exactSet(Object sequent, Object element) {
+    public Subject exactInset(Object sequent, Object element) {
         return null;
     }
 
     @Override
-    public Subject exactSet(Object sequent, Object element, Subject $set) {
+    public Subject exactInset(Object sequent, Object element, Subject $inset) {
         return null;
     }
 

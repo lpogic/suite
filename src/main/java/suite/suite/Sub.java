@@ -4,8 +4,6 @@ import suite.suite.util.Browser;
 import suite.suite.util.Glass;
 import suite.suite.util.Series;
 
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public interface Sub extends Series {
@@ -117,20 +115,38 @@ public interface Sub extends Series {
     default Subject set(Object element) {
         return set().set(element);
     }
-
-
-    default Subject set(Object element, Subject $set) {
-        return set().set(element, $set);
+    default Subject exactSet(Object aim, Object element) {
+        return set().exactSet(aim,element);
     }
-
-
-    default Subject exactSet(Object sequent, Object element) {
-        return set().exactSet(sequent, element);
+    default Subject set(Object key, Object value, Object ... rest) {
+        return set().set(key, value, rest);
     }
-
-
-    default Subject exactSet(Object sequent, Object element, Subject $set) {
-        return set().exactSet(sequent, element, $set);
+    default Subject exactSet(Object aim, Object key, Object value, Object ... rest) {
+        return set().exactSet(aim, key, value, rest);
+    }
+    default Subject inset(Object element, Subject $set) {
+        return set().inset(element, $set);
+    }
+    default Subject exactInset(Object aim, Object element, Subject $set) {
+        return set().exactInset(aim, element, $set);
+    }
+    default Subject put(Object element) {
+        return set().put(element);
+    }
+    default Subject exactPut(Object aim, Object element) {
+        return set().exactPut(aim, element);
+    }
+    default Subject put(Object value, Object ... rest) {
+        return set().put(value, rest);
+    }
+    default Subject exactPut(Object aim, Object value, Object ... rest) {
+        return set().exactPut(aim, value, rest);
+    }
+    default Subject input(Subject $set) {
+        return set().input($set);
+    }
+    default Subject exactInput(Object target, Subject $set) {
+        return set().exactInput(target, $set);
     }
 
     default Subject shift(Object out, Object in) {
@@ -145,21 +161,5 @@ public interface Sub extends Series {
 
     default Subject unset(Object element) {
         return set().unset(element);
-    }
-
-    default Sub setIf(Predicate<Subject> tester) {
-        return tester.test(get()) ? set() : this;
-    }
-
-    default Sub setIf(BiPredicate<Subject, Object> tester, Object element) {
-        return tester.test(get(), element) ? set(element) : this;
-    }
-
-    default Sub setIf(BiPredicate<Subject, Object> tester, Object element, Subject $sub) {
-        return tester.test(get(), element) ? set(element, $sub) : this;
-    }
-
-    default Sub feedIf(Predicate<Subject> tester, Supplier<?> supplier) {
-        return tester.test(get()) ? set(supplier.get()) : this;
     }
 }

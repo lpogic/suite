@@ -242,25 +242,25 @@ class ThreadySubject extends SolidSubject {
     }
 
     @Override
-    public Subject set(Object element, Subject $set) {
+    public Subject exactSet(Object aim, Object element) {
         try(var ignored = writeLock.lock()) {
-            super.set(element, $set);
+            super.exactSet(aim, element);
             return this;
         }
     }
 
     @Override
-    public Subject exactSet(Object sequent, Object element) {
+    public Subject inset(Object element, Subject $set) {
         try(var ignored = writeLock.lock()) {
-            super.exactSet(sequent, element);
+            super.inset(element, $set);
             return this;
         }
     }
 
     @Override
-    public Subject exactSet(Object sequent, Object element, Subject $set) {
+    public Subject exactInset(Object aim, Object element, Subject $set) {
         try(var ignored = writeLock.lock()) {
-            super.exactSet(sequent, element, $set);
+            super.exactInset(aim, element, $set);
             return this;
         }
     }
@@ -290,18 +290,6 @@ class ThreadySubject extends SolidSubject {
     }
 
     @Override
-    public Subject inset(Object... elements) {
-        super.inset(elements);
-        return this;
-    }
-
-    @Override
-    public Subject input(Object... elements) {
-        super.input(elements);
-        return this;
-    }
-
-    @Override
     public Series front() {
         return this;
     }
@@ -324,7 +312,7 @@ class ThreadySubject extends SolidSubject {
             if(it.present()) {
                 Object o = it.direct();
                 if (it.real(o)) {
-                    set(o, it.jump(o));
+                    this.inset(o, it.jump(o));
                 } else {
                     set(o);
                 }
@@ -339,27 +327,11 @@ class ThreadySubject extends SolidSubject {
             if(it.present()) {
                 Object o = it.direct();
                 if (it.real(o)) {
-                    this.exactSet(sequent, o, it.jump(o));
+                    this.exactInset(sequent, o, it.jump(o));
                 } else {
                     this.exactSet(sequent, o);
                 }
             }
-        }
-        return this;
-    }
-
-    @Override
-    public Subject setAll(Iterable<?> iterable) {
-        for(Object it : iterable) {
-            set(it);
-        }
-        return this;
-    }
-
-    @Override
-    public Subject unsetAll(Iterable<?> iterable) {
-        for(Object it : iterable) {
-            unset(it);
         }
         return this;
     }
