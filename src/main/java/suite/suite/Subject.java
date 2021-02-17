@@ -86,6 +86,9 @@ public abstract class Subject implements Sub {
         return exactInset(target, new Suite.Auto(), $set);
     }
     public abstract Subject shift(Object out, Object in);
+    public Subject reset(Object element) {
+        return unset().set(element);
+    }
     public abstract Subject unset();
     public abstract Subject unset(Object element);
     public Subject sate(Object element) {

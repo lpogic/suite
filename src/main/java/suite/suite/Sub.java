@@ -157,6 +157,9 @@ public interface Sub extends Series {
         return set().shift(out, in);
     }
 
+    default Subject reset(Object element) {
+        return set().reset(element);
+    }
 
     default Subject unset() {
         return set().unset();
