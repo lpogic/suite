@@ -226,8 +226,7 @@ public class SolidSubject extends Subject {
     @Override
     public Subject sate(Object element, Subject $set) {
         var $ = get(element);
-        if($.present()) return $;
-        this.inset(element, $set);
+        inset($.present() ? $.direct() : element, $set);
         return get(element);
     }
 

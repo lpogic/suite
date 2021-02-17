@@ -149,6 +149,10 @@ public interface Sub extends Series {
         return set().exactInput(target, $set);
     }
 
+    default Subject merge(Subject $tree) {
+        return set().merge($tree);
+    }
+
     default Subject shift(Object out, Object in) {
         return set().shift(out, in);
     }

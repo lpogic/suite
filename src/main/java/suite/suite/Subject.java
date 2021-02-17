@@ -107,6 +107,18 @@ public abstract class Subject implements Sub {
         throw new UnsupportedOperationException("Solid method");
     }
 
+    public Subject merge(Subject $tree) {
+        for(var $ : $tree) {
+            var $at = $.at();
+            if($at.present()) {
+                in($.direct()).merge($at);
+            } else {
+                sate($.direct());
+            }
+        }
+        return this;
+    }
+
     public Series getAll(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }

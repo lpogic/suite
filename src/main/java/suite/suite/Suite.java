@@ -325,15 +325,15 @@ public class Suite {
         return $.as(Glass.Map(keyType, valueType), reserve);
     }
 
-    public static Subject refactor(Subject $sub, Action refactor) {
-        for(var $ : preDfs(input($sub)).eachIn()) {
+    public static Subject deepConvert(Subject $tree, Action converter) {
+        for(var $ : preDfs(input($tree)).eachIn()) {
             var $t = set();
             for(var $1 : $) {
-                $t.alter(refactor.apply($1));
+                $t.alter(converter.apply($1));
             }
             $.unset().alter($t);
         }
-        return $sub;
+        return $tree;
     }
 
 }
