@@ -171,7 +171,7 @@ public interface Sequence<T> extends Iterable<T>{
 
             @Override
             public Subject next() {
-                return Suite.set(b);
+                return Suite.set(b.next());
             }
         };
     }
