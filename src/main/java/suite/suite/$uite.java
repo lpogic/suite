@@ -5,53 +5,47 @@ import suite.suite.util.*;
 import java.util.*;
 import java.util.function.Function;
 
-public class Suite {
+public class $uite {
 
-    public static class Auto {
-        @Override
-        public String toString() {
-            return "&";
-        }
-    }
-
-    public static Subject set() {
+    public static Subject $() {
         return new SolidSubject();
     }
-    public static Subject set(Object element) {
+    public static Subject $(Object element) {
         return new SolidSubject(new BasicSubject(element));
     }
-    public static Subject add(Object element) {
+    public static Subject $add(Object element) {
         return new SolidSubject().add(element);
     }
-    public static Subject arm(Object ... joints) {
-        if(joints.length == 0) return set();
-        var $ = set(joints[joints.length - 1]);
+    public static Subject $arm(Object ... joints) {
+        if(joints.length == 0) return $();
+        var $ = $(joints[joints.length - 1]);
         for(int i = joints.length - 2;i >= 0;--i) {
-            $ = inset(joints[i], $);
+            $ = $inset(joints[i], $);
         }
         return $;
     }
-    public static Subject inset(Object element, Subject $) {
+    public static Subject $inset(Object element, Subject $) {
         return new SolidSubject(new MonoSubject(element, $));
     }
-    public static Subject inset(Subject $) {
-        return new SolidSubject(new MonoSubject(new Auto(), $));
+    public static Subject $inset(Subject $) {
+        return new SolidSubject(new MonoSubject(new Suite.Auto(), $));
     }
-    public static Subject alter(Iterable<Subject> source) {
+    public static Subject $alter(Iterable<Subject> source) {
         return new SolidSubject().alter(source);
     }
-    public static Subject set(Object ... elements) {
+    public static Subject $(Object ... elements) {
         return new SolidSubject().setEntire(List.of(elements));
     }
-    public static Subject setEntire(Iterable<?> source) {
+    public static Subject $entire(Iterable<?> source) {
         return new SolidSubject().setEntire(source);
     }
-    public static Subject add(Object ... elements) {
+    public static Subject $add(Object ... elements) {
         return new SolidSubject().addEntire(List.of(elements));
     }
-    public static Subject addEntire(Iterable<?> source) {
+    public static Subject $addEntire(Iterable<?> source) {
         return new SolidSubject().addEntire(source);
     }
+
 
 //    public static Subject fuse(Subject sub) {
 //        if(sub == null) {
@@ -76,30 +70,30 @@ public class Suite {
     }
 
     public static Subject zip(Iterable<Object> keys, Iterable<Object> values) {
-        return alter(Series.engage(keys, values));
+        return $alter(Series.engage(keys, values));
     }
 
     public static String describe(Series $ser) {
         StringBuilder sb = new StringBuilder();
         for(var $ : $ser) {
-            sb.append(describe($, true, o -> o instanceof Auto ? "" : Objects.toString(o)));
+            sb.append(describe($, true, o -> o instanceof Suite.Auto ? "" : Objects.toString(o)));
         }
         return sb.toString();
     }
 
     public static String describe(Subject $sub) {
-        return describe($sub, true, o -> o instanceof Auto ? "" : Objects.toString(o));
+        return describe($sub, true, o -> o instanceof Suite.Auto ? "" : Objects.toString(o));
     }
 
     public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder) {
-        if($sub == null) $sub = set();
+        if($sub == null) $sub = $();
         if(pack) {
-            $sub = inset($sub.absent() ? set(new Auto()) : $sub);
+            $sub = $inset($sub.absent() ? $(new Suite.Auto()) : $sub);
         }
         StringBuilder sb = new StringBuilder();
-        java.util.Stack<Subject> stack = new java.util.Stack<>();
-        Subject printed = set();
-        stack.add(set($sub).set($sub.cascade()));
+        Stack<Subject> stack = new Stack<>();
+        Subject printed = $();
+        stack.add($($sub).set($sub.cascade()));
         int goTo = 0;
         boolean tabsBefore = false;
         while(!stack.empty()) {
@@ -127,7 +121,7 @@ public class Suite {
                         } else {
                             sb.append("[ ");
                         }
-                        stack.add(set($).set($.cascade()));
+                        stack.add($($).set($.cascade()));
                         printed.set($);
                         goTo = 1;
                         break;
@@ -150,17 +144,17 @@ public class Suite {
 
     public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
         if(!compress)return describe($sub, pack, encoder);
-        if($sub == null) $sub = set();
-        if(pack) $sub = inset($sub.set());
+        if($sub == null) $sub = $();
+        if(pack) $sub = $inset($sub.set());
         StringBuilder sb = new StringBuilder();
-        java.util.Stack<Iterator<Subject>> stack = new java.util.Stack<>();
-        Subject printed = set();
+        Stack<Iterator<Subject>> stack = new Stack<>();
+        Subject printed = $();
         stack.add($sub.iterator());
         int goTo = 0;
         while(!stack.empty()) {
             Iterator<Subject> it = stack.peek();
             for(var $s : (Iterable<Subject>) () -> it) {
-                if(!$s.is(Auto.class)) {
+                if(!$s.is(Suite.Auto.class)) {
                     sb.append(encoder.apply($s.raw()));
                 }
                 var $ = $s.in().get();
@@ -198,9 +192,9 @@ public class Suite {
 
     public static Series postDfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
-            final Subject $stack = set($sub, serializer.apply($sub).iterator());
-            final Subject $subjectStack = set();
-            final Subject $hasNext = set();
+            final Subject $stack = $($sub, serializer.apply($sub).iterator());
+            final Subject $subjectStack = $();
+            final Subject $hasNext = $();
 
             @Override
             public boolean hasNext() {
@@ -242,7 +236,7 @@ public class Suite {
 
     public static Series preDfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
-            final Subject $stack = set();
+            final Subject $stack = $();
             boolean digDone = false;
             Subject $nextUp = $sub;
 
@@ -279,7 +273,7 @@ public class Suite {
 
     public static Series bfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
-            final Subject $all = set($sub);
+            final Subject $all = $($sub);
             Browser current = serializer.apply($sub).iterator();
             Series $nextFront = Series.empty();
 
