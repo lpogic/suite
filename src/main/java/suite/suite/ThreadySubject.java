@@ -131,9 +131,9 @@ class ThreadySubject extends SolidSubject {
     }
 
     @Override
-    public Object direct() {
+    public Object raw() {
         try(var ignored = readLock.lock()) {
-            return super.direct();
+            return super.raw();
         }
     }
 
@@ -242,25 +242,25 @@ class ThreadySubject extends SolidSubject {
     }
 
     @Override
-    public Subject exactSet(Object aim, Object element) {
+    public Subject aimedSet(Object aim, Object element) {
         try(var ignored = writeLock.lock()) {
-            super.exactSet(aim, element);
+            super.aimedSet(aim, element);
             return this;
         }
     }
 
     @Override
-    public Subject inset(Object element, Subject $set) {
+    public Subject inset(Object in, Subject $set) {
         try(var ignored = writeLock.lock()) {
-            super.inset(element, $set);
+            super.inset(in, $set);
             return this;
         }
     }
 
     @Override
-    public Subject exactInset(Object aim, Object element, Subject $set) {
+    public Subject aimedInset(Object aim, Object in, Subject $set) {
         try(var ignored = writeLock.lock()) {
-            super.exactInset(aim, element, $set);
+            super.aimedInset(aim, in, $set);
             return this;
         }
     }
@@ -310,7 +310,7 @@ class ThreadySubject extends SolidSubject {
     public Subject alter(Iterable<? extends Subject> iterable) {
         for(var it : iterable) {
             if(it.present()) {
-                Object o = it.direct();
+                Object o = it.raw();
                 if (it.real(o)) {
                     this.inset(o, it.jump(o));
                 } else {
@@ -322,14 +322,14 @@ class ThreadySubject extends SolidSubject {
     }
 
     @Override
-    public Subject exactAlter(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject aimedAlter(Object sequent, Iterable<? extends Subject> iterable) {
         for(var it : iterable) {
             if(it.present()) {
-                Object o = it.direct();
+                Object o = it.raw();
                 if (it.real(o)) {
-                    this.exactInset(sequent, o, it.jump(o));
+                    this.aimedInset(sequent, o, it.jump(o));
                 } else {
-                    this.exactSet(sequent, o);
+                    this.aimedSet(sequent, o);
                 }
             }
         }

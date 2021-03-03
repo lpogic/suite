@@ -41,7 +41,7 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
 
     @Override
     public T next() {
-        return stored.present() ? stored.take(stored.direct()).asExpected() : iterator.next();
+        return stored.present() ? stored.take(stored.raw()).asExpected() : iterator.next();
     }
 
     public void store(T t) {

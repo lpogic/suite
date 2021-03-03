@@ -34,8 +34,8 @@ public interface Sub extends Series {
     }
 
 
-    default Object direct() {
-        return get().direct();
+    default Object raw() {
+        return get().raw();
     }
 
 
@@ -115,38 +115,32 @@ public interface Sub extends Series {
     default Subject set(Object element) {
         return set().set(element);
     }
-    default Subject exactSet(Object aim, Object element) {
-        return set().exactSet(aim,element);
+    default Subject aimedSet(Object aim, Object element) {
+        return set().aimedSet(aim,element);
     }
-    default Subject set(Object key, Object value, Object ... rest) {
-        return set().set(key, value, rest);
+    default Subject arm(Object e1, Object e2, Object ... rest) {
+        return set().arm(e1, e2, rest);
     }
-    default Subject exactSet(Object aim, Object key, Object value, Object ... rest) {
-        return set().exactSet(aim, key, value, rest);
+    default Subject aimedArm(Object aim, Object key, Object value, Object ... rest) {
+        return set().aimedArm(aim, key, value, rest);
     }
-    default Subject inset(Object element, Subject $set) {
-        return set().inset(element, $set);
+    default Subject add(Object element) {
+        return set().add(element);
     }
-    default Subject exactInset(Object aim, Object element, Subject $set) {
-        return set().exactInset(aim, element, $set);
+    default Subject aimedAdd(Object aim, Object element) {
+        return set().aimedAdd(aim, element);
     }
-    default Subject put(Object element) {
-        return set().put(element);
+    default Subject inset(Object in, Subject $set) {
+        return set().inset(in, $set);
     }
-    default Subject exactPut(Object aim, Object element) {
-        return set().exactPut(aim, element);
+    default Subject aimedInset(Object aim, Object in, Subject $set) {
+        return set().aimedInset(aim, in, $set);
     }
-    default Subject put(Object value, Object ... rest) {
-        return set().put(value, rest);
+    default Subject inset(Subject $set) {
+        return set().inset($set);
     }
-    default Subject exactPut(Object aim, Object value, Object ... rest) {
-        return set().exactPut(aim, value, rest);
-    }
-    default Subject input(Subject $set) {
-        return set().input($set);
-    }
-    default Subject exactInput(Object target, Subject $set) {
-        return set().exactInput(target, $set);
+    default Subject aimedInset(Object aim, Subject $set) {
+        return set().aimedInset(aim, $set);
     }
 
     default Subject merge(Subject $tree) {

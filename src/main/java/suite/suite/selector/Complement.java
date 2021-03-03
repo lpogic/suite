@@ -14,7 +14,7 @@ public class Complement implements Predicate<Subject> {
 
     @Override
     public boolean test(Subject subject) {
-        return $.get(subject.direct()).absent();
+        return $.get(subject.raw()).absent();
     }
 
     public static Complement respect(Subject $s) {

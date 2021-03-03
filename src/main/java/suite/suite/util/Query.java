@@ -84,8 +84,8 @@ public class Query {
         return $result.asExpected();
     }
 
-    public Object direct() {
-        return $result.direct();
+    public Object raw() {
+        return $result.raw();
     }
 
     public Query map(Subject $map) {
@@ -100,7 +100,7 @@ public class Query {
 
     public<T> Query map(Class<T> mappedType, Function<T, Object> function) {
         $result = $result.convert($ -> $.is(mappedType) ?
-                Suite.inset($.direct(), Suite.set(function.apply($.in($.direct()).asExpected()))) : $).set();
+                Suite.inset($.raw(), Suite.set(function.apply($.in($.raw()).asExpected()))) : $).set();
         return this;
     }
 }

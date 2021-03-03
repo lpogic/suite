@@ -8,7 +8,7 @@ import java.util.Map;
 
 class Chain implements Series {
 
-    private final Map<Object, Link> data = new HashMap<>();
+    private final Map<Object, Link> data = new HashMap<>(3);
     final Link ward;
 
     public Chain() {
@@ -20,20 +20,20 @@ class Chain implements Series {
         this.ward = ward;
         Link link = ward.front;
         while (link != ward) {
-            data.put(link.subject.direct(), link);
+            data.put(link.subject.raw(), link);
             link = link.front;
         }
     }
 
-    Link get(Object key) {
+    public Link get(Object key) {
         return data.getOrDefault(key, ward);
     }
 
-    Link getFirst() {
+    public Link getFirst() {
         return ward.back;
     }
 
-    Link getLast() {
+    public Link getLast() {
         return ward.front;
     }
 
@@ -41,7 +41,7 @@ class Chain implements Series {
         return data.size();
     }
 
-    void put(Object o) {
+    public void put(Object o) {
         Link link = data.get(o);
         if(link != null) {
             link.subject = new BasicSubject(o);
@@ -52,7 +52,7 @@ class Chain implements Series {
         }
     }
 
-    void put(Object o, Subject $) {
+    public void put(Object o, Subject $) {
         Link link = data.get(o);
         if(link != null) {
             link.subject = new MonoSubject(o, $);
@@ -63,7 +63,7 @@ class Chain implements Series {
         }
     }
 
-    void put(Link sequent, Object o) {
+    public void put(Link sequent, Object o) {
         Link link = data.get(o);
         if(link != null) {
             link.subject = new BasicSubject(o);
@@ -75,7 +75,7 @@ class Chain implements Series {
         }
     }
 
-    void put(Link sequent, Object o, Subject $) {
+    public void put(Link sequent, Object o, Subject $) {
         Link link = data.get(o);
         if(link != null) {
             link.subject = new MonoSubject(o, $);
@@ -87,7 +87,7 @@ class Chain implements Series {
         }
     }
 
-    void push(Object pushed, Object pushing) {
+    public void push(Object pushed, Object pushing) {
         Link link = data.remove(pushed);
         if(link != null) {
             link.subject = link.subject.shift(pushed, pushing);
@@ -98,7 +98,7 @@ class Chain implements Series {
         data.put(pushing, link);
     }
 
-    void moveBefore(Link link, Link sequent) {
+    public void moveBefore(Link link, Link sequent) {
         link.front.back = link.back;
         link.back.front = link.front;
 

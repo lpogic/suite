@@ -16,7 +16,7 @@ public abstract class Vendor extends Subject {
 
     protected Subject monoWrap(Subject $) {
         if($.absent()) return $;
-        return Suite.inset($.direct(), wrap($.in().get()));
+        return Suite.inset($.raw(), wrap($.in().get()));
     }
 
     @Override
@@ -65,8 +65,8 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Object direct() {
-        return factor($sub).direct();
+    public Object raw() {
+        return factor($sub).raw();
     }
 
     @Override
@@ -162,17 +162,17 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Subject exactSet(Object aim, Object element)  {
+    public Subject aimedSet(Object aim, Object element)  {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
     @Override
-    public Subject inset(Object element, Subject $set) {
+    public Subject inset(Object in, Subject $set) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
     @Override
-    public Subject exactInset(Object aim, Object element, Subject $set) {
+    public Subject aimedInset(Object aim, Object in, Subject $set) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
@@ -192,12 +192,12 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Subject input(Subject $set) {
+    public Subject inset(Subject $set) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
     @Override
-    public Subject set(Object key, Object value, Object... rest) {
+    public Subject arm(Object e1, Object e2, Object... rest) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
@@ -212,22 +212,22 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Subject exactAlter(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject aimedAlter(Object sequent, Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
     @Override
-    public Subject setAll(Iterable<?> iterable) {
+    public Subject setEntire(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
     @Override
-    public Subject unsetAll(Iterable<?> iterable) {
+    public Subject unsetEntire(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 
     @Override
-    public Subject takeAll(Iterable<?> iterable) {
+    public Subject takeEntire(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 

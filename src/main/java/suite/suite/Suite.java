@@ -1,6 +1,5 @@
 package suite.suite;
 
-import suite.suite.action.Action;
 import suite.suite.util.*;
 
 import java.util.*;
@@ -21,31 +20,37 @@ public class Suite {
     public static Subject set(Object element) {
         return new SolidSubject(new BasicSubject(element));
     }
-    public static Subject set(Object key, Object ... rest) {
-        if(rest.length == 0) return set(key);
-        var $ = set(rest[rest.length - 1]);
-        for(int i = rest.length - 2;i >= 0;--i) {
-            $ = inset(rest[i], $);
+    public static Subject add(Object element) {
+        return new SolidSubject().add(element);
+    }
+    public static Subject arm(Object ... joints) {
+        if(joints.length == 0) return set();
+        var $ = set(joints[joints.length - 1]);
+        for(int i = joints.length - 2;i >= 0;--i) {
+            $ = inset(joints[i], $);
         }
-        return inset(key, $);
+        return $;
     }
     public static Subject inset(Object element, Subject $) {
         return new SolidSubject(new MonoSubject(element, $));
     }
-    public static Subject put(Object element) {
-        return new SolidSubject().put(element);
-    }
-    public static Subject put(Object value, Object ... rest) {
-        return new SolidSubject().put(value, rest);
-    }
-    public static Subject input(Subject $) {
+    public static Subject inset(Subject $) {
         return new SolidSubject(new MonoSubject(new Auto(), $));
     }
     public static Subject alter(Iterable<Subject> source) {
         return new SolidSubject().alter(source);
     }
-    public static Subject setAll(Iterable<?> source) {
-        return new SolidSubject().setAll(source);
+    public static Subject set(Object ... elements) {
+        return new SolidSubject().setEntire(List.of(elements));
+    }
+    public static Subject setEntire(Iterable<?> source) {
+        return new SolidSubject().setEntire(source);
+    }
+    public static Subject add(Object ... elements) {
+        return new SolidSubject().addEntire(List.of(elements));
+    }
+    public static Subject addEntire(Iterable<?> source) {
+        return new SolidSubject().addEntire(source);
     }
 
 //    public static Subject fuse(Subject sub) {
@@ -89,7 +94,7 @@ public class Suite {
     public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder) {
         if($sub == null) $sub = set();
         if(pack) {
-            $sub = input($sub.absent() ? set(new Auto()) : $sub);
+            $sub = inset($sub.absent() ? set(new Auto()) : $sub);
         }
         StringBuilder sb = new StringBuilder();
         java.util.Stack<Subject> stack = new java.util.Stack<>();
@@ -104,7 +109,7 @@ public class Suite {
             for(Subject $s : it.toEnd()) {
                 if(tabsBefore)sb.append("\t".repeat(stack.size() - 1));
                 tabsBefore = false;
-                sb.append(encoder.apply($s.direct()));
+                sb.append(encoder.apply($s.raw()));
                 Subject $ = $s.in().get();
                 if($.absent()) {
                     if($current.size() > 1) {
@@ -146,7 +151,7 @@ public class Suite {
     public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
         if(!compress)return describe($sub, pack, encoder);
         if($sub == null) $sub = set();
-        if(pack) $sub = input($sub.set());
+        if(pack) $sub = inset($sub.set());
         StringBuilder sb = new StringBuilder();
         java.util.Stack<Iterator<Subject>> stack = new java.util.Stack<>();
         Subject printed = set();
@@ -156,7 +161,7 @@ public class Suite {
             Iterator<Subject> it = stack.peek();
             for(var $s : (Iterable<Subject>) () -> it) {
                 if(!$s.is(Auto.class)) {
-                    sb.append(encoder.apply($s.direct()));
+                    sb.append(encoder.apply($s.raw()));
                 }
                 var $ = $s.in().get();
                 if($.absent()) {
@@ -208,7 +213,7 @@ public class Suite {
             @Override
             public Subject next() {
                 if($hasNext.absent()) dig();
-                Subject $next = $subjectStack.take($subjectStack.last().direct()).in().get();
+                Subject $next = $subjectStack.take($subjectStack.last().raw()).in().get();
                 $hasNext.unset();
                 return $next;
             }
@@ -219,7 +224,7 @@ public class Suite {
                 Iterator<Subject> it = $stack.last().in().asExpected();
                 while (it.hasNext()) {
                     var $ = it.next();
-                    $subjectStack.input($);
+                    $subjectStack.inset($);
                     $i = $.in().get();
                     if ($i.present() && $stack.absent($i)) {
                         it = serializer.apply($i).iterator();
@@ -257,11 +262,11 @@ public class Suite {
             }
 
             private void dig(Subject $) {
-                if($.present() && $stack.absent($)) $stack.set($, serializer.apply($).iterator());
+                if($.present() && $stack.absent($)) $stack.arm($, serializer.apply($).iterator());
                 while($stack.present()) {
                     Iterator<Subject> it = $stack.last().in().asExpected();
                     if(it.hasNext()) return;
-                    $stack.unset($stack.last().direct());
+                    $stack.unset($stack.last().raw());
                 }
                 digDone = true;
             }
@@ -324,16 +329,4 @@ public class Suite {
     public static <A, B> Map<A, B> asMapOf(Subject $, Glass<A, A> keyType, Glass<B, B> valueType, Map<A, B> reserve) {
         return $.as(Glass.Map(keyType, valueType), reserve);
     }
-
-    public static Subject deepConvert(Subject $tree, Action converter) {
-        for(var $ : preDfs(input($tree)).eachIn()) {
-            var $t = set();
-            for(var $1 : $) {
-                $t.alter(converter.apply($1));
-            }
-            $.unset().alter($t);
-        }
-        return $tree;
-    }
-
 }

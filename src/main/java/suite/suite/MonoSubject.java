@@ -87,7 +87,7 @@ class MonoSubject extends Subject {
     }
 
     @Override
-    public Object direct() {
+    public Object raw() {
         return element;
     }
 
@@ -173,32 +173,32 @@ class MonoSubject extends Subject {
     }
 
     @Override
-    public Subject exactSet(Object aim, Object element) {
+    public Subject aimedSet(Object aim, Object element) {
         if(Objects.equals(this.element, element)) {
             subject = Suite.set();
             return this;
         } else {
-            return new MultiSubject(link()).exactSet(aim, element);
+            return new MultiSubject(link()).aimedSet(aim, element);
         }
     }
 
     @Override
-    public Subject inset(Object element, Subject $set) {
-        if(Objects.equals(this.element, element)) {
+    public Subject inset(Object in, Subject $set) {
+        if(Objects.equals(this.element, in)) {
             subject = $set;
             return this;
         } else {
-            return new MultiSubject(link()).inset(element, $set);
+            return new MultiSubject(link()).inset(in, $set);
         }
     }
 
     @Override
-    public Subject exactInset(Object aim, Object element, Subject $set) {
-        if(Objects.equals(this.element, element)) {
+    public Subject aimedInset(Object aim, Object in, Subject $set) {
+        if(Objects.equals(this.element, in)) {
             subject = $set;
             return this;
         } else {
-            return new MultiSubject(link()).exactInset(aim, element, $set);
+            return new MultiSubject(link()).aimedInset(aim, in, $set);
         }
     }
 

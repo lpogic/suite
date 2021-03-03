@@ -4,7 +4,6 @@ import suite.suite.util.Browser;
 import suite.suite.util.Glass;
 
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 class ZeroSubject extends Subject {
@@ -58,7 +57,7 @@ class ZeroSubject extends Subject {
     }
 
     @Override
-    public Object direct() {
+    public Object raw() {
         return null;
     }
 
@@ -138,18 +137,18 @@ class ZeroSubject extends Subject {
     }
 
     @Override
-    public Subject exactSet(Object aim, Object element) {
+    public Subject aimedSet(Object aim, Object element) {
         return new BasicSubject(element);
     }
 
     @Override
-    public Subject inset(Object element, Subject $set) {
-        return new MonoSubject(element, $set);
+    public Subject inset(Object in, Subject $set) {
+        return new MonoSubject(in, $set);
     }
 
     @Override
-    public Subject exactInset(Object aim, Object element, Subject $set) {
-        return new MonoSubject(element, $set);
+    public Subject aimedInset(Object aim, Object in, Subject $set) {
+        return new MonoSubject(in, $set);
     }
 
     @Override

@@ -1,10 +1,11 @@
 package suite.suite;
 
-import suite.suite.util.Sequence;
+import suite.suite.action.Action;
 import suite.suite.util.Series;
 import suite.suite.util.Glass;
 import suite.suite.util.Browser;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 @SuppressWarnings("UnusedReturnValue")
@@ -29,10 +30,7 @@ public abstract class Subject implements Sub {
     public abstract Subject first();
     public abstract Subject last();
     public abstract Subject get(Object element);
-    public Subject get(Object... elements) {
-        return getAll(Sequence.of(elements)).set();
-    }
-    public abstract Object direct();
+    public abstract Object raw();
     public abstract <B> B asExpected();
     public abstract <B> B as(Class<B> requestedType);
     public abstract <B> B as(Glass<? super B, B> requestedType);
@@ -58,32 +56,29 @@ public abstract class Subject implements Sub {
     }
 
     public abstract Subject set(Object element);
-    public abstract Subject exactSet(Object aim, Object element);
-    public Subject set(Object key, Object value, Object ... rest) {
-        return inset(key, Suite.set(value, rest));
+    public abstract Subject aimedSet(Object aim, Object element);
+    public Subject arm(Object e1, Object e2, Object ... rest) {
+        return inset(e1, Suite.set(e2, rest));
     }
-    public Subject exactSet(Object aim, Object key, Object value, Object... rest) {
-        return exactInset(aim, key, Suite.set(value, rest));
+    public Subject aimedArm(Object aim, Object key, Object value, Object... rest) {
+        return aimedInset(aim, key, Suite.set(value, rest));
     }
-    public abstract Subject inset(Object element, Subject $set);
-    public abstract Subject exactInset(Object aim, Object element, Subject $set);
-    public Subject put(Object element) {
-        return set(new Suite.Auto(), element);
+    public Subject add(Object element) {
+        return arm(new Suite.Auto(), element);
     }
-    public Subject exactPut(Object aim, Object element) {
-        return exactSet(aim, new Suite.Auto(), element);
+    public Subject aimedAdd(Object aim, Object element) {
+        return aimedArm(aim, new Suite.Auto(), element);
     }
-    public Subject put(Object value, Object ... rest) {
-        return inset(new Suite.Auto(), Suite.set(value, rest));
-    }
-    public Subject exactPut(Object aim, Object value, Object... rest) {
-        return exactInset(aim, new Suite.Auto(), Suite.set(value, rest));
-    }
-    public Subject input(Subject $set) {
+    public abstract Subject inset(Object in, Subject $set);
+    public abstract Subject aimedInset(Object aim, Object in, Subject $set);
+    public Subject inset(Subject $set) {
         return inset(new Suite.Auto(), $set);
     }
-    public Subject exactInput(Object target, Subject $set) {
-        return exactInset(target, new Suite.Auto(), $set);
+    public Subject aimedInset(Object aim, Subject $set) {
+        return aimedInset(aim, new Suite.Auto(), $set);
+    }
+    public Subject shift(Object in) {
+        return shift(raw(), in);
     }
     public abstract Subject shift(Object out, Object in);
     public Subject reset(Object element) {
@@ -100,13 +95,10 @@ public abstract class Subject implements Sub {
     public Subject take(Object element) {
         throw new UnsupportedOperationException("Solid method");
     }
-    public Subject take(Object... elements) {
-        return takeAll(Sequence.of(elements)).set();
-    }
     public Subject alter(Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
-    public Subject exactAlter(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject aimedAlter(Object sequent, Iterable<? extends Subject> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
 
@@ -114,36 +106,66 @@ public abstract class Subject implements Sub {
         for(var $ : $tree) {
             var $at = $.at();
             if($at.present()) {
-                in($.direct()).merge($at);
+                in($.raw()).merge($at);
             } else {
-                sate($.direct());
+                sate($.raw());
             }
         }
         return this;
     }
 
-    public Series getAll(Iterable<?> iterable) {
+    public Subject introspect(Action converter) {
+        for(var $ : Suite.preDfs(Suite.inset(this)).eachIn()) {
+            var $t = set();
+            for(var $1 : $) {
+                $t.alter(converter.apply($1));
+            }
+            $.unset().alter($t);
+        }
+        return this;
+    }
+
+    public Subject get(Object... elements) {
+        return getEntire(List.of(elements)).set();
+    }
+    public Series getEntire(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
-    public Subject setAll(Iterable<?> iterable) {
+
+    public Subject set(Object ... elements) {
+        return setEntire(List.of(elements));
+    }
+    public Subject setEntire(Iterable<?> iterable) {
         for(Object it : iterable) {
             set(it);
         }
         return this;
     }
-    public Subject putAll(Iterable<?> iterable) {
+
+    public Subject add(Object ... elements) {
+        return addEntire(List.of(elements));
+    }
+    public Subject addEntire(Iterable<?> iterable) {
         for(Object it : iterable) {
-            put(it);
+            add(it);
         }
         return this;
     }
-    public Subject unsetAll(Iterable<?> iterable) {
+
+    public Subject unset(Object ... elements) {
+        return unsetEntire(List.of(elements));
+    }
+    public Subject unsetEntire(Iterable<?> iterable) {
         for(Object it : iterable) {
             unset(it);
         }
         return this;
     }
-    public Series takeAll(Iterable<?> iterable) {
+
+    public Subject take(Object... elements) {
+        return takeEntire(List.of(elements)).set();
+    }
+    public Series takeEntire(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
     @Override
@@ -164,77 +186,5 @@ public abstract class Subject implements Sub {
     @Override
     public String toString() {
         return "$" + Integer.toHexString(hashCode());
-    }
-
-    public int asInt() {
-        return as(Number.class).intValue();
-    }
-
-    public byte asByte() {
-        return as(Number.class).byteValue();
-    }
-
-    public long asLong() {
-        return as(Number.class).longValue();
-    }
-
-    public long asShort() {
-        return as(Number.class).shortValue();
-    }
-
-    public float asFloat() {
-        return as(Number.class).floatValue();
-    }
-
-    public double asDouble() {
-        return as(Number.class).doubleValue();
-    }
-
-    public char asChar() {
-        return as(Character.class);
-    }
-
-    public boolean asBoolean() {
-        return as(Boolean.class);
-    }
-
-    public String asString() {
-        return as(String.class);
-    }
-
-    public int asInt(int reserve) {
-        return as(Number.class, reserve).intValue();
-    }
-
-    public byte asByte(byte reserve) {
-        return as(Number.class, reserve).byteValue();
-    }
-
-    public long asLong(long reserve) {
-        return as(Number.class, reserve).longValue();
-    }
-
-    public long asShort(short reserve) {
-        return as(Number.class, reserve).shortValue();
-    }
-
-    public float asFloat(float reserve) {
-        return as(Number.class, reserve).floatValue();
-    }
-
-    public double asDouble(double reserve) {
-        return as(Number.class, reserve).doubleValue();
-    }
-
-    public char asChar(char reserve) {
-        return as(Character.class, reserve);
-    }
-
-    public boolean asBoolean(boolean reserve) {
-        return as(Boolean.class, reserve);
-    }
-
-    public String asString(String reserve) {
-        return as(String.class, reserve);
     }
 }

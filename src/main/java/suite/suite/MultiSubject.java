@@ -70,8 +70,8 @@ class MultiSubject extends Subject {
     }
 
     @Override
-    public Object direct() {
-        return chain.getFirst().subject.direct();
+    public Object raw() {
+        return chain.getFirst().subject.raw();
     }
     
     @Override
@@ -151,20 +151,20 @@ class MultiSubject extends Subject {
     }
 
     @Override
-    public Subject exactSet(Object aim, Object element) {
+    public Subject aimedSet(Object aim, Object element) {
         chain.put(chain.get(aim), element);
         return this;
     }
 
     @Override
-    public Subject inset(Object element, Subject $set) {
-        chain.put(element, $set);
+    public Subject inset(Object in, Subject $set) {
+        chain.put(in, $set);
         return this;
     }
 
     @Override
-    public Subject exactInset(Object aim, Object element, Subject $set) {
-        chain.put(chain.get(aim), element, $set);
+    public Subject aimedInset(Object aim, Object in, Subject $set) {
+        chain.put(chain.get(aim), in, $set);
         return this;
     }
 

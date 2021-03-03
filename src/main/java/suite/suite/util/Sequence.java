@@ -157,7 +157,7 @@ public interface Sequence<T> extends Iterable<T>{
     }
 
     default Subject set() {
-        return Suite.setAll(this);
+        return Suite.setEntire(this);
     }
 
     default Series series() {

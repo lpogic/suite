@@ -89,8 +89,8 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Object direct() {
-        return subject.direct();
+    public Object raw() {
+        return subject.raw();
     }
 
     @Override
@@ -170,20 +170,20 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject exactSet(Object aim, Object element) {
-        subject = subject.exactSet(aim, element);
+    public Subject aimedSet(Object aim, Object element) {
+        subject = subject.aimedSet(aim, element);
         return this;
     }
 
     @Override
-    public Subject inset(Object element, Subject $set) {
-        subject = subject.inset(element, $set);
+    public Subject inset(Object in, Subject $set) {
+        subject = subject.inset(in, $set);
         return this;
     }
 
     @Override
-    public Subject exactInset(Object aim, Object element, Subject $set) {
-        subject = subject.exactInset(aim, element, $set);
+    public Subject aimedInset(Object aim, Object in, Subject $set) {
+        subject = subject.aimedInset(aim, in, $set);
         return this;
     }
 
@@ -226,7 +226,7 @@ public class SolidSubject extends Subject {
     @Override
     public Subject sate(Object element, Subject $set) {
         var $ = get(element);
-        inset($.present() ? $.direct() : element, $set);
+        inset($.present() ? $.raw() : element, $set);
         return get(element);
     }
 
@@ -242,7 +242,7 @@ public class SolidSubject extends Subject {
         var $ = subject;
         for(var it : iterable) {
             if(it.present()) {
-                Object o = it.direct();
+                Object o = it.raw();
                 if (it.real(o)) {
                     $ = $.inset(o, it.jump(o));
                 } else {
@@ -255,15 +255,15 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject exactAlter(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject aimedAlter(Object sequent, Iterable<? extends Subject> iterable) {
         var $ = subject;
         for(var it : iterable) {
             if(it.present()) {
-                Object o = it.direct();
+                Object o = it.raw();
                 if (it.real(o)) {
-                    $ = $.exactInset(sequent, o, it.jump(o));
+                    $ = $.aimedInset(sequent, o, it.jump(o));
                 } else {
-                    $ = $.exactSet(sequent, o);
+                    $ = $.aimedSet(sequent, o);
                 }
             }
         }
@@ -272,7 +272,7 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Series getAll(Iterable<?> iterable) {
+    public Series getEntire(Iterable<?> iterable) {
         return () -> new Browser() {
             final Iterator<?> it = iterable.iterator();
 
@@ -289,7 +289,7 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Series takeAll(Iterable<?> iterable) {
+    public Series takeEntire(Iterable<?> iterable) {
         return () -> new Browser() {
             final Iterator<?> it = iterable.iterator();
 

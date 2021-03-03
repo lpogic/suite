@@ -61,7 +61,7 @@ public interface Series extends Iterable<Subject> {
         return first().in().get();
     }
 
-    default Series order() {
+    default Series enumerate() {
         return () -> new Browser() {
             final Iterator<Subject> origin = iterator();
             int i = 0;
@@ -124,7 +124,7 @@ public interface Series extends Iterable<Subject> {
         };
     }
 
-    default Sequence<?> eachDirect() {
+    default Sequence<?> eachRaw() {
         return () -> new Iterator<>() {
             final Iterator<Subject> subIt = iterator();
 
@@ -135,7 +135,7 @@ public interface Series extends Iterable<Subject> {
 
             @Override
             public Object next() {
-                return subIt.next().direct();
+                return subIt.next().raw();
             }
         };
     }
@@ -192,8 +192,8 @@ public interface Series extends Iterable<Subject> {
         return first().in();
     }
 
-    default Object direct() {
-        return first().direct();
+    default Object raw() {
+        return first().raw();
     }
 
     default <B> B asExpected() {
@@ -269,19 +269,27 @@ public interface Series extends Iterable<Subject> {
         };
     }
 
-    static Series parallel(Series ... series) {
+    static Series parallel(Series s1, Series s2, Series ... rest) {
 
         return () -> new Browser() {
-            final Subject $its = Suite.set(); {
-                for(Series s : series) {
-                    $its.set(s.iterator());
+            final Subject $its = Suite.arm(0, s1.iterator()).arm(1, s2.iterator()); {
+                int i = 2;
+                for(Series s : rest) {
+                    $its.arm(i++, s.iterator());
                 }
             }
             Subject $collected = Suite.set();
 
             @Override
             public boolean hasNext() {
-                return collect();
+                var $c = Suite.set();
+                for(var $ : $its) {
+                    Browser b = $.in().asExpected();
+                    if(b.hasNext()) $c.inset($.raw(), b.next());
+                    else return false;
+                }
+                $collected = $c;
+                return true;
             }
 
             @Override
@@ -290,21 +298,83 @@ public interface Series extends Iterable<Subject> {
                 $collected = Suite.set();
                 return $c;
             }
-
-            boolean collect() {
-                var $c = Suite.set();
-                for(Browser it : $its.eachAs(Browser.class)) {
-                    if(it.hasNext()) $c.input(it.next());
-                    else return false;
-                }
-                $collected = $c;
-                return true;
-            }
         };
     }
 
     default Series print() {
         System.out.println(Suite.describe(this));
         return this;
+    }
+
+    default int asInt() {
+        return as(Number.class).intValue();
+    }
+
+    default byte asByte() {
+        return as(Number.class).byteValue();
+    }
+
+    default long asLong() {
+        return as(Number.class).longValue();
+    }
+
+    default long asShort() {
+        return as(Number.class).shortValue();
+    }
+
+    default float asFloat() {
+        return as(Number.class).floatValue();
+    }
+
+    default double asDouble() {
+        return as(Number.class).doubleValue();
+    }
+
+    default char asChar() {
+        return as(Character.class);
+    }
+
+    default boolean asBoolean() {
+        return as(Boolean.class);
+    }
+
+    default String asString() {
+        return as(String.class);
+    }
+
+    default int asInt(int reserve) {
+        return as(Number.class, reserve).intValue();
+    }
+
+    default byte asByte(byte reserve) {
+        return as(Number.class, reserve).byteValue();
+    }
+
+    default long asLong(long reserve) {
+        return as(Number.class, reserve).longValue();
+    }
+
+    default long asShort(short reserve) {
+        return as(Number.class, reserve).shortValue();
+    }
+
+    default float asFloat(float reserve) {
+        return as(Number.class, reserve).floatValue();
+    }
+
+    default double asDouble(double reserve) {
+        return as(Number.class, reserve).doubleValue();
+    }
+
+    default char asChar(char reserve) {
+        return as(Character.class, reserve);
+    }
+
+    default boolean asBoolean(boolean reserve) {
+        return as(Boolean.class, reserve);
+    }
+
+    default String asString(String reserve) {
+        return as(String.class, reserve);
     }
 }

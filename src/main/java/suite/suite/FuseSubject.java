@@ -9,8 +9,8 @@ class FuseSubject {}/* implements Subject {
     }
 
     @Override
-    public Subject atFirst() {
-        return sub.atFirst();
+    public Subject at() {
+        return sub.at();
     }
 
     @Override
@@ -34,8 +34,8 @@ class FuseSubject {}/* implements Subject {
     }
 
     @Override
-    public Object direct() {
-        return sub.direct();
+    public Object raw() {
+        return sub.raw();
     }
 
     @Override

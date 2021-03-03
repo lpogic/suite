@@ -1,20 +1,20 @@
 package suite;
 
-import suite.suite.Suite;
 import suite.suite.util.Sequence;
 import suite.suite.util.Series;
+
+import static suite.suite.Suite.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        var $ = Suite.set("a", "b", "c").merge(Suite.set("a", "d")).merge(Suite.set("a", "d", "f"));
+        var $ = arm("a", "b", "c").merge(arm("a", "d")).merge(arm("a", "d", "f"));
 //        Suite.preDfs($).print();
-        Suite.deepConvert($, s -> s.shift(s.direct(), s.as(String.class).toUpperCase())).print();
-        $ = Suite.setAll(Sequence.of(1, 2, 3 ,4 , 5));
-        Series.parallel($, $.reverse()).
-                convert(s -> Suite.set(s.at(0).as(Integer.class) * s.at(1).as(Integer.class))).print();
+        $.introspect(s -> s.shift(s.as(String.class).toUpperCase())).print();
+        $ = set(1, 2, 3 ,4 , 5);
+        Series.parallel($, $.reverse()).convert(s -> set(s.in().asInt() * s.in(1).asInt())).print();
 
-        var $2 = Suite.set(1 );
+        var $2 = set(1);
         var $21 = $2.in();
         if($21.absent(2)) $21.set(2);
         $2.print();

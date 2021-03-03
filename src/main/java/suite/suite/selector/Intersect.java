@@ -14,7 +14,7 @@ public class Intersect implements Predicate<Subject> {
 
     @Override
     public boolean test(Subject subject) {
-        return $.get(subject.direct()).present();
+        return $.get(subject.raw()).present();
     }
 
     public static Intersect respect(Subject $s) {

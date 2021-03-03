@@ -138,8 +138,8 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Object direct() {
-        return strengthen(subject).direct();
+    public Object raw() {
+        return strengthen(subject).raw();
     }
 
     @Override
@@ -276,7 +276,7 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Subject input(Object... elements) {
+    public Subject inset(Object... elements) {
         Sub $ = in(new Suite.Auto());
         int i = 0;
         Object o = null;
@@ -325,7 +325,7 @@ public class WonkySubject{}/* extends SolidSubject {
         var $ = subject;
         for(var it : iterable) {
             if(it.present()) {
-                Object o = it.direct();
+                Object o = it.raw();
                 if (it.real(o)) {
                     $ = $.inset(o, it.jump(o));
                 } else {
@@ -338,11 +338,11 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Subject exactAlter(Object sequent, Iterable<? extends Subject> iterable) {
+    public Subject aimedAlter(Object sequent, Iterable<? extends Subject> iterable) {
         var $ = subject;
         for(var it : iterable) {
             if(it.present()) {
-                Object o = it.direct();
+                Object o = it.raw();
                 if (it.real(o)) {
                     $ = $.exactInset(sequent, o, it.jump(o));
                 } else {
@@ -355,7 +355,7 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Series getAll(Iterable<?> iterable) {
+    public Series getEntire(Iterable<?> iterable) {
         return () -> new Browser() {
             final Iterator<?> it = iterable.iterator();
 
@@ -372,7 +372,7 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Subject setAll(Iterable<?> iterable) {
+    public Subject setEntire(Iterable<?> iterable) {
         var $ = subject;
         for(Object it : iterable) {
             $ = $.inset(it);
@@ -382,7 +382,7 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public Subject unsetAll(Iterable<?> iterable) {
+    public Subject unsetEntire(Iterable<?> iterable) {
         var $ = subject;
         for(Object it : iterable) {
             $ = $.unset(it);
@@ -392,7 +392,7 @@ public class WonkySubject{}/* extends SolidSubject {
     }
 
     @Override
-    public*//* Series takeAll(Iterable<?> iterable) {
+    public*//* Series takeEntire(Iterable<?> iterable) {
         return () -> new Browser() {
             final Iterator<?> it = iterable.iterator();
 
