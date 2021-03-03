@@ -57,7 +57,7 @@ public class $uite {
 //        }
 //    }
 
-    public static Subject thready() {
+    public static Subject $thready() {
         return new ThreadySubject();
     }
 
@@ -65,27 +65,27 @@ public class $uite {
 //        return new WonkySubject();
 //    }
 
-    public static Query from(Subject $) {
+    public static Query $from(Subject $) {
         return new Query($);
     }
 
-    public static Subject zip(Iterable<Object> keys, Iterable<Object> values) {
+    public static Subject $zip(Iterable<Object> keys, Iterable<Object> values) {
         return $alter(Series.engage(keys, values));
     }
 
-    public static String describe(Series $ser) {
+    public static String $describe(Series $ser) {
         StringBuilder sb = new StringBuilder();
         for(var $ : $ser) {
-            sb.append(describe($, true, o -> o instanceof Suite.Auto ? "" : Objects.toString(o)));
+            sb.append($describe($, true, o -> o instanceof Suite.Auto ? "" : Objects.toString(o)));
         }
         return sb.toString();
     }
 
-    public static String describe(Subject $sub) {
-        return describe($sub, true, o -> o instanceof Suite.Auto ? "" : Objects.toString(o));
+    public static String $describe(Subject $sub) {
+        return $describe($sub, true, o -> o instanceof Suite.Auto ? "" : Objects.toString(o));
     }
 
-    public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder) {
+    public static String $describe(Subject $sub, boolean pack, Function<Object, String> encoder) {
         if($sub == null) $sub = $();
         if(pack) {
             $sub = $inset($sub.absent() ? $(new Suite.Auto()) : $sub);
@@ -142,8 +142,8 @@ public class $uite {
         return sb.toString();
     }
 
-    public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
-        if(!compress)return describe($sub, pack, encoder);
+    public static String $describe(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
+        if(!compress)return $describe($sub, pack, encoder);
         if($sub == null) $sub = $();
         if(pack) $sub = $inset($sub.set());
         StringBuilder sb = new StringBuilder();
@@ -186,11 +186,11 @@ public class $uite {
         return sb.toString();
     }
 
-    public static Series postDfs(Subject $sub) {
-        return postDfs($sub, Subject::front);
+    public static Series $postDfs(Subject $sub) {
+        return $postDfs($sub, Subject::front);
     }
 
-    public static Series postDfs(Subject $sub, Function<Subject, Series> serializer) {
+    public static Series $postDfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
             final Subject $stack = $($sub, serializer.apply($sub).iterator());
             final Subject $subjectStack = $();
@@ -230,11 +230,11 @@ public class $uite {
         };
     }
 
-    public static Series preDfs(Subject $sub) {
-        return preDfs($sub, Subject::front);
+    public static Series $preDfs(Subject $sub) {
+        return $preDfs($sub, Subject::front);
     }
 
-    public static Series preDfs(Subject $sub, Function<Subject, Series> serializer) {
+    public static Series $preDfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
             final Subject $stack = $();
             boolean digDone = false;
@@ -267,11 +267,11 @@ public class $uite {
         };
     }
 
-    public static Series bfs(Subject $sub) {
-        return bfs($sub, Subject::front);
+    public static Series $bfs(Subject $sub) {
+        return $bfs($sub, Subject::front);
     }
 
-    public static Series bfs(Subject $sub, Function<Subject, Series> serializer) {
+    public static Series $bfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
             final Subject $all = $($sub);
             Browser current = serializer.apply($sub).iterator();
@@ -296,31 +296,5 @@ public class $uite {
                 return $;
             }
         };
-    }
-
-    public static <B> List<B> asListOf(Subject $, Class<B> elementType) {
-        return asListOf($, Glass.of(elementType));
-    }
-    public static <B> List<B> asListOf(Subject $, Glass<B, B> elementType) {
-        return $.as(Glass.List(elementType));
-    }
-    public static <B> List<B> asListOf(Subject $, Class<B> elementType, List<B> reserve) {
-        return asListOf($, Glass.of(elementType), reserve);
-    }
-    public static <B> List<B> asListOf(Subject $, Glass<B, B> elementType, List<B> reserve) {
-        return $.as(Glass.List(elementType), reserve);
-    }
-
-    public static <A, B> Map<A, B> asMapOf(Subject $, Class<A> keyType, Class<B> valueType) {
-        return asMapOf($, Glass.of(keyType), Glass.of(valueType));
-    }
-    public static <A, B> Map<A, B> asMapOf(Subject $, Glass<A, A> keyType, Glass<B, B> valueType) {
-        return $.as(Glass.Map(keyType, valueType));
-    }
-    public static <A, B> Map<A, B> asMapOf(Subject $, Class<A> keyType, Class<B> valueType, Map<A, B> reserve) {
-        return asMapOf($, Glass.of(keyType), Glass.of(valueType), reserve);
-    }
-    public static <A, B> Map<A, B> asMapOf(Subject $, Glass<A, A> keyType, Glass<B, B> valueType, Map<A, B> reserve) {
-        return $.as(Glass.Map(keyType, valueType), reserve);
     }
 }
