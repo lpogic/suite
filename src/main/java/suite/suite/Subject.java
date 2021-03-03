@@ -116,7 +116,7 @@ public abstract class Subject implements Sub {
 
     public Subject introspect(Action converter) {
         for(var $ : Suite.preDfs(Suite.inset(this)).eachIn()) {
-            var $t = set();
+            var $t = Suite.set();
             for(var $1 : $) {
                 $t.alter(converter.apply($1));
             }
