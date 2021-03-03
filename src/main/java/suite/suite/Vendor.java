@@ -197,7 +197,7 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Subject arm(Object e1, Object e2, Object... rest) {
+    public Subject arm(Object e1, Object... joints) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 

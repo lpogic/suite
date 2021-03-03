@@ -19,6 +19,7 @@ public class Main {
         var $21 = $2.in();
         if($21.absent(2)) $21.set(2);
         $2.print();
-        Suite.postDfs($2).print();
+        $2.arm(3,4,5).print();
+
     }
 }

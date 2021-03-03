@@ -118,8 +118,8 @@ public interface Sub extends Series {
     default Subject aimedSet(Object aim, Object element) {
         return set().aimedSet(aim,element);
     }
-    default Subject arm(Object e1, Object e2, Object ... rest) {
-        return set().arm(e1, e2, rest);
+    default Subject arm(Object e1, Object ... joints) {
+        return set().arm(e1, joints);
     }
     default Subject aimedArm(Object aim, Object key, Object value, Object ... rest) {
         return set().aimedArm(aim, key, value, rest);
