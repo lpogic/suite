@@ -10,7 +10,7 @@ public class Suite {
     public static class Auto {
         @Override
         public String toString() {
-            return "$A";
+            return "&";
         }
     }
 
@@ -51,6 +51,16 @@ public class Suite {
     }
     public static Subject addEntire(Iterable<?> source) {
         return new SolidSubject().addEntire(source);
+    }
+
+    public static Subject $() {
+        return new SolidSubject();
+    }
+    public static Subject $(Object element) {
+        return new SolidSubject(new BasicSubject(element));
+    }
+    public static Subject $(Object ... elements) {
+        return new SolidSubject().setEntire(List.of(elements));
     }
 
 //    public static Subject fuse(Subject sub) {
