@@ -1,5 +1,6 @@
 package suite;
 
+import suite.suite.Suite;
 import suite.suite.util.Sequence;
 import suite.suite.util.Series;
 
@@ -18,5 +19,6 @@ public class Main {
         var $21 = $2.in();
         if($21.absent(2)) $21.set(2);
         $2.print();
+        Suite.postDfs($2).print();
     }
 }

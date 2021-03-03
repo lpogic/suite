@@ -192,7 +192,7 @@ public class $uite {
 
     public static Series $postDfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
-            final Subject $stack = $($sub, serializer.apply($sub).iterator());
+            final Subject $stack = $arm($sub, serializer.apply($sub).iterator());
             final Subject $subjectStack = $();
             final Subject $hasNext = $();
 

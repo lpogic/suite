@@ -198,7 +198,7 @@ public class Suite {
 
     public static Series postDfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
-            final Subject $stack = set($sub, serializer.apply($sub).iterator());
+            final Subject $stack = arm($sub, serializer.apply($sub).iterator());
             final Subject $subjectStack = set();
             final Subject $hasNext = set();
 
