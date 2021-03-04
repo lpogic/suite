@@ -47,6 +47,14 @@ public class $uite {
     }
 
 
+    public static<T> Subject $$(Subject ... $$) {
+        var $ = $();
+        for(var $i : $$) {
+            $.merge($i);
+        }
+        return $;
+    }
+
 //    public static Subject fuse(Subject sub) {
 //        if(sub == null) {
 //            return Suite.inset();

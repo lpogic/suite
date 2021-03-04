@@ -1,5 +1,6 @@
 package suite;
 
+import suite.suite.Subject;
 import suite.suite.Suite;
 import suite.suite.util.Sequence;
 import suite.suite.util.Series;
@@ -9,7 +10,8 @@ import static suite.suite.Suite.*;
 public class Main {
 
     public static void main(String[] args) {
-        var $ = arm("a", "b", "c").merge(arm("a", "d")).merge(arm("a", "d", "f"));
+//        var $ = arm("a", "b", "c").merge(arm("a", "d")).merge(arm("a", "d", "f"));
+        var $ = merge(arm("a", "b", "c"), arm("a", "d", "e"), arm("a", "d", "f"));
 //        Suite.preDfs($).print();
         $.introspect(s -> s.shift(s.as(String.class).toUpperCase())).print();
         $ = set(1, 2, 3 ,4 , 5);

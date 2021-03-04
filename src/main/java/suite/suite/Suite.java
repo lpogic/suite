@@ -53,6 +53,14 @@ public class Suite {
         return new SolidSubject().addEntire(source);
     }
 
+    public static<T> Subject merge(Subject ... $$) {
+        var $ = set();
+        for(var $i : $$) {
+            $.merge($i);
+        }
+        return $;
+    }
+
 //    public static Subject fuse(Subject sub) {
 //        if(sub == null) {
 //            return Suite.inset();
