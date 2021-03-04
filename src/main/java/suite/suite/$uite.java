@@ -13,14 +13,14 @@ public class $uite {
     public static Subject $(Object element) {
         return new SolidSubject(new BasicSubject(element));
     }
-    public static Subject $add(Object element) {
+    public static Subject $$(Object element) {
         return new SolidSubject().add(element);
     }
-    public static Subject $arm(Object ... joints) {
-        if(joints.length == 0) return $();
-        var $ = $(joints[joints.length - 1]);
-        for(int i = joints.length - 2;i >= 0;--i) {
-            $ = $inset(joints[i], $);
+    public static Subject $arm(Object ... o) {
+        if(o.length == 0) return $();
+        var $ = $(o[o.length - 1]);
+        for(int i = o.length - 2; i >= 0; --i) {
+            $ = $inset(o[i], $);
         }
         return $;
     }
@@ -39,7 +39,7 @@ public class $uite {
     public static Subject $entire(Iterable<?> source) {
         return new SolidSubject().setEntire(source);
     }
-    public static Subject $add(Object ... elements) {
+    public static Subject $$(Object ... elements) {
         return new SolidSubject().addEntire(List.of(elements));
     }
     public static Subject $addEntire(Iterable<?> source) {
@@ -47,7 +47,7 @@ public class $uite {
     }
 
 
-    public static<T> Subject $$(Subject ... $$) {
+    public static<T> Subject $m(Subject ... $$) {
         var $ = $();
         for(var $i : $$) {
             $.merge($i);
