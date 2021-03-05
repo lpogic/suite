@@ -13,7 +13,7 @@ public class $uite {
     public static Subject $(Object element) {
         return new SolidSubject(new BasicSubject(element));
     }
-    public static Subject add$(Object element) {
+    public static Subject $$(Object element) {
         return new SolidSubject().add(element);
     }
     public static Subject arm$(Object ... o) {
@@ -39,7 +39,7 @@ public class $uite {
     public static Subject entire$(Iterable<?> source) {
         return new SolidSubject().setEntire(source);
     }
-    public static Subject add$(Object ... elements) {
+    public static Subject $$(Object ... elements) {
         return new SolidSubject().addEntire(List.of(elements));
     }
     public static Subject addEntire$(Iterable<?> source) {
@@ -53,10 +53,6 @@ public class $uite {
             $.merge($i);
         }
         return $;
-    }
-
-    public static Series $$(Object ... elements) {
-        return Sequence.of(elements).series();
     }
 
 //    public static Subject fuse(Subject sub) {
