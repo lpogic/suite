@@ -13,46 +13,50 @@ public class $uite {
     public static Subject $(Object element) {
         return new SolidSubject(new BasicSubject(element));
     }
-    public static Subject $$(Object element) {
+    public static Subject add$(Object element) {
         return new SolidSubject().add(element);
     }
-    public static Subject $arm(Object ... o) {
+    public static Subject arm$(Object ... o) {
         if(o.length == 0) return $();
         var $ = $(o[o.length - 1]);
         for(int i = o.length - 2; i >= 0; --i) {
-            $ = $inset(o[i], $);
+            $ = inset$(o[i], $);
         }
         return $;
     }
-    public static Subject $inset(Object element, Subject $) {
+    public static Subject inset$(Object element, Subject $) {
         return new SolidSubject(new MonoSubject(element, $));
     }
-    public static Subject $inset(Subject $) {
+    public static Subject inset$(Subject $) {
         return new SolidSubject(new MonoSubject(new Suite.Auto(), $));
     }
-    public static Subject $alter(Iterable<Subject> source) {
+    public static Subject alter$(Iterable<Subject> source) {
         return new SolidSubject().alter(source);
     }
     public static Subject $(Object ... elements) {
         return new SolidSubject().setEntire(List.of(elements));
     }
-    public static Subject $entire(Iterable<?> source) {
+    public static Subject entire$(Iterable<?> source) {
         return new SolidSubject().setEntire(source);
     }
-    public static Subject $$(Object ... elements) {
+    public static Subject add$(Object ... elements) {
         return new SolidSubject().addEntire(List.of(elements));
     }
-    public static Subject $addEntire(Iterable<?> source) {
+    public static Subject addEntire$(Iterable<?> source) {
         return new SolidSubject().addEntire(source);
     }
 
 
-    public static<T> Subject $m(Subject ... $$) {
+    public static<T> Subject merge$(Subject ... $$) {
         var $ = $();
         for(var $i : $$) {
             $.merge($i);
         }
         return $;
+    }
+
+    public static Series $$(Object ... elements) {
+        return Sequence.of(elements).series();
     }
 
 //    public static Subject fuse(Subject sub) {
@@ -65,7 +69,7 @@ public class $uite {
 //        }
 //    }
 
-    public static Subject $thready() {
+    public static Subject thready$() {
         return new ThreadySubject();
     }
 
@@ -73,30 +77,30 @@ public class $uite {
 //        return new WonkySubject();
 //    }
 
-    public static Query $from(Subject $) {
+    public static Query from$(Subject $) {
         return new Query($);
     }
 
-    public static Subject $zip(Iterable<Object> keys, Iterable<Object> values) {
-        return $alter(Series.engage(keys, values));
+    public static Subject zip$(Iterable<Object> keys, Iterable<Object> values) {
+        return alter$(Series.engage(keys, values));
     }
 
-    public static String $describe(Series $ser) {
+    public static String describe$(Series $ser) {
         StringBuilder sb = new StringBuilder();
         for(var $ : $ser) {
-            sb.append($describe($, true, o -> o instanceof Suite.Auto ? "" : Objects.toString(o)));
+            sb.append(describe$($, true, o -> o instanceof Suite.Auto ? "" : Objects.toString(o)));
         }
         return sb.toString();
     }
 
-    public static String $describe(Subject $sub) {
-        return $describe($sub, true, o -> o instanceof Suite.Auto ? "" : Objects.toString(o));
+    public static String describe$(Subject $sub) {
+        return describe$($sub, true, o -> o instanceof Suite.Auto ? "" : Objects.toString(o));
     }
 
-    public static String $describe(Subject $sub, boolean pack, Function<Object, String> encoder) {
+    public static String describe$(Subject $sub, boolean pack, Function<Object, String> encoder) {
         if($sub == null) $sub = $();
         if(pack) {
-            $sub = $inset($sub.absent() ? $(new Suite.Auto()) : $sub);
+            $sub = inset$($sub.absent() ? $(new Suite.Auto()) : $sub);
         }
         StringBuilder sb = new StringBuilder();
         Stack<Subject> stack = new Stack<>();
@@ -150,10 +154,10 @@ public class $uite {
         return sb.toString();
     }
 
-    public static String $describe(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
-        if(!compress)return $describe($sub, pack, encoder);
+    public static String describe$(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
+        if(!compress)return describe$($sub, pack, encoder);
         if($sub == null) $sub = $();
-        if(pack) $sub = $inset($sub.set());
+        if(pack) $sub = inset$($sub.set());
         StringBuilder sb = new StringBuilder();
         Stack<Iterator<Subject>> stack = new Stack<>();
         Subject printed = $();
@@ -194,13 +198,13 @@ public class $uite {
         return sb.toString();
     }
 
-    public static Series $postDfs(Subject $sub) {
-        return $postDfs($sub, Subject::front);
+    public static Series postDfs$(Subject $sub) {
+        return postDfs$($sub, Subject::front);
     }
 
-    public static Series $postDfs(Subject $sub, Function<Subject, Series> serializer) {
+    public static Series postDfs$(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
-            final Subject $stack = $arm($sub, serializer.apply($sub).iterator());
+            final Subject $stack = arm$($sub, serializer.apply($sub).iterator());
             final Subject $subjectStack = $();
             final Subject $hasNext = $();
 
@@ -238,11 +242,11 @@ public class $uite {
         };
     }
 
-    public static Series $preDfs(Subject $sub) {
-        return $preDfs($sub, Subject::front);
+    public static Series preDfs$(Subject $sub) {
+        return preDfs$($sub, Subject::front);
     }
 
-    public static Series $preDfs(Subject $sub, Function<Subject, Series> serializer) {
+    public static Series preDfs$(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
             final Subject $stack = $();
             boolean digDone = false;
@@ -275,11 +279,11 @@ public class $uite {
         };
     }
 
-    public static Series $bfs(Subject $sub) {
-        return $bfs($sub, Subject::front);
+    public static Series bfs$(Subject $sub) {
+        return bfs$($sub, Subject::front);
     }
 
-    public static Series $bfs(Subject $sub, Function<Subject, Series> serializer) {
+    public static Series bfs$(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
             final Subject $all = $($sub);
             Browser current = serializer.apply($sub).iterator();
