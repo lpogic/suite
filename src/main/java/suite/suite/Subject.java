@@ -60,8 +60,8 @@ public abstract class Subject implements Sub {
     public Subject arm(Object e1, Object ... joints) {
         return inset(e1, Suite.arm(joints));
     }
-    public Subject aimedArm(Object aim, Object key, Object value, Object... rest) {
-        return aimedInset(aim, key, Suite.set(value, rest));
+    public Subject aimedArm(Object aim, Object key, Object... rest) {
+        return aimedInset(aim, key, Suite.set(rest));
     }
     public Subject add(Object element) {
         return arm(new Suite.Auto(), element);
