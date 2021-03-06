@@ -23,11 +23,11 @@ public class Suite {
     public static Subject add(Object element) {
         return new SolidSubject().add(element);
     }
-    public static Subject arm(Object ... joints) {
-        if(joints.length == 0) return set();
-        var $ = set(joints[joints.length - 1]);
-        for(int i = joints.length - 2;i >= 0;--i) {
-            $ = inset(joints[i], $);
+    public static Subject put(Object ... e) {
+        if(e.length == 0) return set();
+        var $ = set(e[e.length - 1]);
+        for(int i = e.length - 2; i >= 0; --i) {
+            $ = inset(e[i], $);
         }
         return $;
     }
@@ -53,7 +53,7 @@ public class Suite {
         return new SolidSubject().addEntire(source);
     }
 
-    public static<T> Subject merge(Subject ... $$) {
+    public static<T> Subject join(Subject ... $$) {
         var $ = set();
         for(var $i : $$) {
             $.merge($i);
@@ -206,7 +206,7 @@ public class Suite {
 
     public static Series postDfs(Subject $sub, Function<Subject, Series> serializer) {
         return () -> new Browser() {
-            final Subject $stack = arm($sub, serializer.apply($sub).iterator());
+            final Subject $stack = put($sub, serializer.apply($sub).iterator());
             final Subject $subjectStack = set();
             final Subject $hasNext = set();
 
@@ -270,7 +270,7 @@ public class Suite {
             }
 
             private void dig(Subject $) {
-                if($.present() && $stack.absent($)) $stack.arm($, serializer.apply($).iterator());
+                if($.present() && $stack.absent($)) $stack.put($, serializer.apply($).iterator());
                 while($stack.present()) {
                     Iterator<Subject> it = $stack.last().in().asExpected();
                     if(it.hasNext()) return;

@@ -272,10 +272,10 @@ public interface Series extends Iterable<Subject> {
     static Series parallel(Series s1, Series s2, Series ... rest) {
 
         return () -> new Browser() {
-            final Subject $its = Suite.arm(0, s1.iterator()).arm(1, s2.iterator()); {
+            final Subject $its = Suite.put(0, s1.iterator()).put(1, s2.iterator()); {
                 int i = 2;
                 for(Series s : rest) {
-                    $its.arm(i++, s.iterator());
+                    $its.put(i++, s.iterator());
                 }
             }
             Subject $collected = Suite.set();
