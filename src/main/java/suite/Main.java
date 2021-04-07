@@ -10,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) {
 //        var $ = arm("a", "b", "c").join(arm("a", "d")).join(arm("a", "d", "f"));
-        var $ = join$($("a", "b", "c"), $("a", "d", "e"), $("a", "d", "f"));
+        var $ = $$($("a", "b", "c"), $("a", "d", "e"), $("a", "d", "f"));
 //        Suite.preDfs($).print();
         $.introspect(s -> s.shift(s.as(String.class).toUpperCase())).print();
         $ = set$(1, 2, 3 ,4 , 5);

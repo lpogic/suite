@@ -13,21 +13,22 @@ public class $uite {
     public static Subject $(Object o) {
         return new SolidSubject(new BasicSubject(o));
     }
-    public static Subject $$(Object o) {
+    public static Subject add$(Object o) {
         return new SolidSubject().add(o);
     }
     public static Subject $(Object ... o) {
         if(o.length == 0) return $();
-        var $ = $(o[o.length - 1]);
+        Object io = o[o.length - 1];
+        Subject $ = io instanceof Subject ? (Subject) io : $(io);
         for(int i = o.length - 2; i >= 0; --i) {
-            $ = inset$(o[i], $);
+            $ = in$(o[i], $);
         }
         return $;
     }
-    public static Subject inset$(Object o, Subject $) {
+    public static Subject in$(Object o, Subject $) {
         return new SolidSubject(new MonoSubject(o, $));
     }
-    public static Subject inset$(Subject $) {
+    public static Subject in$(Subject $) {
         return new SolidSubject(new MonoSubject(new Suite.Auto(), $));
     }
     public static Subject alter$(Iterable<Subject> i) {
@@ -39,7 +40,7 @@ public class $uite {
     public static Subject entire$(Iterable<?> i) {
         return new SolidSubject().setEntire(i);
     }
-    public static Subject $$(Object ... o) {
+    public static Subject add$(Object ... o) {
         return new SolidSubject().addEntire(List.of(o));
     }
     public static Subject addEntire$(Iterable<?> i) {
@@ -47,10 +48,14 @@ public class $uite {
     }
 
 
-    public static<T> Subject join$(Subject ... $$) {
+    public static<T> Subject $$(Object ... o) {
         var $ = $();
-        for(var $i : $$) {
-            $.merge($i);
+        for(var io : o) {
+            if(io instanceof Subject) {
+                $.merge((Subject) io);
+            } else {
+                $.put(io);
+            }
         }
         return $;
     }
@@ -96,7 +101,7 @@ public class $uite {
     public static String toString$(Subject $sub, boolean pack, Function<Object, String> encoder) {
         if($sub == null) $sub = $();
         if(pack) {
-            $sub = inset$($sub.absent() ? $(new Suite.Auto()) : $sub);
+            $sub = in$($sub.absent() ? $(new Suite.Auto()) : $sub);
         }
         StringBuilder sb = new StringBuilder();
         Stack<Subject> stack = new Stack<>();
@@ -153,7 +158,7 @@ public class $uite {
     public static String toString$(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
         if(!compress)return toString$($sub, pack, encoder);
         if($sub == null) $sub = $();
-        if(pack) $sub = inset$($sub.set());
+        if(pack) $sub = in$($sub.set());
         StringBuilder sb = new StringBuilder();
         Stack<Iterator<Subject>> stack = new Stack<>();
         Subject printed = $();
