@@ -33,9 +33,6 @@ public class $uite {
     public static Subject list$() {
         return set$(new Suite.Auto());
     }
-    public static Subject list$(Object o) {
-        return arm$(new Suite.Auto(), o);
-    }
     public static Subject list$(Object ... o) {
         var $ = set$();
         for(var io : o) {
@@ -108,228 +105,43 @@ public class $uite {
         return Series.engage(keys, values).set();
     }
 
-    public static String toString$(Series $ser) {
-        StringBuilder sb = new StringBuilder();
-        for(var $ : $ser) {
-            sb.append(toString$($, true, o -> o instanceof Suite.Auto ? "" : Objects.toString(o)));
-        }
-        return sb.toString();
+    public static String toString$(Series series) {
+        return Suite.describe(series);
     }
 
     public static String toString$(Subject $sub) {
-        return toString$($sub, true, o -> o instanceof Suite.Auto ? "" : Objects.toString(o));
+        return Suite.describe($sub);
     }
 
     public static String toString$(Subject $sub, boolean pack, Function<Object, String> encoder) {
-        if($sub == null) $sub = set$();
-        if(pack) {
-            $sub = list$($sub.absent() ? list$() : $sub);
-        }
-        StringBuilder sb = new StringBuilder();
-        Stack<Subject> stack = new Stack<>();
-        Subject printed = set$();
-        stack.add(set$($sub).set($sub.cascade()));
-        int goTo = 0;
-        boolean tabsBefore = false;
-        while(!stack.empty()) {
-            var $1 = stack.peek();
-            Subject $current = $1.asExpected();
-            Cascade<Subject> it = $1.last().asExpected();
-            for(Subject $s : it.toEnd()) {
-                if(tabsBefore)sb.append("\t".repeat(stack.size() - 1));
-                tabsBefore = false;
-                sb.append(encoder.apply($s.raw()));
-                Subject $ = $s.in().get();
-                if($.absent()) {
-                    if($current.size() > 1) {
-                        sb.append("[]\n");
-                        tabsBefore = true;
-                    }
-                } else {
-                    if(printed.get($).present()) {
-                        sb.append("[ ").append($).append(" ]\n");
-                        tabsBefore = true;
-                    } else {
-                        if($.size() > 1 || $.in().present()) {
-                            sb.append("[\n");
-                            tabsBefore = true;
-                        } else {
-                            sb.append("[ ");
-                        }
-                        stack.add(set$($).set($.cascade()));
-                        printed.set($);
-                        goTo = 1;
-                        break;
-                    }
-                }
-            }
-            if(goTo == 1) {
-                goTo = 0;
-                continue;
-            }
-            stack.pop();
-            if(stack.size() > 0) {
-                if(tabsBefore) sb.append("\t".repeat(stack.size() - 1)).append("]\n");
-                else sb.append(" ]\n");
-                tabsBefore = true;
-            }
-        }
-        return sb.toString();
+        return Suite.describe($sub, pack, encoder);
     }
 
     public static String toString$(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
-        if(!compress)return toString$($sub, pack, encoder);
-        if($sub == null) $sub = set$();
-        if(pack) $sub = list$($sub.set());
-        StringBuilder sb = new StringBuilder();
-        Stack<Iterator<Subject>> stack = new Stack<>();
-        Subject printed = set$();
-        stack.add($sub.iterator());
-        int goTo = 0;
-        while(!stack.empty()) {
-            Iterator<Subject> it = stack.peek();
-            for(var $s : (Iterable<Subject>) () -> it) {
-                if(!$s.is(Suite.Auto.class)) {
-                    sb.append(encoder.apply($s.raw()));
-                }
-                var $ = $s.in().get();
-                if($.absent()) {
-                    if(it.hasNext()) {
-                        sb.append("[]");
-                    }
-                } else {
-                    if(printed.in($).present()) {
-                        sb.append("[").append($).append("]");
-                    } else {
-                        sb.append("[");
-                        stack.add($.iterator());
-                        printed.set($);
-                        goTo = 1;
-                        break;
-                    }
-                }
-            }
-            if(goTo == 1) {
-                goTo = 0;
-                continue;
-            }
-            stack.pop();
-            if(stack.size() > 0) {
-                sb.append("]");
-            }
-        }
-        return sb.toString();
+        return Suite.describe($sub, pack, encoder, compress);
     }
 
     public static Series postDfs$(Subject $sub) {
-        return postDfs$($sub, Subject::front);
+        return Suite.postDfs($sub);
     }
 
     public static Series postDfs$(Subject $sub, Function<Subject, Series> serializer) {
-        return () -> new Browser() {
-            final Subject $stack = arm$($sub, serializer.apply($sub).iterator());
-            final Subject $subjectStack = set$();
-            final Subject $hasNext = set$();
-
-            @Override
-            public boolean hasNext() {
-                if($hasNext.present()) return $hasNext.asExpected();
-                dig();
-                $hasNext.set($subjectStack.present());
-                return $hasNext.asExpected();
-            }
-
-            @Override
-            public Subject next() {
-                if($hasNext.absent()) dig();
-                Subject $next = $subjectStack.take($subjectStack.last().raw()).in().get();
-                $hasNext.unset();
-                return $next;
-            }
-
-            private void dig() {
-                if ($stack.absent()) return;
-                Subject $i = $stack.last().asExpected();
-                Iterator<Subject> it = $stack.last().in().asExpected();
-                while (it.hasNext()) {
-                    var $ = it.next();
-                    $subjectStack.inset($);
-                    $i = $.in().get();
-                    if ($i.present() && $stack.absent($i)) {
-                        it = serializer.apply($i).iterator();
-                        $stack.in($i).set(it);
-                    } else return;
-                }
-                $stack.unset($i);
-            }
-        };
+        return Suite.postDfs($sub, serializer);
     }
 
     public static Series preDfs$(Subject $sub) {
-        return preDfs$($sub, Subject::front);
+        return Suite.preDfs($sub);
     }
 
     public static Series preDfs$(Subject $sub, Function<Subject, Series> serializer) {
-        return () -> new Browser() {
-            final Subject $stack = set$();
-            boolean digDone = false;
-            Subject $nextUp = $sub;
-
-            @Override
-            public boolean hasNext() {
-                if(!digDone) dig($nextUp);
-                return $stack.present();
-            }
-
-            @Override
-            public Subject next() {
-                Iterator<Subject> it = $stack.last().in().asExpected();
-                var $next = it.next();
-                $nextUp = $next.in().get();
-                digDone = false;
-                return $next;
-            }
-
-            private void dig(Subject $) {
-                if($.present() && $stack.absent($)) $stack.put($, serializer.apply($).iterator());
-                while($stack.present()) {
-                    Iterator<Subject> it = $stack.last().in().asExpected();
-                    if(it.hasNext()) return;
-                    $stack.unset($stack.last().raw());
-                }
-                digDone = true;
-            }
-        };
+        return Suite.preDfs($sub, serializer);
     }
 
     public static Series bfs$(Subject $sub) {
-        return bfs$($sub, Subject::front);
+        return Suite.bfs($sub);
     }
 
     public static Series bfs$(Subject $sub, Function<Subject, Series> serializer) {
-        return () -> new Browser() {
-            final Subject $all = set$($sub);
-            Browser current = serializer.apply($sub).iterator();
-            Series $nextFront = Series.empty();
-
-            @Override
-            public boolean hasNext() {
-                if(current.hasNext()) return true;
-                current = $nextFront.iterator();
-                $nextFront = Series.empty();
-                return current.hasNext();
-            }
-
-            @Override
-            public Subject next() {
-                var $ = current.next();
-                var $i = $.in().get();
-                if($i.present() && $all.absent($i)) {
-                    $all.set($i);
-                    $nextFront = $nextFront.join(serializer.apply($i));
-                }
-                return $;
-            }
-        };
+        return Suite.bfs($sub, serializer);
     }
 }
