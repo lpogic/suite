@@ -5,6 +5,7 @@ import suite.suite.Subject;
 import suite.suite.Suite;
 import suite.suite.action.Action;
 import suite.suite.selector.Index;
+import suite.suite.selector.Type;
 
 import java.util.Iterator;
 import java.util.List;
@@ -49,7 +50,11 @@ public interface Series extends Iterable<Subject> {
         return select(new Index(i));
     }
 
-    default Series at(Predicate<Subject> predicate) {
+    default Series select(Class<?> type) {
+        return select(new Type(type));
+    }
+
+    default Subject at(Predicate<Subject> predicate) {
         return select(predicate).in().get();
     }
 
@@ -105,21 +110,21 @@ public interface Series extends Iterable<Subject> {
 
     default Series join(Iterable<Subject> iterable) {
         return () -> new Browser() {
-            Browser selfWave = Series.this.iterator();
-            final Iterator<Subject> thatIterator = iterable.iterator();
+            Browser firstWave = Series.this.iterator();
+            final Iterator<Subject> secondWave = iterable.iterator();
 
             @Override
             public boolean hasNext() {
-                if(selfWave != null) {
-                    if(selfWave.hasNext()) return true;
-                    else selfWave = null;
+                if(firstWave != null) {
+                    if(firstWave.hasNext()) return true;
+                    else firstWave = null;
                 }
-                return thatIterator.hasNext();
+                return secondWave.hasNext();
             }
 
             @Override
             public Subject next() {
-                return selfWave != null ? selfWave.next() : thatIterator.next();
+                return firstWave != null ? firstWave.next() : secondWave.next();
             }
         };
     }
@@ -183,7 +188,7 @@ public interface Series extends Iterable<Subject> {
 
             @Override
             public Subject next() {
-                return subIt.next().in().get();
+                return subIt.next().at();
             }
         };
     }

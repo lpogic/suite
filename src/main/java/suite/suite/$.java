@@ -5,7 +5,7 @@ import suite.suite.util.*;
 import java.util.*;
 import java.util.function.Function;
 
-public class $uite {
+public class $ extends SolidSubject {
 
     public static Subject set$() {
         return new SolidSubject();

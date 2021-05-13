@@ -1,11 +1,7 @@
 package suite;
 
 
-import suite.suite.Suite;
-import suite.suite.util.Sequence;
-import suite.suite.util.Series;
-
-import static suite.suite.$uite.*;
+import static suite.suite.$.*;
 
 public class Main {
 
