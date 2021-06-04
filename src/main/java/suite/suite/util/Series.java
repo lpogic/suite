@@ -54,6 +54,10 @@ public interface Series extends Iterable<Subject> {
         return select(new Type(type));
     }
 
+    default<T> Sequence<T> selectAs(Class<T> type) {
+        return select(new Type(type)).eachAs(type);
+    }
+
     default Subject at(Predicate<Subject> predicate) {
         return select(predicate).in().get();
     }
