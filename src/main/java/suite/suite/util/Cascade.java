@@ -44,6 +44,10 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
         return stored.present() ? stored.take(stored.raw()).asExpected() : iterator.next();
     }
 
+    public T nextOrNull() {
+        return hasNext() ? next() : null;
+    }
+
     public void store(T t) {
         stored.in().set(t);
     }
