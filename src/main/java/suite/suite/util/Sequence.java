@@ -17,11 +17,11 @@ public interface Sequence<T> extends Iterable<T>{
         return new Cascade<>(iterator());
     }
 
-    default <F> Sequence<F> filter(Class<F> requestedType) {
+    default <F extends T> Sequence<F> filter(Class<F> requestedType) {
         return filter(Glass.of(requestedType));
     }
 
-    default <F> Sequence<F> filter(Glass<? super F, F> requestedType) {
+    default <F extends T> Sequence<F> filter(Glass<? super F, F> requestedType) {
         return () -> new Iterator<>() {
             final Iterator<T> origin = iterator();
             F next = null;
@@ -29,10 +29,10 @@ public interface Sequence<T> extends Iterable<T>{
 
             @Override
             public boolean hasNext() {
-                if(nextFound) return true;
+                if (nextFound) return true;
                 while (origin.hasNext()) {
                     Object o = origin.next();
-                    if(requestedType.isInstance(o)) {
+                    if (requestedType.isInstance(o)) {
                         next = requestedType.cast(o);
                         nextFound = true;
                         return true;
@@ -75,6 +75,10 @@ public interface Sequence<T> extends Iterable<T>{
                 return next;
             }
         };
+    }
+
+    default<F extends T> Sequence<F> filter(Class<F> type, Predicate<F> predicate) {
+        return filter(type).filter(predicate);
     }
 
     static<I> Sequence<I> empty() {
@@ -147,6 +151,11 @@ public interface Sequence<T> extends Iterable<T>{
             if(predicate.test(t))return true;
         }
         return false;
+    }
+
+    default T first() {
+        var it = iterator();
+        return it.hasNext() ? it.next() : null;
     }
 
 
