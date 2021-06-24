@@ -2,10 +2,9 @@ package suite.suite;
 
 import suite.suite.util.*;
 
-import java.util.*;
 import java.util.function.Function;
 
-public class $ extends SolidSubject {
+public class $uite extends SolidSubject {
 
     public static Subject set$() {
         return new SolidSubject();
@@ -30,10 +29,10 @@ public class $ extends SolidSubject {
         }
         return $;
     }
-    public static Subject list$() {
-        return set$(new Suite.Auto());
+    public static Subject add$() {
+        return set$();
     }
-    public static Subject list$(Object ... o) {
+    public static Subject add$(Object ... o) {
         var $ = set$();
         for(var io : o) {
             if(io instanceof Subject $s) {
@@ -44,15 +43,15 @@ public class $ extends SolidSubject {
         }
         return $;
     }
-    public static Subject arm$() {
+    public static Subject $() {
         return new SolidSubject();
     }
-    public static Subject arm$(Object o) {
-        return o instanceof Subject $ ? $ : set$(o);
+    public static Subject $(Object o) {
+        return set$(o);
     }
-    public static Subject arm$(Object ... o) {
-        if(o.length == 0) return arm$();
-        var $ = arm$(o[o.length - 1]);
+    public static Subject $(Object ... o) {
+        if(o.length == 0) return $();
+        var $ = $(o[o.length - 1]);
         for(int i = o.length - 2; i >= 0; --i) {
             $ = new SolidSubject(new MonoSubject(o[i], $));
         }

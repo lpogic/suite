@@ -1,7 +1,7 @@
 package suite;
 
 
-import static suite.suite.$.*;
+import static suite.suite.$uite.*;
 
 public class Main {
 
@@ -19,7 +19,7 @@ public class Main {
 //        $2.print();
 //        $2.put(3,4,5).print();
 
-        var $ = list$(1, 2, arm$('a', 'b'), 3);
+        var $ = add$(1, 2, $('a', 'b'), 3);
         $.at(2).print();
         System.out.println($.at(2).raw());
     }

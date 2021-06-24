@@ -197,6 +197,23 @@ public interface Series extends Iterable<Subject> {
         };
     }
 
+    default Series list() {
+        return () -> new Browser() {
+            final Iterator<Subject> subIt = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return subIt.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                var next = subIt.next();
+                return next.is(Suite.Auto.class) ? next.at() : next;
+            }
+        };
+    }
+
     default Sub in() {
         return first().in();
     }

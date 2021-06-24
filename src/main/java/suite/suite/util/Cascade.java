@@ -34,13 +34,18 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
 
     public boolean hasNext(Predicate<T> predicate) {
         if(!hasNext())return false;
-        T next = next();
+        T next = privateNext();
         store(next);
         return predicate.test(next);
     }
 
     @Override
     public T next() {
+        ++falls;
+        return privateNext();
+    }
+
+    private T privateNext() {
         return stored.present() ? stored.take(stored.raw()).asExpected() : iterator.next();
     }
 
@@ -56,16 +61,18 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
         return falls;
     }
 
+    public boolean firstFall() {
+        return falls == 1;
+    }
+
     @SuppressWarnings("next")
     public Sequence<T> until(Predicate<T> predicate) {
-        falls = 0;
         return () -> new Iterator<>() {
 
             @Override
             public boolean hasNext() {
                 if(Cascade.this.hasNext()) {
-                    //noinspection IteratorHasNextCallsIteratorNext
-                    T next = Cascade.this.next();
+                    T next = Cascade.this.privateNext();
                     if(predicate.test(next)) {
                         store(next);
                         return true;
@@ -79,14 +86,12 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
 
             @Override
             public T next() {
-                ++falls;
                 return Cascade.this.next();
             }
         };
     }
 
     public Sequence<T> toEnd() {
-        falls = 0;
         return () -> new Iterator<>() {
             @Override
             public boolean hasNext() {
@@ -95,7 +100,6 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
 
             @Override
             public T next() {
-                ++falls;
                 return Cascade.this.next();
             }
         };
