@@ -87,19 +87,19 @@ public class Suite {
         return alter(Series.engage(keys, values));
     }
 
-    public static String describe(Series $ser) {
+    public static String toString(Series $ser) {
         StringBuilder sb = new StringBuilder();
         for(var $ : $ser) {
-            sb.append(describe($, true, o -> o instanceof Auto ? "" : Objects.toString(o)));
+            sb.append(toString($, true, o -> o instanceof Auto ? "" : Objects.toString(o)));
         }
         return sb.toString();
     }
 
-    public static String describe(Subject $sub) {
-        return describe($sub, true, o -> o instanceof Auto ? "" : Objects.toString(o));
+    public static String toString(Subject $sub) {
+        return toString($sub, true, o -> o instanceof Auto ? "" : Objects.toString(o));
     }
 
-    public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder) {
+    public static String toString(Subject $sub, boolean pack, Function<Object, String> encoder) {
         if($sub == null) $sub = set();
         if(pack) {
             $sub = inset($sub.absent() ? set(new Auto()) : $sub);
@@ -156,8 +156,8 @@ public class Suite {
         return sb.toString();
     }
 
-    public static String describe(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
-        if(!compress)return describe($sub, pack, encoder);
+    public static String toString(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
+        if(!compress)return toString($sub, pack, encoder);
         if($sub == null) $sub = set();
         if(pack) $sub = inset($sub.set());
         StringBuilder sb = new StringBuilder();

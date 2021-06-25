@@ -179,7 +179,7 @@ public abstract class Subject implements Sub {
 
     abstract Subject separate();
     public Subject print() {
-        System.out.println(Suite.describe(this));
+        System.out.println(Suite.toString(this));
         return this;
     }
 

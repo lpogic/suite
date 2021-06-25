@@ -105,19 +105,19 @@ public class $uite extends SolidSubject {
     }
 
     public static String toString$(Series series) {
-        return Suite.describe(series);
+        return Suite.toString(series);
     }
 
     public static String toString$(Subject $sub) {
-        return Suite.describe($sub);
+        return Suite.toString($sub);
     }
 
     public static String toString$(Subject $sub, boolean pack, Function<Object, String> encoder) {
-        return Suite.describe($sub, pack, encoder);
+        return Suite.toString($sub, pack, encoder);
     }
 
     public static String toString$(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
-        return Suite.describe($sub, pack, encoder, compress);
+        return Suite.toString($sub, pack, encoder, compress);
     }
 
     public static Series postDfs$(Subject $sub) {
