@@ -153,11 +153,28 @@ public interface Sequence<T> extends Iterable<T>{
         return false;
     }
 
+    default boolean isEmpty() {
+        for(T ignored : this) return false;
+        return true;
+    }
+
+    default boolean isAny() {
+        return !isEmpty();
+    }
+
     default T first() {
         var it = iterator();
         return it.hasNext() ? it.next() : null;
     }
 
+    default int index(Predicate<T> predicate) {
+        int i = 0;
+        for(T t : this) {
+            if(predicate.test(t))return i;
+            ++i;
+        }
+        return -1;
+    }
 
     default List<T> toList() {
         List<T> list = new ArrayList<>();

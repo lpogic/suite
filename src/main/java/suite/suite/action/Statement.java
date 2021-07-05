@@ -32,4 +32,6 @@ public interface Statement extends Impression {
         revel();
         return Suite.set();
     }
+
+    static void vain() {}
 }

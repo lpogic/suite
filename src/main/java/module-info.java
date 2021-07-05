@@ -1,4 +1,4 @@
-open module suite.main {
+open module suite {
     exports suite.suite;
     exports suite.processor;
     exports suite.suite.action;
