@@ -4,7 +4,7 @@ Uniwersalny kontener. Mapa pamiętająca kolejność dodawania. Stosuje luźne p
 # Przykłady
 
 W nazewnictwie przyjęto zasadę, że obiekty klasy Subject (czyli tworzonego przez Suite/$uite) dostają prefix '$'.
-W przykładach 3. i 4. użyto notacji <a href="https://github.com/lpogic/brackettree">BracketTree</a>
+W przykładach 3., 4. i 5. użyto notacji <a href="https://github.com/lpogic/brackettree">BracketTree</a>
 
 ## 1. Utwórz zbiór liczb od 1 do 5:
 ```
