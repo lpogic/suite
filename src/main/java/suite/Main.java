@@ -19,7 +19,7 @@ public class Main {
 //        $2.print();
 //        $2.put(3,4,5).print();
 
-        var $ = $(1, 2, 'a', $('b'), 3);
+        var $ = $(1, 2, 'a', $('b'));
         $.print();
         System.out.println($.present('a'));
         $.at('a').print();
