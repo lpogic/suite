@@ -19,8 +19,10 @@ public class Main {
 //        $2.print();
 //        $2.put(3,4,5).print();
 
-        var $ = add$(1, 2, $('a', 'b'), 3);
-        $.at(2).print();
-        System.out.println($.at(2).raw());
+        var $ = $(1, 2, 'a', $('b'), 3);
+        $.print();
+        System.out.println($.present('a'));
+        $.at('a').print();
+        System.out.println($.at('a').raw());
     }
 }

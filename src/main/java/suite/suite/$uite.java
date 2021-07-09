@@ -1,64 +1,83 @@
 package suite.suite;
 
+import suite.suite.action.Action;
+import suite.suite.action.Expression;
+import suite.suite.action.Statement;
 import suite.suite.util.*;
 
 import java.util.function.Function;
 
 public class $uite extends SolidSubject {
 
-    public static Subject set$() {
-        return new SolidSubject();
-    }
-    public static Subject set$(Object o) {
-        var $ = set$();
-        if(o instanceof Series series) {
-            $.alter(series);
-        } else {
-            $.put(o);
-        }
-        return $;
-    }
-    public static Subject set$(Object ... o) {
-        var $ = set$();
-        for(var io : o) {
-            if(io instanceof Series series) {
-                $.alter(series);
-            } else {
-                $.put(io);
-            }
-        }
-        return $;
-    }
-    public static Subject add$() {
-        return set$();
-    }
-    public static Subject add$(Object ... o) {
-        var $ = set$();
-        for(var io : o) {
-            if(io instanceof Subject $s) {
-                $.inset($s);
-            } else {
-                $.inset(new SolidSubject(new BasicSubject(io)));
-            }
-        }
-        return $;
-    }
     public static Subject $() {
         return new SolidSubject();
     }
+
     public static Subject $(Object o) {
-        return set$(o);
-    }
-    public static Subject $(Object ... o) {
-        if(o.length == 0) return $();
-        var $ = $(o[o.length - 1]);
-        for(int i = o.length - 2; i >= 0; --i) {
-            $ = new SolidSubject(new MonoSubject(o[i], $));
+        var $ = $();
+        if(o instanceof Subject $o) {
+            $.inset($o);
+        } else {
+            $.set(o);
         }
         return $;
     }
+
+    public static Subject $(Action a) {
+        var $ = $();
+        $.set(a);
+        return $;
+    }
+
+    public static Subject $(Statement s) {
+        var $ = $();
+        $.set(s);
+        return $;
+    }
+
+    public static Subject $(Expression e) {
+        var $ = $();
+        $.set(e);
+        return $;
+    }
+
+    public static Subject $(Object o0, Object ... o) {
+        boolean lastSubject = o0 instanceof Subject;
+        Subject $;
+        Object ol;
+        if(lastSubject) {
+            $ = $(o0);
+            ol = null;
+        } else {
+            $ = $();
+            ol = o0;
+        }
+        for(var oi : o) {
+            if (lastSubject) {
+                if (oi instanceof Subject $i) {
+                    $.inset($i);
+                    lastSubject = true;
+                } else {
+                    ol = oi;
+                    lastSubject = false;
+                }
+            } else {
+                if (oi instanceof Subject $i) {
+                    $.inset(ol, $i);
+                    lastSubject = true;
+                } else {
+                    $.set(ol);
+                    ol = oi;
+                    lastSubject = false;
+                }
+            }
+        }
+        if(!lastSubject) $.set(ol);
+        return $;
+    }
+
     public static Subject join$(Object o) {
-        var $ = set$();
+        var $ = $();
         if(o instanceof Subject $s) {
             $.merge($s);
         } else {
@@ -67,7 +86,7 @@ public class $uite extends SolidSubject {
         return $;
     }
     public static Subject join$(Object ... o) {
-        var $ = set$();
+        var $ = $();
         for(var io : o) {
             if(io instanceof Subject $s) {
                 $.merge($s);
