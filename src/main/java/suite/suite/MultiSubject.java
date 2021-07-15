@@ -145,6 +145,14 @@ class MultiSubject extends Subject {
     }
 
     @Override
+    public Browser browser(Object start, boolean reverse) {
+        var link = chain.get(start);
+        if(link == chain.ward) return iterator(reverse);
+        return reverse ? chain.iterator(true, link.back) :
+                chain.iterator(false, link.front);
+    }
+
+    @Override
     public Subject set(Object element) {
         chain.put(element);
         return this;

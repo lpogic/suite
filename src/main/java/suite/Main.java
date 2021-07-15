@@ -1,17 +1,22 @@
 package suite;
 
 
+import suite.suite.Suite;
+import suite.suite.util.Sequence;
+import suite.suite.util.Series;
+
 import static suite.suite.$uite.*;
 
 public class Main {
 
     public static void main(String[] args) {
-//        var $ = set$(arm$("a", "b", "c"), arm$("a", "d", "e"), arm$("a", "d", "f"));
-//        $.introspect(s -> s.shift(s.as(String.class).toUpperCase())).print();
-//        $ = set$(1, 2, 3 ,4 , 5);
-//        Series.parallel($, $.reverse()).convert(s -> $uite.set$(s.in().asInt() * s.in(1).asInt())).print();
-//        $.convert(Suite::inset).set().print();
-//        Sequence.of(1,2,3).series().convert(Suite::inset).set().print();
+//        var $ = join$($("a", $("b", $("c"))), $("a", $("d", $("e"))), $("a", $("d", $("f"))));
+        var $ = join$(Suite.put("a", "b", "c"), Suite.put("a", "d", "e"), Suite.put("a", "d", "f"));
+        $.introspect(s -> s.shift(s.as(String.class).toUpperCase())).print();
+        $ = $(1, 2, 3 ,4, 5);
+        Series.parallel($, $.reverse()).convert(s -> $(s.in().asInt() * s.at(1).asInt())).print();
+        $.convert(Suite::inset).set().print();
+        Sequence.of(1,2,3).series().convert(Suite::inset).set().print();
 //
 //        var $2 = $uite.set$(1);
 //        var $21 = $2.in();
@@ -19,10 +24,9 @@ public class Main {
 //        $2.print();
 //        $2.put(3,4,5).print();
 
-        var $ = $(1, 2, 'a', $('b'));
-        $.print();
-        System.out.println($.present('a'));
-        $.at('a').print();
-        System.out.println($.at('a').raw());
+//        var $3 = $(1, 2, 3, 4, 5);
+//        $3.print();
+//        $3.aimedSet($3.front(2).select(2).raw(), 3.5);
+//        $3.print();
     }
 }

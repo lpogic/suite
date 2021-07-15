@@ -132,6 +132,11 @@ class ZeroSubject extends Subject {
     }
 
     @Override
+    public Browser browser(Object start, boolean reverse) {
+        return Browser.empty();
+    }
+
+    @Override
     public Subject set(Object element) {
         return new BasicSubject(element);
     }

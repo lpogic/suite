@@ -76,23 +76,13 @@ public class $uite extends SolidSubject {
         return $;
     }
 
-    public static Subject join$(Object o) {
-        var $ = $();
-        if(o instanceof Subject $s) {
-            $.merge($s);
-        } else {
-            $.put(o);
-        }
-        return $;
+    public static Subject join$(Subject $s) {
+        return $().merge($s);
     }
-    public static Subject join$(Object ... o) {
+    public static Subject join$(Subject ... $s) {
         var $ = $();
-        for(var io : o) {
-            if(io instanceof Subject $s) {
-                $.merge($s);
-            } else {
-                $.put(io);
-            }
+        for(var $i : $s) {
+            $.merge($i);
         }
         return $;
     }

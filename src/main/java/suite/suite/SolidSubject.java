@@ -12,27 +12,27 @@ public class SolidSubject extends Subject {
     class HomogenizedSubjectIterator implements Browser {
         Subject sub;
         boolean reverse;
-        Browser it;
+        Browser browser;
 
 
-        HomogenizedSubjectIterator(Subject sub, boolean reverse) {
+        HomogenizedSubjectIterator(Browser browser, Subject sub, boolean reverse) {
             this.sub = sub;
             this.reverse = reverse;
-            this.it = sub.iterator(reverse);
+            this.browser = browser;
         }
 
         @Override
         public boolean hasNext() {
             if(sub.origin != subject.origin) {
-                it = subject.iterator(reverse);
+                browser = subject.iterator(reverse);
                 sub = subject;
             }
-            return it.hasNext();
+            return browser.hasNext();
         }
 
         @Override
         public Subject next() {
-            return new SolidSubject(it.next());
+            return new SolidSubject(browser.next());
         }
     }
 
@@ -160,7 +160,12 @@ public class SolidSubject extends Subject {
 
     @Override
     public Browser iterator(boolean reverse) {
-        return new HomogenizedSubjectIterator(subject, reverse);
+        return new HomogenizedSubjectIterator(subject.iterator(reverse), subject, reverse);
+    }
+
+    @Override
+    public Browser browser(Object start, boolean reverse) {
+        return new HomogenizedSubjectIterator(subject.browser(start, reverse), subject, reverse);
     }
 
     @Override
@@ -213,6 +218,16 @@ public class SolidSubject extends Subject {
     @Override
     public Series reverse() {
         return () -> iterator(true);
+    }
+
+    @Override
+    public Series front(Object start) {
+        return () -> browser(start, false);
+    }
+
+    @Override
+    public Series reverse(Object start) {
+        return () -> browser(start, true);
     }
 
     @Override

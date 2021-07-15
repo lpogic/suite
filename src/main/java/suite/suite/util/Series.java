@@ -62,12 +62,12 @@ public interface Series extends Iterable<Subject> {
         return select(predicate).in().get();
     }
 
-    default Subject at(int i) {
-        return select(new Index(i)).in().get();
-    }
-
     default Subject at() {
         return first().in().get();
+    }
+
+    default Subject at(int i) {
+        return select(new Index(i)).in().get();
     }
 
     default Series exclude(Predicate<Subject> predicate) {

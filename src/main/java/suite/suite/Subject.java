@@ -48,10 +48,20 @@ public abstract class Subject implements Sub {
     public Browser iterator() {
         return iterator(false);
     }
+    public abstract Browser browser(Object start, boolean reverse);
+    public Browser browser(Object start) {
+        return browser(start, false);
+    }
     public Series front() {
         throw new UnsupportedOperationException("Solid method");
     }
     public Series reverse() {
+        throw new UnsupportedOperationException("Solid method");
+    }
+    public Series front(Object start) {
+        throw new UnsupportedOperationException("Solid method");
+    }
+    public Series reverse(Object start) {
         throw new UnsupportedOperationException("Solid method");
     }
 

@@ -148,6 +148,11 @@ class BasicSubject extends Subject {
     }
 
     @Override
+    public Browser browser(Object start, boolean reverse) {
+        return iterator(reverse);
+    }
+
+    @Override
     public Subject set(Object element) {
         if(Objects.equals(this.element, element)) {
             return this;

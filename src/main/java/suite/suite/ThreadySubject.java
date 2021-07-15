@@ -291,12 +291,22 @@ class ThreadySubject extends SolidSubject {
 
     @Override
     public Series front() {
-        return this;
+        return () -> iterator(false);
     }
 
     @Override
     public Series reverse() {
         return () -> iterator(true);
+    }
+
+    @Override
+    public Series front(Object start) {
+        return () -> browser(start, false);
+    }
+
+    @Override
+    public Series reverse(Object start) {
+        return () -> browser(start, true);
     }
 
     @Override

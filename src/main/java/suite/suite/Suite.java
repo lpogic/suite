@@ -53,14 +53,6 @@ public class Suite {
         return new SolidSubject().addEntire(source);
     }
 
-    public static<T> Subject join(Subject ... $$) {
-        var $ = set();
-        for(var $i : $$) {
-            $.merge($i);
-        }
-        return $;
-    }
-
 //    public static Subject fuse(Subject sub) {
 //        if(sub == null) {
 //            return Suite.inset();
@@ -312,7 +304,7 @@ public class Suite {
         };
     }
 
-    public static <B> List<B> asListOf(Subject $, Class<B> elementType) {
+    /*public static <B> List<B> asListOf(Subject $, Class<B> elementType) {
         return asListOf($, Glass.of(elementType));
     }
     public static <B> List<B> asListOf(Subject $, Glass<B, B> elementType) {
@@ -336,5 +328,5 @@ public class Suite {
     }
     public static <A, B> Map<A, B> asMapOf(Subject $, Glass<A, A> keyType, Glass<B, B> valueType, Map<A, B> reserve) {
         return $.as(Glass.Map(keyType, valueType), reserve);
-    }
+    }*/
 }
