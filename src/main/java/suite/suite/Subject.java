@@ -56,24 +56,24 @@ public abstract class Subject implements Sub {
     }
 
     public abstract Subject set(Object element);
-    public abstract Subject aimedSet(Object aim, Object element);
     public Subject put(Object e1, Object ... en) {
         return inset(e1, Suite.put(en));
-    }
-    public Subject aimedPut(Object aim, Object key, Object... en) {
-        return aimedInset(aim, key, Suite.set(en));
     }
     public Subject add(Object element) {
         return put(new Suite.Auto(), element);
     }
-    public Subject aimedAdd(Object aim, Object element) {
-        return aimedPut(aim, new Suite.Auto(), element);
-    }
     public abstract Subject inset(Object in, Subject $set);
-    public abstract Subject aimedInset(Object aim, Object in, Subject $set);
     public Subject inset(Subject $set) {
         return inset(new Suite.Auto(), $set);
     }
+    public abstract Subject aimedSet(Object aim, Object element);
+    public Subject aimedPut(Object aim, Object key, Object... en) {
+        return aimedInset(aim, key, Suite.set(en));
+    }
+    public Subject aimedAdd(Object aim, Object element) {
+        return aimedPut(aim, new Suite.Auto(), element);
+    }
+    public abstract Subject aimedInset(Object aim, Object in, Subject $set);
     public Subject aimedInset(Object aim, Subject $set) {
         return aimedInset(aim, new Suite.Auto(), $set);
     }

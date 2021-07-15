@@ -70,23 +70,6 @@ public interface Series extends Iterable<Subject> {
         return first().in().get();
     }
 
-    default Series enumerate() {
-        return () -> new Browser() {
-            final Iterator<Subject> origin = iterator();
-            int i = 0;
-
-            @Override
-            public boolean hasNext() {
-                return origin.hasNext();
-            }
-
-            @Override
-            public Subject next() {
-                return Suite.inset(i++, origin.next());
-            }
-        };
-    }
-
     default Series exclude(Predicate<Subject> predicate) {
         return select(predicate.negate());
     }
@@ -298,10 +281,9 @@ public interface Series extends Iterable<Subject> {
     static Series parallel(Series s1, Series s2, Series ... rest) {
 
         return () -> new Browser() {
-            final Subject $its = Suite.put(0, s1.iterator()).put(1, s2.iterator()); {
-                int i = 2;
+            final Subject $its = Suite.put(s1, s1.iterator()).put(s2, s2.iterator()); {
                 for(Series s : rest) {
-                    $its.put(i++, s.iterator());
+                    $its.put(s, s.iterator());
                 }
             }
             Subject $collected = Suite.set();
@@ -368,6 +350,10 @@ public interface Series extends Iterable<Subject> {
         return as(String.class);
     }
 
+    default Action asAction() {
+        return as(Action.class);
+    }
+
     default int asInt(int reserve) {
         return as(Number.class, reserve).intValue();
     }
@@ -402,5 +388,9 @@ public interface Series extends Iterable<Subject> {
 
     default String asString(String reserve) {
         return as(String.class, reserve);
+    }
+
+    default Action asAction(Action reserve) {
+        return as(Action.class, reserve);
     }
 }

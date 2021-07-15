@@ -207,7 +207,7 @@ public class SolidSubject extends Subject {
 
     @Override
     public Series front() {
-        return this;
+        return () -> iterator(false);
     }
 
     @Override

@@ -91,6 +91,32 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
         };
     }
 
+    @SuppressWarnings("next")
+    public Sequence<T> until(Predicate<T> predicate, boolean consume) {
+        return () -> new Iterator<>() {
+
+            @Override
+            public boolean hasNext() {
+                if(Cascade.this.hasNext()) {
+                    T next = Cascade.this.privateNext();
+                    if(predicate.test(next)) {
+                        store(next);
+                        return true;
+                    } else {
+                        if(!consume)store(next);
+                        return false;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public T next() {
+                return Cascade.this.next();
+            }
+        };
+    }
+
     public Sequence<T> toEnd() {
         return () -> new Iterator<>() {
             @Override

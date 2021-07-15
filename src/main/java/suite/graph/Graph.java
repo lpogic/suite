@@ -26,7 +26,7 @@ public class Graph {
         $pool.in(b).unset(a);
     }
 
-    public void linkAll(Series $a, Series $b) {
+    public void linkGroups(Series $a, Series $b) {
         for (var a : $a.eachRaw()) {
             for (var b : $b.eachRaw()) {
                 link(a, b);
