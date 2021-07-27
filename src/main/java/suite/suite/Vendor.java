@@ -152,6 +152,23 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
+    public Browser browser(Object start, boolean reverse) {
+        return new Browser() {
+            final Iterator<Subject> source = $sub.browser(start, reverse);
+
+            @Override
+            public boolean hasNext() {
+                return source.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                return monoWrap(source.next());
+            }
+        };
+    }
+
+    @Override
     Subject separate() {
         return this;
     }

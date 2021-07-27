@@ -5,7 +5,7 @@ import suite.suite.util.Series;
 import suite.suite.util.Glass;
 import suite.suite.util.Browser;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 @SuppressWarnings("UnusedReturnValue")
@@ -136,14 +136,14 @@ public abstract class Subject implements Sub {
     }
 
     public Subject get(Object... elements) {
-        return getEntire(List.of(elements)).set();
+        return getEntire(Arrays.asList(elements)).set();
     }
     public Series getEntire(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
 
     public Subject set(Object ... elements) {
-        return setEntire(List.of(elements));
+        return setEntire(Arrays.asList(elements));
     }
     public Subject setEntire(Iterable<?> iterable) {
         for(Object it : iterable) {
@@ -153,7 +153,7 @@ public abstract class Subject implements Sub {
     }
 
     public Subject add(Object ... elements) {
-        return addEntire(List.of(elements));
+        return addEntire(Arrays.asList(elements));
     }
     public Subject addEntire(Iterable<?> iterable) {
         for(Object it : iterable) {
@@ -163,7 +163,7 @@ public abstract class Subject implements Sub {
     }
 
     public Subject unset(Object ... elements) {
-        return unsetEntire(List.of(elements));
+        return unsetEntire(Arrays.asList(elements));
     }
     public Subject unsetEntire(Iterable<?> iterable) {
         for(Object it : iterable) {
@@ -173,7 +173,7 @@ public abstract class Subject implements Sub {
     }
 
     public Subject take(Object... elements) {
-        return takeEntire(List.of(elements)).set();
+        return takeEntire(Arrays.asList(elements)).set();
     }
     public Series takeEntire(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");

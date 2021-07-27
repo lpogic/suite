@@ -18,6 +18,7 @@ public class $uite extends SolidSubject {
         if(o instanceof Subject $o) {
             $.inset($o);
         } else {
+            if(o instanceof Suite.ObjectMask om) o = om.subject;
             $.set(o);
         }
         return $;
@@ -50,7 +51,7 @@ public class $uite extends SolidSubject {
             ol = null;
         } else {
             $ = $();
-            ol = o0;
+            ol = o0 instanceof Suite.ObjectMask om ? om.subject : o0;
         }
         for(var oi : o) {
             if (lastSubject) {
@@ -58,7 +59,7 @@ public class $uite extends SolidSubject {
                     $.inset($i);
                     lastSubject = true;
                 } else {
-                    ol = oi;
+                    ol = oi instanceof Suite.ObjectMask om ? om.subject : oi;
                     lastSubject = false;
                 }
             } else {
@@ -67,7 +68,7 @@ public class $uite extends SolidSubject {
                     lastSubject = true;
                 } else {
                     $.set(ol);
-                    ol = oi;
+                    ol = oi instanceof Suite.ObjectMask om ? om.subject : oi;
                     lastSubject = false;
                 }
             }
@@ -85,6 +86,10 @@ public class $uite extends SolidSubject {
             $.merge($i);
         }
         return $;
+    }
+
+    public static Suite.ObjectMask mask$(Subject subject) {
+        return new Suite.ObjectMask(subject);
     }
 
 //    public static Subject fuse(Subject sub) {

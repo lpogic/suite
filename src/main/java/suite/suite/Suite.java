@@ -14,6 +14,14 @@ public class Suite {
         }
     }
 
+    public static class ObjectMask {
+        public Subject subject;
+
+        public ObjectMask(Subject subject) {
+            this.subject = subject;
+        }
+    }
+
     public static Subject set() {
         return new SolidSubject();
     }
