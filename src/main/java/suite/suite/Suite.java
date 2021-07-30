@@ -84,7 +84,7 @@ public class Suite {
     }
 
     public static Subject zip(Iterable<Object> keys, Iterable<Object> values) {
-        return alter(Series.engage(keys, values));
+        return alter(Sequence.ofEntire(values).series().index(keys));
     }
 
     public static String toString(Series $ser) {

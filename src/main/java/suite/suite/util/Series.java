@@ -4,6 +4,7 @@ import suite.suite.Sub;
 import suite.suite.Subject;
 import suite.suite.Suite;
 import suite.suite.action.Action;
+import suite.suite.action.Expression;
 import suite.suite.selector.Index;
 import suite.suite.selector.Type;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+@SuppressWarnings("unused")
 public interface Series extends Iterable<Subject> {
     Browser iterator();
 
@@ -79,6 +81,38 @@ public interface Series extends Iterable<Subject> {
         return wave.hasNext() ? wave.next() : Suite.set();
     }
 
+    default Series until(Predicate<Subject> predicate) {
+        return () -> new Browser() {
+            final Iterator<Subject> origin = iterator();
+            Subject next = null;
+            boolean nextFound = false;
+            boolean testFailed = false;
+
+            @Override
+            public boolean hasNext() {
+                if(testFailed) return false;
+                if(nextFound) return true;
+                if (origin.hasNext()) {
+                    Subject v = origin.next();
+                    if(testFailed = !predicate.test(v)) return false;
+                    next = v;
+                    return nextFound = true;
+                }
+                return false;
+            }
+
+            @Override
+            public Subject next() {
+                nextFound = false;
+                return next;
+            }
+        };
+    }
+
+    default Series first(int limit) {
+        return until(new Index(limit).negate());
+    }
+
     default Series convert(Action action) {
         return () -> new Browser() {
             final Iterator<Subject> origin = iterator();
@@ -91,6 +125,23 @@ public interface Series extends Iterable<Subject> {
             @Override
             public Subject next() {
                 return action.play(origin.next());
+            }
+        };
+    }
+
+    default Series index(Iterable<?> indices) {
+        return () -> new Browser() {
+            final Iterator<?> k = indices.iterator();
+            final Browser v = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return k.hasNext() && v.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                return Suite.inset(k.next(), v.next());
             }
         };
     }
@@ -257,25 +308,38 @@ public interface Series extends Iterable<Subject> {
         return ofEntire(List.of(subjects));
     }
 
-    static Series empty() {
-        return Browser::empty;
-    }
-
-    static Series engage(Iterable<?> keys, Iterable<?> values) {
+    static Series pull(Action action) {
         return () -> new Browser() {
-            final Iterator<?> keyIt = keys.iterator();
-            final Iterator<?> valIt = values.iterator();
 
             @Override
             public boolean hasNext() {
-                return keyIt.hasNext() && valIt.hasNext();
+                return true;
             }
 
             @Override
             public Subject next() {
-                return Suite.inset(keyIt.next(), Suite.set(valIt.next()));
+                return action.play();
             }
         };
+    }
+
+    static Series pull(Expression exp) {
+        return () -> new Browser() {
+
+            @Override
+            public boolean hasNext() {
+                return true;
+            }
+
+            @Override
+            public Subject next() {
+                return exp.play();
+            }
+        };
+    }
+
+    static Series empty() {
+        return Browser::empty;
     }
 
     static Series parallel(Series s1, Series s2, Series ... rest) {
@@ -309,6 +373,7 @@ public interface Series extends Iterable<Subject> {
         };
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     default Series print() {
         System.out.println(Suite.toString(this));
         return this;
@@ -326,7 +391,7 @@ public interface Series extends Iterable<Subject> {
         return as(Number.class).longValue();
     }
 
-    default long asShort() {
+    default short asShort() {
         return as(Number.class).shortValue();
     }
 
@@ -342,7 +407,7 @@ public interface Series extends Iterable<Subject> {
         return as(Character.class);
     }
 
-    default boolean asBoolean() {
+    default boolean asBool() {
         return as(Boolean.class);
     }
 
@@ -366,7 +431,7 @@ public interface Series extends Iterable<Subject> {
         return as(Number.class, reserve).longValue();
     }
 
-    default long asShort(short reserve) {
+    default short asShort(short reserve) {
         return as(Number.class, reserve).shortValue();
     }
 
@@ -382,7 +447,7 @@ public interface Series extends Iterable<Subject> {
         return as(Character.class, reserve);
     }
 
-    default boolean asBoolean(boolean reserve) {
+    default boolean asBool(boolean reserve) {
         return as(Boolean.class, reserve);
     }
 
@@ -392,5 +457,165 @@ public interface Series extends Iterable<Subject> {
 
     default Action asAction(Action reserve) {
         return as(Action.class, reserve);
+    }
+
+    default Sequence<Integer> eachInt() {
+        return () -> new Iterator<>() {
+            final Browser origin = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return origin.hasNext();
+            }
+
+            @Override
+            public Integer next() {
+                return origin.next().asInt();
+            }
+        };
+    }
+
+    default Sequence<Byte> eachByte() {
+        return () -> new Iterator<>() {
+            final Browser origin = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return origin.hasNext();
+            }
+
+            @Override
+            public Byte next() {
+                return origin.next().asByte();
+            }
+        };
+    }
+
+    default Sequence<Long> eachLong() {
+        return () -> new Iterator<>() {
+            final Browser origin = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return origin.hasNext();
+            }
+
+            @Override
+            public Long next() {
+                return origin.next().asLong();
+            }
+        };
+    }
+
+    default Sequence<Short> eachShort() {
+        return () -> new Iterator<>() {
+            final Browser origin = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return origin.hasNext();
+            }
+
+            @Override
+            public Short next() {
+                return origin.next().asShort();
+            }
+        };
+    }
+
+    default Sequence<Float> eachFloat() {
+        return () -> new Iterator<>() {
+            final Browser origin = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return origin.hasNext();
+            }
+
+            @Override
+            public Float next() {
+                return origin.next().asFloat();
+            }
+        };
+    }
+
+    default Sequence<Double> eachDouble() {
+        return () -> new Iterator<>() {
+            final Browser origin = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return origin.hasNext();
+            }
+
+            @Override
+            public Double next() {
+                return origin.next().asDouble();
+            }
+        };
+    }
+
+    default Sequence<Character> eachChar() {
+        return () -> new Iterator<>() {
+            final Browser origin = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return origin.hasNext();
+            }
+
+            @Override
+            public Character next() {
+                return origin.next().asChar();
+            }
+        };
+    }
+
+    default Sequence<Boolean> eachBool() {
+        return () -> new Iterator<>() {
+            final Browser origin = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return origin.hasNext();
+            }
+
+            @Override
+            public Boolean next() {
+                return origin.next().asBool();
+            }
+        };
+    }
+
+    default Sequence<String> eachString() {
+        return () -> new Iterator<>() {
+            final Browser origin = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return origin.hasNext();
+            }
+
+            @Override
+            public String next() {
+                return origin.next().asString();
+            }
+        };
+    }
+
+    default Sequence<Action> eachAction() {
+        return () -> new Iterator<>() {
+            final Browser origin = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return origin.hasNext();
+            }
+
+            @Override
+            public Action next() {
+                return origin.next().asAction();
+            }
+        };
     }
 }

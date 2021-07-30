@@ -167,7 +167,7 @@ public interface Sequence<T> extends Iterable<T>{
         return it.hasNext() ? it.next() : null;
     }
 
-    default int index(Predicate<T> predicate) {
+    default int indexOf(Predicate<T> predicate) {
         int i = 0;
         for(T t : this) {
             if(predicate.test(t))return i;

@@ -115,7 +115,7 @@ public class $uite extends SolidSubject {
     }
 
     public static Subject zip$(Iterable<Object> keys, Iterable<Object> values) {
-        return Series.engage(keys, values).set();
+        return Sequence.ofEntire(values).series().index(keys).set();
     }
 
     public static String toString$(Series series) {
