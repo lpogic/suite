@@ -17,11 +17,11 @@ public interface Sequence<T> extends Iterable<T>{
         return new Cascade<>(iterator());
     }
 
-    default <F extends T> Sequence<F> filter(Class<F> requestedType) {
-        return filter(Glass.of(requestedType));
+    default <F extends T> Sequence<F> select(Class<F> requestedType) {
+        return select(Glass.of(requestedType));
     }
 
-    default <F extends T> Sequence<F> filter(Glass<? super F, F> requestedType) {
+    default <F extends T> Sequence<F> select(Glass<? super F, F> requestedType) {
         return () -> new Iterator<>() {
             final Iterator<T> origin = iterator();
             F next = null;
@@ -49,7 +49,7 @@ public interface Sequence<T> extends Iterable<T>{
         };
     }
 
-    default Sequence<T> filter(Predicate<T> predicate) {
+    default Sequence<T> select(Predicate<T> predicate) {
         return () -> new Iterator<>() {
             final Iterator<T> origin = iterator();
             T next = null;
@@ -77,8 +77,8 @@ public interface Sequence<T> extends Iterable<T>{
         };
     }
 
-    default<F extends T> Sequence<F> filter(Class<F> type, Predicate<F> predicate) {
-        return filter(type).filter(predicate);
+    default<F extends T> Sequence<F> select(Class<F> type, Predicate<F> predicate) {
+        return select(type).select(predicate);
     }
 
     static<I> Sequence<I> empty() {
@@ -125,18 +125,6 @@ public interface Sequence<T> extends Iterable<T>{
                 return function.apply(origin.next(), param);
             }
         };
-    }
-
-    default Sequence<T> skip(int from, int to) {
-        return filter(new Predicate<>() {
-            int counter = 0;
-
-            @Override
-            public boolean test(T t) {
-                ++counter;
-                return counter <= from || counter > to;
-            }
-        });
     }
 
     default boolean allTrue(Predicate<T> predicate) {
