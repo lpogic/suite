@@ -4,6 +4,7 @@ import suite.suite.Subject;
 import suite.suite.Suite;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class Cascade<T> implements Iterator<T>, Sequence<T> {
@@ -35,7 +36,7 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
     public boolean hasNext(Predicate<T> predicate) {
         if(!hasNext())return false;
         T next = privateNext();
-        store(next);
+        setNext(next);
         return predicate.test(next);
     }
 
@@ -43,6 +44,12 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
     public T next() {
         ++falls;
         return privateNext();
+    }
+
+
+    public T nextOr(T substitute) {
+        ++falls;
+        return hasNext() ? privateNext() : substitute;
     }
 
     private T privateNext() {
@@ -53,8 +60,8 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
         return hasNext() ? next() : null;
     }
 
-    public void store(T t) {
-        stored.in().set(t);
+    public void setNext(T t) {
+        stored.aimedAdd(stored.raw(), t);
     }
 
     public int getFalls() {
@@ -74,10 +81,10 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
                 if(Cascade.this.hasNext()) {
                     T next = Cascade.this.privateNext();
                     if(predicate.test(next)) {
-                        store(next);
+                        setNext(next);
                         return true;
                     } else {
-                        store(next);
+                        setNext(next);
                         return false;
                     }
                 }
@@ -100,10 +107,10 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
                 if(Cascade.this.hasNext()) {
                     T next = Cascade.this.privateNext();
                     if(predicate.test(next)) {
-                        store(next);
+                        setNext(next);
                         return true;
                     } else {
-                        if(!consume)store(next);
+                        if(!consume) setNext(next);
                         return false;
                     }
                 }
@@ -117,17 +124,44 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
         };
     }
 
-    public Sequence<T> toEnd() {
-        return () -> new Iterator<>() {
+    @SafeVarargs
+    static<I> Cascade<I> of(I ... is) {
+        return ofEntire(List.of(is));
+    }
+
+    static<I> Cascade<I> ofEntire(Iterable<I> iterable) {
+        return ofEntire(iterable.iterator());
+    }
+
+    static<I> Cascade<I> ofEntire(Iterator<I> iterator) {
+        return iterator instanceof Cascade ? (Cascade<I>)iterator : new Cascade<>(iterator);
+    }
+
+    public<I extends T> Cascade<T> and(I i) {
+        return andEntire(List.of(i));
+    }
+
+    public<I extends T> Cascade<T> andEntire(Iterable<I> iterable) {
+        return andEntire(iterable.iterator());
+    }
+
+    public<I extends T> Cascade<T> andEntire(Iterator<I> thatIterator) {
+        return new Cascade<>(new Iterator<>() {
+            Iterator<T> selfWave = Cascade.this.iterator();
+
             @Override
             public boolean hasNext() {
-                return Cascade.this.hasNext();
+                if(selfWave != null) {
+                    if(selfWave.hasNext()) return true;
+                    else selfWave = null;
+                }
+                return thatIterator.hasNext();
             }
 
             @Override
             public T next() {
-                return Cascade.this.next();
+                return selfWave != null ? selfWave.next() : thatIterator.next();
             }
-        };
+        });
     }
 }

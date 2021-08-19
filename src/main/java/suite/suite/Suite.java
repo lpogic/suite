@@ -83,6 +83,10 @@ public class Suite {
         return new Query($);
     }
 
+    public static Subject copy(Subject $) {
+        return new SolidSubject().merge($);
+    }
+
     public static Subject zip(Iterable<Object> keys, Iterable<Object> values) {
         return alter(Sequence.ofEntire(values).series().index(keys));
     }
@@ -113,8 +117,8 @@ public class Suite {
         while(!stack.empty()) {
             var $1 = stack.peek();
             Subject $current = $1.asExpected();
-            Cascade<Subject> it = $1.last().asExpected();
-            for(Subject $s : it.toEnd()) {
+            Cascade<Subject> c = $1.last().asExpected();
+            for(Subject $s : c) {
                 if(tabsBefore)sb.append("\t".repeat(stack.size() - 1));
                 tabsBefore = false;
                 sb.append(encoder.apply($s.raw()));

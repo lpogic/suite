@@ -48,8 +48,8 @@ public interface Series extends Iterable<Subject> {
         };
     }
 
-    default Series select(int i) {
-        return select(new Index(i));
+    default Subject select(int i) {
+        return select(new Index(i)).first();
     }
 
     default Series select(Class<?> type) {
@@ -77,8 +77,8 @@ public interface Series extends Iterable<Subject> {
     }
 
     default Subject first() {
-        Browser wave = iterator();
-        return wave.hasNext() ? wave.next() : Suite.set();
+        Browser browser = iterator();
+        return browser.hasNext() ? browser.next() : Suite.set();
     }
 
     default Series until(Predicate<Subject> predicate) {

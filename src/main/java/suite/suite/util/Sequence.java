@@ -200,6 +200,16 @@ public interface Sequence<T> extends Iterable<T>{
         return stringBuilder.toString();
     }
 
+    default String toString(String prefix, String separator) {
+        StringBuilder stringBuilder = new StringBuilder(prefix);
+        Iterator<T> it = iterator();
+        while(it.hasNext()) {
+            stringBuilder.append(it.next());
+            if(it.hasNext())stringBuilder.append(separator);
+        }
+        return stringBuilder.toString();
+    }
+
     @SafeVarargs
     static<I> Sequence<I> of(I ... is) {
         return ofEntire(List.of(is));
