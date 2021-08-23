@@ -193,8 +193,8 @@ public class SolidSubject extends Subject {
     }
 
     @Override
-    public Subject shift(Object out, Object in) {
-        subject = subject.shift(out, in);
+    public Subject swap(Object o1, Object o2) {
+        subject = subject.swap(o1, o2);
         return this;
     }
 

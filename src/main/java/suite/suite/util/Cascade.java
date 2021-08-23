@@ -36,7 +36,7 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
     public boolean hasNext(Predicate<T> predicate) {
         if(!hasNext())return false;
         T next = privateNext();
-        setNext(next);
+        pushNext(next);
         return predicate.test(next);
     }
 
@@ -46,6 +46,12 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
         return privateNext();
     }
 
+    public T next(boolean preserve) {
+        var t = next();
+        if(preserve) pushNext(t);
+        return t;
+    }
+
 
     public T nextOr(T substitute) {
         ++falls;
@@ -53,14 +59,14 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
     }
 
     private T privateNext() {
-        return stored.present() ? stored.take(stored.raw()).asExpected() : iterator.next();
+        return stored.present() ? stored.take(stored.raw()).in().asExpected() : iterator.next();
     }
 
     public T nextOrNull() {
         return hasNext() ? next() : null;
     }
 
-    public void setNext(T t) {
+    public void pushNext(T t) {
         stored.aimedAdd(stored.raw(), t);
     }
 
@@ -81,10 +87,10 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
                 if(Cascade.this.hasNext()) {
                     T next = Cascade.this.privateNext();
                     if(predicate.test(next)) {
-                        setNext(next);
+                        pushNext(next);
                         return true;
                     } else {
-                        setNext(next);
+                        pushNext(next);
                         return false;
                     }
                 }
@@ -107,10 +113,10 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
                 if(Cascade.this.hasNext()) {
                     T next = Cascade.this.privateNext();
                     if(predicate.test(next)) {
-                        setNext(next);
+                        pushNext(next);
                         return true;
                     } else {
-                        if(!consume) setNext(next);
+                        if(!consume) pushNext(next);
                         return false;
                     }
                 }

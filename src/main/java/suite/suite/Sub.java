@@ -147,8 +147,8 @@ public interface Sub extends Series {
         return set().merge($tree);
     }
 
-    default Subject shift(Object out, Object in) {
-        return set().shift(out, in);
+    default Subject swap(Object o1, Object o2) {
+        return set().swap(o1, o2);
     }
 
     default Subject reset(Object element) {

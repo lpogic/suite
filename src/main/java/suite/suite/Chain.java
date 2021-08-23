@@ -87,15 +87,22 @@ class Chain implements Series {
         }
     }
 
-    public void push(Object pushed, Object pushing) {
-        Link link = data.remove(pushed);
-        if(link != null) {
-            link.subject = link.subject.shift(pushed, pushing);
-        } else {
-            link = new Link(ward.front, ward, new BasicSubject(pushing));
-            ward.front = ward.front.back = link;
+    public void swap(Object o1, Object o2) {
+        Link link1 = data.remove(o1);
+        Link link2 = data.remove(o2);
+        if(link1 != null && link2 != null) {
+            var s = link1.subject.swap(o1, o2);
+            link1.subject = link2.subject.swap(o2, o1);
+            link2.subject = s;
+            data.put(o1, link2);
+            data.put(o2, link1);
+        } else if(link2 != null) {
+            link2.subject = link2.subject.swap(o2, o1);
+            data.put(o1, link2);
+        } else if(link1 != null) {
+            link1.subject = link1.subject.swap(o1, o2);
+            data.put(o2, link1);
         }
-        data.put(pushing, link);
     }
 
     public void moveBefore(Link link, Link sequent) {

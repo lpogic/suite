@@ -87,10 +87,7 @@ public abstract class Subject implements Sub {
     public Subject aimedInset(Object aim, Subject $set) {
         return aimedInset(aim, new Suite.Auto(), $set);
     }
-    public Subject shift(Object in) {
-        return shift(raw(), in);
-    }
-    public abstract Subject shift(Object out, Object in);
+    public abstract Subject swap(Object o1, Object o2);
     public Subject reset(Object element) {
         return unset().set(element);
     }

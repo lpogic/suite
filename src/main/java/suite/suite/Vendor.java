@@ -204,7 +204,7 @@ public abstract class Vendor extends Subject {
     }
 
     @Override
-    public Subject shift(Object out, Object in) {
+    public Subject swap(Object o1, Object o2) {
         throw new UnsupportedOperationException("Vendor is immutable");
     }
 

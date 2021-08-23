@@ -157,8 +157,8 @@ class ZeroSubject extends Subject {
     }
 
     @Override
-    public Subject shift(Object out, Object in) {
-        return new BasicSubject(in);
+    public Subject swap(Object o1, Object o2) {
+        return this;
     }
 
     @Override

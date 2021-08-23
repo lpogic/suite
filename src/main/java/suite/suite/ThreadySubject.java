@@ -266,9 +266,9 @@ class ThreadySubject extends SolidSubject {
     }
 
     @Override
-    public Subject shift(Object out, Object in) {
+    public Subject swap(Object o1, Object o2) {
         try(var ignored = writeLock.lock()) {
-            super.shift(out, in);
+            super.swap(o1, o2);
             return this;
         }
     }

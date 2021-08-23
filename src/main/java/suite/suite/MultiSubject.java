@@ -177,8 +177,8 @@ class MultiSubject extends Subject {
     }
 
     @Override
-    public Subject shift(Object out, Object in) {
-        chain.push(out, in);
+    public Subject swap(Object o1, Object o2) {
+        chain.swap(o1, o2);
         return this;
     }
 
