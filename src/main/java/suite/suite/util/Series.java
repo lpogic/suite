@@ -231,6 +231,22 @@ public interface Series extends Iterable<Subject> {
         };
     }
 
+    default Series eachOut() {
+        return () -> new Browser() {
+            final Iterator<Subject> subIt = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return subIt.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                return Suite.inset(subIt.next());
+            }
+        };
+    }
+
     default Series list() {
         return () -> new Browser() {
             final Iterator<Subject> subIt = iterator();

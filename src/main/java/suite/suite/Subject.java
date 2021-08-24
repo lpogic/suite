@@ -27,6 +27,13 @@ public abstract class Subject implements Sub {
     protected abstract Subject jump(Object element);
     protected abstract boolean real(Object element);
 
+    public Subject out() {
+        return Suite.inset(this);
+    }
+    public Subject out(Object o) {
+        return Suite.inset(o, this);
+    }
+
     public abstract Subject first();
     public abstract Subject last();
     public abstract Subject get(Object element);

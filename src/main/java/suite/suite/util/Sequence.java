@@ -191,22 +191,31 @@ public interface Sequence<T> extends Iterable<T>{
     }
 
     default String toString(String separator) {
+        Cascade<T> c = cascade();
+        if(!c.hasNext()) return "";
         StringBuilder stringBuilder = new StringBuilder();
-        Iterator<T> it = iterator();
-        while(it.hasNext()) {
-            stringBuilder.append(it.next());
-            if(it.hasNext())stringBuilder.append(separator);
+        var n1 = c.next();
+        for(var n2 : c) {
+            stringBuilder.append(n1).append(separator);
+            n1 = n2;
         }
+        stringBuilder.append(n1);
         return stringBuilder.toString();
     }
 
-    default String toString(String prefix, String separator) {
-        StringBuilder stringBuilder = new StringBuilder(prefix);
-        Iterator<T> it = iterator();
-        while(it.hasNext()) {
-            stringBuilder.append(it.next());
-            if(it.hasNext())stringBuilder.append(separator);
+    default String toString(String separator, String lastSeparator) {
+        Cascade<T> c = cascade();
+        if(!c.hasNext()) return "";
+        var n1 = c.next();
+        if(!c.hasNext()) return "" + n1;
+        StringBuilder stringBuilder = new StringBuilder();
+        var n2 = c.next();
+        for(var n3 : c) {
+            stringBuilder.append(n1).append(separator);
+            n1 = n2;
+            n2 = n3;
         }
+        stringBuilder.append(n1).append(lastSeparator).append(n2);
         return stringBuilder.toString();
     }
 
