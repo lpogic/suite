@@ -196,10 +196,10 @@ public interface Sequence<T> extends Iterable<T>{
         StringBuilder stringBuilder = new StringBuilder();
         var n1 = c.next();
         for(var n2 : c) {
-            stringBuilder.append(n1).append(separator);
+            stringBuilder.append(n1.toString()).append(separator);
             n1 = n2;
         }
-        stringBuilder.append(n1);
+        stringBuilder.append(n1.toString());
         return stringBuilder.toString();
     }
 
@@ -211,11 +211,11 @@ public interface Sequence<T> extends Iterable<T>{
         StringBuilder stringBuilder = new StringBuilder();
         var n2 = c.next();
         for(var n3 : c) {
-            stringBuilder.append(n1).append(separator);
+            stringBuilder.append(n1.toString()).append(separator);
             n1 = n2;
             n2 = n3;
         }
-        stringBuilder.append(n1).append(lastSeparator).append(n2);
+        stringBuilder.append(n1.toString()).append(lastSeparator).append(n2.toString());
         return stringBuilder.toString();
     }
 
