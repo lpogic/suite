@@ -276,6 +276,10 @@ public interface Series extends Iterable<Subject> {
         return first().asExpected();
     }
 
+    default <B> B one() {
+        return first().one();
+    }
+
     default <B> B as(Class<B> requestedType) {
         return first().as(requestedType);
     }

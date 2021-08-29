@@ -39,6 +39,9 @@ public abstract class Subject implements Sub {
     public abstract Subject get(Object element);
     public abstract Object raw();
     public abstract <B> B asExpected();
+    public <B> B one() {
+        return asExpected();
+    }
     public abstract <B> B as(Class<B> requestedType);
     public abstract <B> B as(Glass<? super B, B> requestedType);
     public abstract <B> B as(Class<B> requestedType, B reserve);

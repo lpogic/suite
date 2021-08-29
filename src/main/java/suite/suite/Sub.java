@@ -43,6 +43,9 @@ public interface Sub extends Series {
         return get().asExpected();
     }
 
+    default  <B> B one() {
+        return get().one();
+    }
 
     default <B> B as(Class<B> requestedType) {
         return get().as(requestedType);
