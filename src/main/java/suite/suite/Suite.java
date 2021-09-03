@@ -14,11 +14,11 @@ public class Suite {
         }
     }
 
-    public static class ObjectMask {
-        public Subject subject;
+    public static class Mask {
+        public Object object;
 
-        public ObjectMask(Subject subject) {
-            this.subject = subject;
+        public Mask(Object object) {
+            this.object = object;
         }
     }
 
