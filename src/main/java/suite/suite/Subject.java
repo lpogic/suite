@@ -185,6 +185,16 @@ public abstract class Subject implements Sub {
     public Series takeEntire(Iterable<?> iterable) {
         throw new UnsupportedOperationException("Solid method");
     }
+
+    public Subject merge(Subject ... subjects) {
+        return mergeEntire(Arrays.asList(subjects));
+    }
+    public Subject mergeEntire(Iterable<? extends Subject> iterable) {
+        for(var it : iterable) {
+            merge(it);
+        }
+        return this;
+    }
     @Override
     public Subject set() {
         return this;

@@ -167,7 +167,7 @@ public interface Series extends Iterable<Subject> {
         };
     }
 
-    default Sequence<?> eachRaw() {
+    default Sequence<?> each() {
         return () -> new Iterator<>() {
             final Iterator<Subject> subIt = iterator();
 

@@ -145,6 +145,21 @@ public interface Sub extends Series {
     default Subject aimedInset(Object aim, Subject $set) {
         return set().aimedInset(aim, $set);
     }
+    default Subject sate(Object element) {
+        return set().sate(element);
+    }
+    default Subject sate(Object element, Subject $set) {
+        return set().sate(element, $set);
+    }
+    default Subject take(Object element) {
+        return set().take(element);
+    }
+    default Subject alter(Iterable<? extends Subject> iterable) {
+        return set().alter(iterable);
+    }
+    default Subject aimedAlter(Object sequent, Iterable<? extends Subject> iterable) {
+        return set().aimedAlter(sequent, iterable);
+    }
 
     default Subject merge(Subject $tree) {
         return set().merge($tree);

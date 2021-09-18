@@ -4,7 +4,7 @@ import suite.suite.Subject;
 
 import java.util.function.Predicate;
 
-public class Index implements Predicate<Subject> {
+public class Index<T> implements Predicate<T> {
 
     int counter = 0;
     final int index;
@@ -14,7 +14,7 @@ public class Index implements Predicate<Subject> {
     }
 
     @Override
-    public boolean test(Subject subject) {
+    public boolean test(T t) {
         return counter++ == index;
     }
 

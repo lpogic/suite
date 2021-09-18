@@ -27,8 +27,8 @@ public class Graph {
     }
 
     public void linkGroups(Series $a, Series $b) {
-        for (var a : $a.eachRaw()) {
-            for (var b : $b.eachRaw()) {
+        for (var a : $a.each()) {
+            for (var b : $b.each()) {
                 link(a, b);
             }
         }
@@ -39,7 +39,7 @@ public class Graph {
     }
 
     public void detach(Object o) {
-        for(var i : getLinked(o).eachRaw()) {
+        for(var i : getLinked(o).each()) {
             $pool.in(i).unset(o);
         }
         $pool.unset(o);

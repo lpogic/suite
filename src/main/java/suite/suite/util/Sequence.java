@@ -2,6 +2,7 @@ package suite.suite.util;
 
 import suite.suite.Subject;
 import suite.suite.Suite;
+import suite.suite.selector.Index;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -79,6 +80,38 @@ public interface Sequence<T> extends Iterable<T>{
 
     default<F extends T> Sequence<F> select(Class<F> type, Predicate<F> predicate) {
         return select(type).select(predicate);
+    }
+
+    default Sequence<T> until(Predicate<T> predicate) {
+        return () -> new Iterator<>() {
+            final Iterator<T> origin = iterator();
+            T next = null;
+            boolean nextFound = false;
+            boolean testFailed = false;
+
+            @Override
+            public boolean hasNext() {
+                if(testFailed) return false;
+                if(nextFound) return true;
+                if (origin.hasNext()) {
+                    var v = origin.next();
+                    if(testFailed = !predicate.test(v)) return false;
+                    next = v;
+                    return nextFound = true;
+                }
+                return false;
+            }
+
+            @Override
+            public T next() {
+                nextFound = false;
+                return next;
+            }
+        };
+    }
+
+    default Sequence<T> first(int limit) {
+        return until(new Index(limit).negate());
     }
 
     static<I> Sequence<I> empty() {

@@ -64,16 +64,16 @@ public class $uite extends SolidSubject {
                 }
             } else {
                 if (oi instanceof Subject $i) {
-                    $.merge(Suite.inset(ol, $i));
+                    $.inset(ol, $i);
                     lastSubject = true;
                 } else {
-                    $.merge(Suite.set(ol));
+                    $.set(ol);
                     ol = oi instanceof Suite.Mask m ? m.object : oi;
                     lastSubject = false;
                 }
             }
         }
-        if(!lastSubject) $.merge(Suite.set(ol));
+        if(!lastSubject) $.alter(Suite.set(ol));
         return $;
     }
 

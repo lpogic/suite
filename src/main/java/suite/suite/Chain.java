@@ -91,9 +91,9 @@ class Chain implements Series {
         Link link1 = data.remove(o1);
         Link link2 = data.remove(o2);
         if(link1 != null && link2 != null) {
-            var s = link1.subject.swap(o1, o2);
-            link1.subject = link2.subject.swap(o2, o1);
-            link2.subject = s;
+            link1.subject = link1.subject.swap(o1, o2);
+            link2.subject = link2.subject.swap(o2, o1);
+//            link2.subject = s;
             data.put(o1, link2);
             data.put(o2, link1);
         } else if(link2 != null) {
