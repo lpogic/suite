@@ -1,7 +1,5 @@
 package suite.suite.selector;
 
-import suite.suite.Subject;
-
 import java.util.function.Predicate;
 
 public class Index<T> implements Predicate<T> {
@@ -18,7 +16,7 @@ public class Index<T> implements Predicate<T> {
         return counter++ == index;
     }
 
-    public static Index of(int i) {
-        return new Index(i);
+    public static<T> Index<T> of(int i) {
+        return new Index<>(i);
     }
 }
