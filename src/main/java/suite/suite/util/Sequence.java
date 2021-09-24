@@ -7,10 +7,11 @@ import suite.suite.selector.Index;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
+@SuppressWarnings("unused")
 public interface Sequence<T> extends Iterable<T>{
     Iterator<T> iterator();
 
@@ -95,7 +96,8 @@ public interface Sequence<T> extends Iterable<T>{
                 if(nextFound) return true;
                 if (origin.hasNext()) {
                     var v = origin.next();
-                    if(testFailed = !predicate.test(v)) return false;
+                    testFailed = !predicate.test(v);
+                    if(testFailed) return false;
                     next = v;
                     return nextFound = true;
                 }
@@ -111,7 +113,7 @@ public interface Sequence<T> extends Iterable<T>{
     }
 
     default Sequence<T> first(int limit) {
-        return until(new Index(limit).negate());
+        return until(new Index<T>(limit).negate());
     }
 
     static<I> Sequence<I> empty() {
@@ -128,7 +130,7 @@ public interface Sequence<T> extends Iterable<T>{
         };
     }
 
-    default<O> Sequence<O> each(Function<T, O> function) {
+    default<O> Sequence<O> convert(Function<T, O> function) {
         return () -> new Iterator<>() {
             final Iterator<T> origin = iterator();
 
@@ -140,22 +142,6 @@ public interface Sequence<T> extends Iterable<T>{
             @Override
             public O next() {
                 return function.apply(origin.next());
-            }
-        };
-    }
-
-    default<P, O> Sequence<O> each(P param, BiFunction<T, P, O> function) {
-        return () -> new Iterator<>() {
-            final Iterator<T> origin = iterator();
-
-            @Override
-            public boolean hasNext() {
-                return origin.hasNext();
-            }
-
-            @Override
-            public O next() {
-                return function.apply(origin.next(), param);
             }
         };
     }
@@ -223,6 +209,23 @@ public interface Sequence<T> extends Iterable<T>{
         };
     }
 
+    default Series index(Iterable<?> indices) {
+        return () -> new Browser() {
+            final Iterator<?> k = indices.iterator();
+            final Iterator<?> v = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return k.hasNext() && v.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                return Suite.put(k.next(), v.next());
+            }
+        };
+    }
+
     default String toString(String separator) {
         Cascade<T> c = cascade();
         if(!c.hasNext()) return "";
@@ -250,6 +253,21 @@ public interface Sequence<T> extends Iterable<T>{
         }
         stringBuilder.append(n1.toString()).append(lastSeparator).append(n2.toString());
         return stringBuilder.toString();
+    }
+
+    static<S> Sequence<S> pull(Supplier<S> supplier) {
+        return () -> new Iterator<>() {
+
+            @Override
+            public boolean hasNext() {
+                return true;
+            }
+
+            @Override
+            public S next() {
+                return supplier.get();
+            }
+        };
     }
 
     @SafeVarargs

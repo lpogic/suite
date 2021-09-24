@@ -4,7 +4,6 @@ import suite.suite.Sub;
 import suite.suite.Subject;
 import suite.suite.Suite;
 import suite.suite.action.Action;
-import suite.suite.action.Expression;
 import suite.suite.selector.Index;
 import suite.suite.selector.Type;
 
@@ -49,7 +48,7 @@ public interface Series extends Iterable<Subject> {
     }
 
     default Subject select(int i) {
-        return select(new Index(i)).first();
+        return select(new Index<>(i)).first();
     }
 
     default Series select(Class<?> type) {
@@ -69,7 +68,7 @@ public interface Series extends Iterable<Subject> {
     }
 
     default Subject at(int i) {
-        return select(new Index(i)).in().get();
+        return select(new Index<>(i)).in().get();
     }
 
     default Series exclude(Predicate<Subject> predicate) {
@@ -94,7 +93,8 @@ public interface Series extends Iterable<Subject> {
                 if(nextFound) return true;
                 if (origin.hasNext()) {
                     Subject v = origin.next();
-                    if(testFailed = !predicate.test(v)) return false;
+                    testFailed = !predicate.test(v);
+                    if(testFailed) return false;
                     next = v;
                     return nextFound = true;
                 }
@@ -110,7 +110,7 @@ public interface Series extends Iterable<Subject> {
     }
 
     default Series first(int limit) {
-        return until(new Index(limit).negate());
+        return until(new Index<Subject>(limit).negate());
     }
 
     default Series convert(Action action) {
@@ -328,7 +328,7 @@ public interface Series extends Iterable<Subject> {
         return ofEntire(List.of(subjects));
     }
 
-    static Series pull(Action action) {
+    static Series pull(Supplier<Subject> action) {
         return () -> new Browser() {
 
             @Override
@@ -338,22 +338,7 @@ public interface Series extends Iterable<Subject> {
 
             @Override
             public Subject next() {
-                return action.play();
-            }
-        };
-    }
-
-    static Series pull(Expression exp) {
-        return () -> new Browser() {
-
-            @Override
-            public boolean hasNext() {
-                return true;
-            }
-
-            @Override
-            public Subject next() {
-                return exp.play();
+                return action.get();
             }
         };
     }
