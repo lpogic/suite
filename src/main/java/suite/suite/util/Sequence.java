@@ -271,8 +271,21 @@ public interface Sequence<T> extends Iterable<T>{
     }
 
     @SafeVarargs
-    static<I> Sequence<I> of(I ... is) {
-        return ofEntire(List.of(is));
+    static<I, IN extends I> Sequence<I> of(I i0, IN ... is) {
+        return ((Sequence<I>) () -> new Iterator<I>() {
+            boolean has = false;
+
+            @Override
+            public boolean hasNext() {
+                return has;
+            }
+
+            @Override
+            public I next() {
+                has = false;
+                return i0;
+            }
+        }).andEntire(List.of(is));
     }
 
     static<I> Sequence<I> ofEntire(Iterable<I> iterable) {
