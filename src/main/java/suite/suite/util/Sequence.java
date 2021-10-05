@@ -83,6 +83,10 @@ public interface Sequence<T> extends Iterable<T>{
         return select(type).select(predicate);
     }
 
+    default T select(int i) {
+        return select(new Index<>(i)).first();
+    }
+
     default Sequence<T> until(Predicate<T> predicate) {
         return () -> new Iterator<>() {
             final Iterator<T> origin = iterator();
@@ -226,7 +230,11 @@ public interface Sequence<T> extends Iterable<T>{
         };
     }
 
-    default String toString(String separator) {
+    default String string() {
+        return string(", ");
+    }
+
+    default String string(String separator) {
         Cascade<T> c = cascade();
         if(!c.hasNext()) return "";
         StringBuilder stringBuilder = new StringBuilder();
@@ -239,7 +247,7 @@ public interface Sequence<T> extends Iterable<T>{
         return stringBuilder.toString();
     }
 
-    default String toString(String separator, String lastSeparator) {
+    default String string(String separator, String lastSeparator) {
         Cascade<T> c = cascade();
         if(!c.hasNext()) return "";
         var n1 = c.next();
