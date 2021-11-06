@@ -8,7 +8,7 @@ import java.util.function.IntConsumer;
 @FunctionalInterface
 public interface IntProcessor extends IntConsumer {
 
-    void advance(int i);
+    int advance(int i);
 
     @Override
     default void accept(int value) {
