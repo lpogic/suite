@@ -55,7 +55,7 @@ public interface Series extends Iterable<Subject> {
         return select(new Type(type));
     }
 
-    default<T> Sequence<T> selectAs(Class<T> type) {
+    default<T> Sequence<T> each(Class<T> type) {
         return select(new Type(type)).eachAs(type);
     }
 
@@ -111,6 +111,27 @@ public interface Series extends Iterable<Subject> {
 
     default Series first(int limit) {
         return until(new Index<Subject>(limit).negate());
+    }
+
+    default Series skip(int skipped) {
+        return () -> new Browser() {
+            final Iterator<Subject> origin = iterator();
+            {
+                for(int i = 0;i < skipped;++i) {
+                    if(origin.hasNext()) origin.next();
+                }
+            }
+
+            @Override
+            public boolean hasNext() {
+                return origin.hasNext();
+            }
+
+            @Override
+            public Subject next() {
+                return origin.next();
+            }
+        };
     }
 
     default Series convert(Action action) {

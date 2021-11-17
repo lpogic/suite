@@ -120,6 +120,27 @@ public interface Sequence<T> extends Iterable<T>{
         return until(new Index<T>(limit).negate());
     }
 
+    default Sequence<T> skip(int skipped) {
+        return () -> new Iterator<>() {
+            final Iterator<T> origin = iterator();
+            {
+                for(int i = 0;i < skipped;++i) {
+                    if(origin.hasNext()) origin.next();
+                }
+            }
+
+            @Override
+            public boolean hasNext() {
+                return origin.hasNext();
+            }
+
+            @Override
+            public T next() {
+                return origin.next();
+            }
+        };
+    }
+
     static<I> Sequence<I> empty() {
         return () -> new Iterator<>() {
             @Override
