@@ -143,10 +143,14 @@ public abstract class Subject implements Sub {
     }
 
     public Subject get(Object... elements) {
-        return getEntire(Arrays.asList(elements)).set();
+        return getEntire(Arrays.asList(elements));
     }
-    public Series getEntire(Iterable<?> iterable) {
-        throw new UnsupportedOperationException("Solid method");
+    public Subject getEntire(Iterable<?> iterable) {
+        var got = Suite.set();
+        for(Object it : iterable) {
+            got.alter(get(it));
+        }
+        return got;
     }
 
     public Subject set(Object ... elements) {
@@ -180,10 +184,14 @@ public abstract class Subject implements Sub {
     }
 
     public Subject take(Object... elements) {
-        return takeEntire(Arrays.asList(elements)).set();
+        return takeEntire(Arrays.asList(elements));
     }
-    public Series takeEntire(Iterable<?> iterable) {
-        throw new UnsupportedOperationException("Solid method");
+    public Subject takeEntire(Iterable<?> iterable) {
+        var taken = Suite.set();
+        for(Object it : iterable) {
+            taken.alter(take(it));
+        }
+        return taken;
     }
 
     public Subject merge(Subject ... subjects) {

@@ -248,7 +248,7 @@ public class SolidSubject extends Subject {
     @Override
     public Subject take(Object key) {
         Subject taken = get(key);
-        if(taken.present()) subject = subject.unset(key);
+        if(taken.present()) unset(key);
         return taken;
     }
 
@@ -284,40 +284,6 @@ public class SolidSubject extends Subject {
         }
         subject = $;
         return this;
-    }
-
-    @Override
-    public Series getEntire(Iterable<?> iterable) {
-        return () -> new Browser() {
-            final Iterator<?> it = iterable.iterator();
-
-            @Override
-            public boolean hasNext() {
-                return it.hasNext();
-            }
-
-            @Override
-            public Subject next() {
-                return get(it.next());
-            }
-        };
-    }
-
-    @Override
-    public Series takeEntire(Iterable<?> iterable) {
-        return () -> new Browser() {
-            final Iterator<?> it = iterable.iterator();
-
-            @Override
-            public boolean hasNext() {
-                return it.hasNext();
-            }
-
-            @Override
-            public Subject next() {
-                return take(it.next());
-            }
-        };
     }
 
     @Override
