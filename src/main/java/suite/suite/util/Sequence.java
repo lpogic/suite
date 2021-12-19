@@ -300,9 +300,14 @@ public interface Sequence<T> extends Iterable<T>{
     }
 
     @SafeVarargs
+    static<I> Sequence<I> of(I ... is) {
+        return ofEntire(List.of(is));
+    }
+
+    @SafeVarargs
     static<I, IN extends I> Sequence<I> of(I i0, IN ... is) {
         return ((Sequence<I>) () -> new Iterator<I>() {
-            boolean has = false;
+            boolean has = true;
 
             @Override
             public boolean hasNext() {

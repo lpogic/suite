@@ -11,7 +11,12 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
 
     private final Iterator<T> iterator;
     private final Subject stored;
-    private int falls = 0;
+    private int counter = 0;
+    private boolean hasNextFired = false;
+
+    public Cascade(Iterable<T> iterable) {
+        this(iterable.iterator());
+    }
 
     public Cascade(Iterator<T> iterator) {
         this.iterator = iterator;
@@ -30,6 +35,7 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
 
     @Override
     public boolean hasNext() {
+        hasNextFired = true;
         return stored.present() || iterator.hasNext();
     }
 
@@ -42,7 +48,8 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
 
     @Override
     public T next() {
-        ++falls;
+        ++counter;
+        if(!hasNextFired) hasNext();
         return privateNext();
     }
 
@@ -54,7 +61,7 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
 
 
     public T nextOr(T substitute) {
-        ++falls;
+        ++counter;
         return hasNext() ? privateNext() : substitute;
     }
 
@@ -70,12 +77,16 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
         stored.aimedAdd(stored.raw(), t);
     }
 
-    public int getFalls() {
-        return falls;
+    public int counter() {
+        return counter;
     }
 
-    public boolean firstFall() {
-        return falls == 1;
+    public boolean opening() {
+        return counter == 1;
+    }
+
+    public boolean closing() {
+        return !hasNext();
     }
 
     @SuppressWarnings("next")
