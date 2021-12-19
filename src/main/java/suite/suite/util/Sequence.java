@@ -300,11 +300,6 @@ public interface Sequence<T> extends Iterable<T>{
     }
 
     @SafeVarargs
-    static<I> Sequence<I> of(I ... is) {
-        return ofEntire(List.of(is));
-    }
-
-    @SafeVarargs
     static<I, IN extends I> Sequence<I> of(I i0, IN ... is) {
         return ((Sequence<I>) () -> new Iterator<I>() {
             boolean has = true;
@@ -320,6 +315,11 @@ public interface Sequence<T> extends Iterable<T>{
                 return i0;
             }
         }).andEntire(List.of(is));
+    }
+
+    @SafeVarargs
+    static<I> Sequence<I> ofEntire(I ... is) {
+        return ofEntire(List.of(is));
     }
 
     static<I> Sequence<I> ofEntire(Iterable<I> iterable) {

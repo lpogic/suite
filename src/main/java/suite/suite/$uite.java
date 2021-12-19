@@ -6,6 +6,7 @@ import suite.suite.action.Statement;
 import suite.suite.util.*;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class $uite extends SolidSubject {
 
@@ -36,10 +37,8 @@ public class $uite extends SolidSubject {
         return $;
     }
 
-    public static Subject $(Expression e) {
-        var $ = $();
-        $.set(e);
-        return $;
+    public static Subject $(Supplier<?> e) {
+        return $().set(e);
     }
 
     public static Subject $(Object o0, Object ... o) {
