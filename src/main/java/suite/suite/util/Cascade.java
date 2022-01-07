@@ -50,6 +50,7 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
     public T next() {
         ++counter;
         if(!hasNextFired) hasNext();
+        hasNextFired = false;
         return privateNext();
     }
 
