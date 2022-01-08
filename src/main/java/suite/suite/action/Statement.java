@@ -4,7 +4,12 @@ import suite.suite.Subject;
 import suite.suite.Suite;
 
 @FunctionalInterface
-public interface Statement extends Impression {
+public interface Statement extends Impression, Runnable {
+
+    @Override
+    default void run() {
+        revel();
+    }
 
     void revel();
 
@@ -23,12 +28,12 @@ public interface Statement extends Impression {
         return Suite.set();
     }
 
-    default Subject gamble() {
+    default Subject gamble() throws Exception {
         revel();
         return Suite.set();
     }
 
-    default Subject gamble(Subject in) {
+    default Subject gamble(Subject in) throws Exception {
         revel();
         return Suite.set();
     }
