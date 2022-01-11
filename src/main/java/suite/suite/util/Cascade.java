@@ -142,6 +142,15 @@ public class Cascade<T> implements Iterator<T>, Sequence<T> {
         };
     }
 
+    public T select(int index) {
+        int i = 0;
+        for(var t : this) {
+            if(i == index) return t;
+            ++i;
+        }
+        return null;
+    }
+
     @SafeVarargs
     static<I> Cascade<I> of(I ... is) {
         return ofEntire(List.of(is));

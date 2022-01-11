@@ -644,4 +644,38 @@ public interface Series extends Iterable<Subject> {
             }
         };
     }
+
+    //// FUSY CONVENTIONAL ////
+
+    default int intValue() {
+        return asInt();
+    }
+
+    default byte byteValue() {
+        return asByte();
+    }
+
+    default long longValue() {
+        return asLong();
+    }
+
+    default short shortValue() {
+        return asShort();
+    }
+
+    default float floatValue() {
+        return asFloat();
+    }
+
+    default double doubleValue() {
+        return asDouble();
+    }
+
+    default char charValue() {
+        return asChar();
+    }
+
+    default boolean booleanValue() {
+        return asBool();
+    }
 }
