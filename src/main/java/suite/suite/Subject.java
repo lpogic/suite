@@ -224,26 +224,22 @@ public abstract class Subject implements Sub {
     }
 
 
-    /// FOR FUSY .:. ///
+    //    |" !_! $ `/
 
-    public Subject fusySet(Object ... objects) {
-        for(var o : objects) {
-            if(o instanceof Series s) {
-                alter(s);
-            } else {
-                set(o);
-            }
+    public Subject fusySet(Object o) {
+        if(o instanceof Series s) {
+            alter(s);
+        } else {
+            set(o);
         }
         return this;
     }
 
-    public Subject fusyAdd(Object ... objects) {
-        for(var o : objects) {
-            if(o instanceof Series s) {
-                inset(s.set());
-            } else {
-                add(o);
-            }
+    public Subject fusyAdd(Object o) {
+        if(o instanceof Series s) {
+            inset(s.set());
+        } else {
+            add(o);
         }
         return this;
     }
