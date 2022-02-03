@@ -2,6 +2,7 @@ package suite.suite;
 
 import suite.suite.util.*;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 
@@ -94,21 +95,41 @@ public class Suite {
     public static String toString(Series $ser) {
         StringBuilder sb = new StringBuilder();
         for(var $ : $ser) {
-            sb.append(toString($, true, o -> o instanceof Auto ? "" : Objects.toString(o)));
+            sb.append(toString($, false, o -> o instanceof Auto ? "" : Objects.toString(o)));
         }
         return sb.toString();
     }
 
     public static String toString(Subject $sub) {
-        return toString($sub, true, o -> o instanceof Auto ? "" : Objects.toString(o));
+        return toString($sub, false, o -> o instanceof Auto ? "" : Objects.toString(o));
     }
 
     public static String toString(Subject $sub, boolean pack, Function<Object, String> encoder) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            export($sub, sb, pack, encoder);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        return sb.toString();
+    }
+
+    public static String toString(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
+        if(!compress)return toString($sub, pack, encoder);
+        StringBuilder sb = new StringBuilder();
+        try {
+            export($sub, sb, pack, encoder, compress);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        return sb.toString();
+    }
+
+    public static void export(Subject $sub, Appendable appendable, boolean pack, Function<Object, String> encoder) throws IOException {
         if($sub == null) $sub = set();
         if(pack) {
             $sub = inset($sub.absent() ? set(new Auto()) : $sub);
         }
-        StringBuilder sb = new StringBuilder();
         java.util.Stack<Subject> stack = new java.util.Stack<>();
         Subject printed = set();
         stack.add(set($sub).set($sub.cascade()));
@@ -119,25 +140,25 @@ public class Suite {
             Subject $current = $1.asExpected();
             Cascade<Subject> c = $1.last().asExpected();
             for(Subject $s : c) {
-                if(tabsBefore)sb.append("\t".repeat(stack.size() - 1));
+                if(tabsBefore)appendable.append("\t".repeat(stack.size() - 1));
                 tabsBefore = false;
-                sb.append(encoder.apply($s.raw()));
+                appendable.append(encoder.apply($s.raw()));
                 Subject $ = $s.in().get();
                 if($.absent()) {
                     if($current.size() > 1) {
-                        sb.append("[]\n");
+                        appendable.append("[]\n");
                         tabsBefore = true;
                     }
                 } else {
                     if(printed.get($).present()) {
-                        sb.append("[ ").append($).append(" ]\n");
+                        appendable.append("[ ").append(encoder.apply($)).append(" ]\n");
                         tabsBefore = true;
                     } else {
                         if($.size() > 1 || $.in().present()) {
-                            sb.append("[\n");
+                            appendable.append("[\n");
                             tabsBefore = true;
                         } else {
-                            sb.append("[ ");
+                            appendable.append("[ ");
                         }
                         stack.add(set($).set($.cascade()));
                         printed.set($);
@@ -152,19 +173,20 @@ public class Suite {
             }
             stack.pop();
             if(stack.size() > 0) {
-                if(tabsBefore) sb.append("\t".repeat(stack.size() - 1)).append("]\n");
-                else sb.append(" ]\n");
+                if(tabsBefore) appendable.append("\t".repeat(stack.size() - 1)).append("]\n");
+                else appendable.append(" ]\n");
                 tabsBefore = true;
             }
         }
-        return sb.toString();
     }
 
-    public static String toString(Subject $sub, boolean pack, Function<Object, String> encoder, boolean compress) {
-        if(!compress)return toString($sub, pack, encoder);
+    public static void export(Subject $sub, Appendable appendable, boolean pack, Function<Object, String> encoder, boolean compress) throws IOException {
+        if(!compress) {
+            export($sub, appendable, pack, encoder);
+            return;
+        }
         if($sub == null) $sub = set();
         if(pack) $sub = inset($sub.set());
-        StringBuilder sb = new StringBuilder();
         java.util.Stack<Iterator<Subject>> stack = new java.util.Stack<>();
         Subject printed = set();
         stack.add($sub.iterator());
@@ -172,19 +194,17 @@ public class Suite {
         while(!stack.empty()) {
             Iterator<Subject> it = stack.peek();
             for(var $s : (Iterable<Subject>) () -> it) {
-                if(!$s.is(Auto.class)) {
-                    sb.append(encoder.apply($s.raw()));
-                }
+                appendable.append(encoder.apply($s.raw()));
                 var $ = $s.in().get();
                 if($.absent()) {
                     if(it.hasNext()) {
-                        sb.append("[]");
+                        appendable.append("[]");
                     }
                 } else {
                     if(printed.in($).present()) {
-                        sb.append("[").append($).append("]");
+                        appendable.append("[").append(encoder.apply($)).append("]");
                     } else {
-                        sb.append("[");
+                        appendable.append("[");
                         stack.add($.iterator());
                         printed.set($);
                         goTo = 1;
@@ -198,10 +218,9 @@ public class Suite {
             }
             stack.pop();
             if(stack.size() > 0) {
-                sb.append("]");
+                appendable.append("]");
             }
         }
-        return sb.toString();
     }
 
     public static Series postDfs(Subject $sub) {
