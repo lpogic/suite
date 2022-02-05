@@ -247,4 +247,8 @@ public abstract class Subject implements Sub {
         }
         return this;
     }
+
+    public Subject fusyReset(Object o) {
+        return unset().fusySet(o);
+    }
 }

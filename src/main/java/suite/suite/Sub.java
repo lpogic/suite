@@ -181,4 +181,18 @@ public interface Sub extends Series {
     default Subject unset(Object element) {
         return set().unset(element);
     }
+
+    //    |" !_! $ `/
+
+    default Subject fusySet(Object o) {
+        return set().fusySet(o);
+    }
+
+    default Subject fusyAdd(Object o) {
+        return set().fusyAdd(o);
+    }
+
+    default Subject fusyReset(Object o) {
+        return set().fusyReset(o);
+    }
 }
