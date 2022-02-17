@@ -3,13 +3,14 @@ package suite.suite.action;
 import suite.suite.Suite;
 import suite.suite.Subject;
 
+import java.io.Serializable;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 @FunctionalInterface
-public interface Action extends Function<Subject, Subject>, Supplier<Subject>, Consumer<Subject> {
+public interface Action extends Function<Subject, Subject>, Supplier<Subject>, Consumer<Subject>, Serializable {
 
     @Override
     default Subject apply(Subject subject) {
