@@ -227,7 +227,7 @@ public abstract class Subject implements Sub {
     //    |" !_! $ `/
 
     public Subject fusySet(Object o) {
-        if(o instanceof Series s) {
+        if(o instanceof Sub s) {
             alter(s);
         } else if(o instanceof Iterable<?> it) {
             setEntire(it);
@@ -238,7 +238,7 @@ public abstract class Subject implements Sub {
     }
 
     public Subject fusyAdd(Object o) {
-        if(o instanceof Series s) {
+        if(o instanceof Sub s) {
             inset(s.set());
         } else if(o instanceof Iterable<?> it) {
             addEntire(it);
