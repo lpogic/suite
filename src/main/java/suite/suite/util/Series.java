@@ -268,7 +268,7 @@ public interface Series extends Iterable<Subject> {
         };
     }
 
-    default Series list() {
+    default Series autoIn() {
         return () -> new Browser() {
             final Iterator<Subject> subIt = iterator();
 
@@ -339,6 +339,10 @@ public interface Series extends Iterable<Subject> {
 
     default Subject set() {
         return Suite.alter(this);
+    }
+
+    default Subject list() {
+        return eachOut().set();
     }
 
     static Series ofEntire(Iterable<Subject> iterable) {

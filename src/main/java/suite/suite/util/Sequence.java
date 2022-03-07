@@ -218,6 +218,10 @@ public interface Sequence<T> extends Iterable<T>{
         return Suite.setEntire(this);
     }
 
+    default Subject list() {
+        return Suite.addEntire(this);
+    }
+
     default Series series() {
         return () -> new Browser() {
             final Iterator<T> b = Sequence.this.iterator();
