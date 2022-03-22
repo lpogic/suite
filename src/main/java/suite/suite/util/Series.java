@@ -204,6 +204,22 @@ public interface Series extends Iterable<Subject> {
         };
     }
 
+    default Sequence<Object> eachRaw() {
+        return () -> new Iterator<>() {
+            final Iterator<Subject> subIt = iterator();
+
+            @Override
+            public boolean hasNext() {
+                return subIt.hasNext();
+            }
+
+            @Override
+            public Object next() {
+                return subIt.next().raw();
+            }
+        };
+    }
+
     default<T> Sequence<T> eachAs(Class<T> type) {
         return () -> new Iterator<>() {
             final Iterator<Subject> subIt = iterator();

@@ -4,9 +4,7 @@ import suite.suite.Subject;
 import suite.suite.Suite;
 import suite.suite.selector.Index;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -19,11 +17,11 @@ public interface Sequence<T> extends Iterable<T>{
         return new Cascade<>(iterator());
     }
 
-    default <F extends T> Sequence<F> select(Class<F> requestedType) {
+    default <F> Sequence<F> select(Class<F> requestedType) {
         return select(Glass.of(requestedType));
     }
 
-    default <F extends T> Sequence<F> select(Glass<? super F, F> requestedType) {
+    default <F> Sequence<F> select(Glass<? super F, F> requestedType) {
         return () -> new Iterator<>() {
             final Iterator<T> origin = iterator();
             F next = null;
@@ -171,6 +169,14 @@ public interface Sequence<T> extends Iterable<T>{
         };
     }
 
+    default<O> O entire(Function<Sequence<T>, O> function) {
+        return function.apply(this);
+    }
+
+    default<O, F> O entire(Class<F> type, Function<Sequence<F>, O> function) {
+        return function.apply(select(type));
+    }
+
     default boolean allTrue(Predicate<T> predicate) {
         for(T t : this) {
             if(!predicate.test(t))return false;
@@ -212,6 +218,11 @@ public interface Sequence<T> extends Iterable<T>{
         List<T> list = new ArrayList<>();
         forEach(list::add);
         return list;
+    }
+
+    @SuppressWarnings("unchecked")
+    default T[] toArray() {
+        return (T[])toList().toArray();
     }
 
     default Subject set() {
@@ -288,6 +299,42 @@ public interface Sequence<T> extends Iterable<T>{
         return stringBuilder.toString();
     }
 
+    default Sequence<T> sort(Comparator<T> cmp) {
+        var a = toArray();
+        Arrays.sort(a, cmp);
+        return Sequence.ofEntire(Arrays.asList(a));
+    }
+
+    default Sequence<T> sort() {
+        var a = toArray();
+        Arrays.sort(a);
+        return Sequence.ofEntire(Arrays.asList(a));
+    }
+
+    default Sequence<T> mix() {
+        var list = toList();
+        Collections.shuffle(list);
+        return Sequence.ofEntire(list);
+    }
+
+    default T max(Comparator<T> cmp) {
+        return Collections.max(toList(), cmp);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    default T max() {
+        return Collections.max(toList(), (o1, o2) -> ((Comparable)o1).compareTo(o2));
+    }
+
+    default T min(Comparator<T> cmp) {
+        return Collections.min(toList(), cmp);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    default T min() {
+        return Collections.min(toList(), (o1, o2) -> ((Comparable)o1).compareTo(o2));
+    }
+
     static<S> Sequence<S> pull(Supplier<S> supplier) {
         return () -> new Iterator<>() {
 
@@ -327,7 +374,19 @@ public interface Sequence<T> extends Iterable<T>{
     }
 
     static<I> Sequence<I> ofEntire(Iterable<I> iterable) {
-        return iterable instanceof Sequence ? (Sequence<I>)iterable : iterable::iterator;
+        if(iterable instanceof Sequence<I> s) return s;
+        if(iterable instanceof List<I> l) return new Sequence<>() {
+            @Override
+            public Iterator<I> iterator() {
+                return l.iterator();
+            }
+
+            @Override
+            public List<I> toList() {
+                return l;
+            }
+        };
+        return iterable::iterator;
     }
 
     default<I extends T> Sequence<T> and(I i) {
